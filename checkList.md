@@ -479,7 +479,7 @@
 
 ---
 
-## 5.2. Управление друзьями (через Gateway)
+    ## 5.2. Управление друзьями (через Gateway)
 
 ### 5.2.1 POST /user/friends/{friendLogin} — позитивный (добавление друга)
 - [ ] Создать модель `AddFriendGatewayResponse` в `models/user/`

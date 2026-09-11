@@ -3,7 +3,7 @@ package com.apiAuto.presentation.test.users;
 import com.apiAuto.presentation.base.properties.config.UserData;
 import com.apiAuto.presentation.base.properties.patch.UsersPatch;
 import com.apiAuto.helpers.testHelper.JsonContext;
-import com.apiAuto.helpers.testHelper.commonDataGenerator;
+import com.apiAuto.helpers.testHelper.CommonDataGenerator;
 import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.models.users.UserUpdate;
@@ -36,15 +36,15 @@ public class PutUsersIdTest {
             Response createResponse = UserCreateTemplate.userCreateTemplate();
             int userId = createResponse.jsonPath().getInt("id");
 
-            String userName = commonDataGenerator.generatorString(commonDataGenerator.timeIndex());
-            String userEmail = commonDataGenerator.generatorEmail(commonDataGenerator.timeIndex());
+            String userName = CommonDataGenerator.generatorString(CommonDataGenerator.timeIndex());
+            String userEmail = CommonDataGenerator.generatorEmail(CommonDataGenerator.timeIndex());
             String userRole = "admin";
             String userAvatar = UserData.IMAGE_URI;
 
             UserUpdate jsonRequest = new UserUpdate();
             jsonRequest.setName(userName);
             jsonRequest.setEmail(userEmail);
-            jsonRequest.setPassword(commonDataGenerator.randomPassword());
+            jsonRequest.setPassword(CommonDataGenerator.randomPassword());
             jsonRequest.setAvatar(userAvatar);
             jsonRequest.setRole(userRole);
             String requestBody = JsonContext.toJson(jsonRequest);

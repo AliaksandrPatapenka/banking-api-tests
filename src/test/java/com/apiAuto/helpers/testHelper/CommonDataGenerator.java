@@ -10,9 +10,9 @@ import java.time.format.DateTimeFormatter;
 /**
  * Генерация текущих даты и времени
  */
-public class commonDataGenerator {
+public class CommonDataGenerator {
     public static String timeIndex() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss-SSS"));
     }
 
     /**

@@ -25,5 +25,21 @@ public class UserCreateTemplate {
                 .extract().response();
     }
 
+    public static String userGetLogin(){
+        Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
+        String requestBody = JsonContext.toJson(jsonRequest);
+        String userLogin = (String) jsonRequest.get("login");
+
+        given(requestSpec())
+                .body(requestBody)
+                .when()
+                .post(UsersPatch.ENDPOINT_USERS)
+                .then()
+                .spec(responseSpec())
+                .statusCode(200);
+
+        return userLogin;
+
+    }
 
 }

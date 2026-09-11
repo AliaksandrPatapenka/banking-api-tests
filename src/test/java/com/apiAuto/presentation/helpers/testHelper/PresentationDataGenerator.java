@@ -3,7 +3,7 @@ package com.apiAuto.presentation.helpers.testHelper;
 import java.security.SecureRandom;
 import java.util.Random;
 
-public class presentationDataGenerator {
+public class PresentationDataGenerator {
 
     public static class GenderGenerator {
         private static final String[] gender = {

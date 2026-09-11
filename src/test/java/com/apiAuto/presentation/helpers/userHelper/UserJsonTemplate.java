@@ -1,7 +1,7 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
-import com.apiAuto.helpers.testHelper.CommonDataGenerator;
-import com.apiAuto.presentation.helpers.testHelper.presentationDataGenerator;
+import com.apiAuto.common.helpers.CommonDataGenerator;
+import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +14,9 @@ public class UserJsonTemplate {
         Map<String, Object> userJsonTemplate = new HashMap<>();
         userJsonTemplate.put("login", CommonDataGenerator.generatorString(timeIndex));
         userJsonTemplate.put("name", CommonDataGenerator.generatorString(timeIndex));
-        userJsonTemplate.put("age", presentationDataGenerator.randomAge());
-        userJsonTemplate.put("gender", presentationDataGenerator.GenderGenerator.randomGender());
-        userJsonTemplate.put("hairColor", presentationDataGenerator.HairColorGenerator.randomHairColor());
+        userJsonTemplate.put("age", PresentationDataGenerator.randomAge());
+        userJsonTemplate.put("gender", PresentationDataGenerator.GenderGenerator.randomGender());
+        userJsonTemplate.put("hairColor", PresentationDataGenerator.HairColorGenerator.randomHairColor());
         userJsonTemplate.put("friends", new ArrayList<String>());
 
         return userJsonTemplate;

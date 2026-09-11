@@ -1,4 +1,4 @@
-package com.apiAuto.helpers.testHelper;
+package com.apiAuto.common.helpers;
 
 import com.apiAuto.common.base.config.DbConfig;
 

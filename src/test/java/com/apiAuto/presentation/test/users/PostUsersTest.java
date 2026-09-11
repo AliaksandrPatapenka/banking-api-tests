@@ -1,11 +1,12 @@
 package com.apiAuto.presentation.test.users;
 
-import com.apiAuto.helpers.testHelper.CommonDataGenerator;
-import com.apiAuto.helpers.testHelper.DbUtils;
+import com.apiAuto.common.helpers.ApiSteps;
+import com.apiAuto.common.helpers.CommonDataGenerator;
+import com.apiAuto.common.helpers.DbUtils;
 import com.apiAuto.presentation.base.properties.patch.UsersPatch;
-import com.apiAuto.helpers.testHelper.JsonContext;
-import com.apiAuto.presentation.helpers.testHelper.DbCleanup;
-import com.apiAuto.presentation.helpers.testHelper.presentationDataGenerator;
+import com.apiAuto.common.helpers.JsonContext;
+import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
+import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.models.users.UserCreate;
@@ -18,6 +19,7 @@ import static com.apiAuto.common.base.Specs.responseSpec;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.BDDAssertions.then;
 
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -29,8 +31,8 @@ public class PostUsersTest {
 
     @BeforeEach
     void dbCleanup() {
-        DbCleanup.deleteFriends();
-        DbCleanup.deleteUsers();
+        PresentationDbCleanup.deleteFriends();
+        PresentationDbCleanup.deleteUsers();
     }
     @Nested
     @DisplayName("POST /users. PositiveTests")
@@ -44,9 +46,9 @@ public class PostUsersTest {
             String timeIndex = CommonDataGenerator.timeIndex();
             String userLogin = CommonDataGenerator.generatorString(timeIndex);
             String userName = CommonDataGenerator.generatorString(timeIndex);
-            int userAge = presentationDataGenerator.randomAge();
-            String userGender = presentationDataGenerator.GenderGenerator.randomGender();
-            String userHairColor = presentationDataGenerator.HairColorGenerator.randomHairColor();
+            int userAge = PresentationDataGenerator.randomAge();
+            String userGender = PresentationDataGenerator.GenderGenerator.randomGender();
+            String userHairColor = PresentationDataGenerator.HairColorGenerator.randomHairColor();
             List<String> userFriends = Collections.emptyList();
 
             UserCreate userCreate = new UserCreate();
@@ -57,13 +59,8 @@ public class PostUsersTest {
             userCreate.setHairColor(userHairColor);
             userCreate.setFriends(userFriends);
 
-            given(requestSpec())
-                    .body(userCreate)
-                    .when()
-                    .post(UsersPatch.ENDPOINT_USERS)
+            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
                     .then()
-                    .spec(responseSpec())
-                    .statusCode(200)
                     .body(matchesJsonSchemaInClasspath("schemas/presentation/userCrudSchema/userCreateSchema.json"));
 
             int count = ((Number) Objects.requireNonNull(DbUtils.getValue(
@@ -96,9 +93,9 @@ public class PostUsersTest {
             String timeIndex = CommonDataGenerator.timeIndex();
             String userLogin = CommonDataGenerator.generatorString(timeIndex);
             String userName = CommonDataGenerator.generatorString(timeIndex);
-            int userAge = presentationDataGenerator.randomAge();
-            String userGender = presentationDataGenerator.GenderGenerator.randomGender();
-            String userHairColor = presentationDataGenerator.HairColorGenerator.randomHairColor();
+            int userAge = PresentationDataGenerator.randomAge();
+            String userGender = PresentationDataGenerator.GenderGenerator.randomGender();
+            String userHairColor = PresentationDataGenerator.HairColorGenerator.randomHairColor();
 
             UserCreate userCreate = new UserCreate();
             userCreate.setLogin(userLogin);
@@ -108,13 +105,8 @@ public class PostUsersTest {
             userCreate.setHairColor(userHairColor);
             userCreate.setFriends(friends);
 
-            given(requestSpec())
-                    .body(userCreate)
-                    .when()
-                    .post(UsersPatch.ENDPOINT_USERS)
+            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
                     .then()
-                    .spec(responseSpec())
-                    .statusCode(200)
                     .body(matchesJsonSchemaInClasspath("schemas/presentation/userCrudSchema/userCreateSchema.json"));
 
             int count = ((Number) Objects.requireNonNull(DbUtils.getValue(

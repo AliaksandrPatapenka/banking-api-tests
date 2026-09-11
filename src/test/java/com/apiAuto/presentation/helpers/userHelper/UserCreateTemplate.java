@@ -1,7 +1,7 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
 import com.apiAuto.presentation.base.properties.patch.UsersPatch;
-import com.apiAuto.helpers.testHelper.JsonContext;
+import com.apiAuto.common.helpers.JsonContext;
 import io.restassured.response.Response;
 
 import java.util.Map;

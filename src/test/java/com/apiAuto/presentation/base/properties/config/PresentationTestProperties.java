@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.base.properties.config;
 
-public final class TestProperties {
+public final class PresentationTestProperties {
     public static final String BASE_URI = System.getProperty("base.url", "http://localhost:8081");
 
     public static final int HTTP_CONNECTION_TIMEOUT = Integer.parseInt(System.getProperty("http.connection.timeout", "10000"));

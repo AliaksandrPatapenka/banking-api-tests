@@ -1,7 +1,6 @@
-package com.apiAuto.helpers.testHelper;
+package com.apiAuto.common.helpers;
 
 import com.apiAuto.common.base.config.CommonData;
-import com.apiAuto.presentation.base.properties.config.UserData;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -30,15 +29,6 @@ public class CommonDataGenerator {
         return password.toString();
     }
 
-    /**
-     * Генератор Email<br>
-     * Формат Test_yyyy-MM-dd_HH-mm-ss@example.com<br>
-     * Передаем текущее время из timeIndex и подставляем в user.email из config.properties
-     */
-    public static String generatorEmail(String timeIndex) {
-        String template = UserData.EMAIL_TEMPLATE;
-        return String.format(template, timeIndex);
-    }
 
     /**
      * Генератор name пользователя<br>

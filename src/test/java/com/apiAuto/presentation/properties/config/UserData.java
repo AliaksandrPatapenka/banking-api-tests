@@ -16,23 +16,9 @@ public final class UserData {
         }
     } // Загружает local.properties для локального запуска. В Jenkins переопределяется через -D.
 
-
-    /**
-     * Валидные тестовые пользователи<br>
-     * Email и password прописаны в Jenkins /manage/credentials/store/system/domain
-     */
-    public static final String USER_EMAIL = System.getProperty("user.email", props.getProperty("user.email"));
-    public static final String USER_PASSWORD = System.getProperty("user.password", props.getProperty("user.password"));
-
-
     /**
      * Невалидные тестовые данные пользователя
      */
-    public static final String NON_EXISTENT_EMAIL = System.getProperty("user.nonExistentEmail", "nonExistentEmail@test.ru");
-    public static final String INVALID_FORMAT_AGE = System.getProperty("user.invalidFormatEmail", "a");
+    public static final String LOGIN_NOT_EXIST = System.getProperty("user.loginNotExist", "loginNotExist");
 
-    /**
-     * Тестовые данные
-     */
-    public static final String EMAIL_TEMPLATE = System.getProperty("email.template", "Test_%s@example.com");
 }

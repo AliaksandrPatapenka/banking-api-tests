@@ -28,7 +28,7 @@ public class Specs {
         return new RequestSpecBuilder()
                 .setBaseUri(baseURI)
                 .setBasePath(basePath)
-                .setContentType("application/json")
+                .setContentType("application/json") //TODO Доработать остальные ContentType
                 .log(LogDetail.ALL)
                 .addFilter(allureFilter)
                 .setConfig(RestAssured.config()

@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "login": { "type": "string" },
+    "name": { "type": "string" },
+    "age": { "type": "integer" },
+    "gender": { "type": "string" },
+    "hairColor": { "type": "string" },
+    "friends": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["login", "name", "age", "gender", "hairColor", "friends"]
+}

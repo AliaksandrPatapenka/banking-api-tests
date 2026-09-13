@@ -9,7 +9,7 @@
 - [х] Добавить тест в существующий `PostUsersTest.java` (или создать новый `CreateUserNewTest.java`)
 - [х] Добавить JSON schema `createUserSuccessSchema.json` в `schemas/userCrudSchema/`
 - [х] Создать хелпер `UserHelper.createUserWithFriends()` для подготовки тестовых данных
-- [ ] Добавить проверку в БД: `UserRepository.findByLogin()` — проверка новых полей (age, gender, hairColor)
+- [х] Добавить проверку в БД: `UserRepository.findByLogin()` — проверка новых полей (age, gender, hairColor)
 - [ ] Добавить проверку события в Kafka: `ClientEvent` (createUser)
 
 ### 1.1.2 POST /users — негативный (пользователь с таким логином уже существует)

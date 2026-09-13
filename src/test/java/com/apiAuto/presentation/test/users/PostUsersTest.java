@@ -64,7 +64,7 @@ public class PostUsersTest {
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
-        private static final String  USER_CREATE_SCHEMA = "schemas/presentation/userSchema/userCreateSchema.json";
+        private static final String USER_CREATE_SCHEMA = "schemas/presentation/userSchema/userCreateSchema.json";
 
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
@@ -93,7 +93,7 @@ public class PostUsersTest {
 
             ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA   ));
+                    .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
             DbAssert.assertCount(UserSql.SELECT_USER_COUNT, userCreate.getLogin(), 1);
             UserDbAssert.assertDataUser(userCreate);
@@ -107,12 +107,12 @@ public class PostUsersTest {
     /**
      * ==================== НЕГАТИВНЫЕ ТЕСТЫ ====================
      */
-
     @Nested
     @DisplayName("POST /users. NegativeTests")
     @Order(2)
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
-        private  static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
+        private static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
 
         @Test
         @Order(1)

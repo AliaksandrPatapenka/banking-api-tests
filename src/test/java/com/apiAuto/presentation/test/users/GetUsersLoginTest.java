@@ -54,8 +54,6 @@ public class GetUsersLoginTest {
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
-        private static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
-
         @Test
         @DisplayName("Case 2.1: Получение пользователя по не существующему в БД логину")
         void userList() {

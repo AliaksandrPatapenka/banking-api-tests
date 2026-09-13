@@ -1,8 +1,8 @@
 package com.apiAuto.presentation.test.users;
 
 
-import com.apiAuto.presentation.properties.patch.UsersPatch;
 import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
+import com.apiAuto.presentation.properties.patch.UsersPatch;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 

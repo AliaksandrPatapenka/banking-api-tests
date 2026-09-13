@@ -11,7 +11,7 @@ import java.util.Objects;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserDbAssert {
-    public static void assertDataUser(UserCreate expected){
+    public static void assertDataUser(UserCreate expected) {
         Map<String, Object> user = DbUtils.getRow(
                 UserSql.SELECT_USER_BY_LOGIN, expected.getLogin());
 
@@ -23,7 +23,7 @@ public class UserDbAssert {
         assertThat(user.get("hair_color")).isEqualTo(expected.getHairColor());
     }
 
-    public  static  void assertFriends(UserCreate expected){
+    public static void assertFriends(UserCreate expected) {
         Map<String, Object> user = DbUtils.getRow(
                 UserSql.SELECT_USER_BY_LOGIN, expected.getLogin());
 

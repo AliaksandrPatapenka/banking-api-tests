@@ -2,16 +2,22 @@ package com.apiAuto.common.helpers;
 
 import com.apiAuto.common.config.DbConfig;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Хелпер для проверок данных в БД через JDBC. */
+/**
+ * Хелпер для проверок данных в БД через JDBC.
+ */
 public class DbUtils {
 
-    /** Есть ли строка. */
+    /**
+     * Есть ли строка.
+     */
     public static boolean exists(String sql, Object value) {
         try (var con = connect(); var ps = con.prepareStatement(sql)) {
             ps.setObject(1, value);
@@ -21,7 +27,9 @@ public class DbUtils {
         }
     }
 
-    /** Одно значение из первой строки (COUNT, id, MAX). null, если строк нет. */
+    /**
+     * Одно значение из первой строки (COUNT, id, MAX). null, если строк нет.
+     */
     public static Object getValue(String sql, Object value) {
         try (var con = connect(); var ps = con.prepareStatement(sql)) {
             ps.setObject(1, value);
@@ -44,7 +52,9 @@ public class DbUtils {
         }
     }
 
-    /** Одна строка как Map<колонка, значение>. null, если строк нет. */
+    /**
+     * Одна строка как Map<колонка, значение>. null, если строк нет.
+     */
     public static Map<String, Object> getRow(String sql, Object value) {
         try (var con = connect(); var ps = con.prepareStatement(sql)) {
             ps.setObject(1, value);
@@ -63,7 +73,9 @@ public class DbUtils {
         }
     }
 
-    /** Все строки как List<Map<колонка, значение>>. Пустой список, если строк нет. */
+    /**
+     * Все строки как List<Map<колонка, значение>>. Пустой список, если строк нет.
+     */
     public static List<Map<String, Object>> getRows(String sql, Object value) {
         try (var con = connect(); var ps = con.prepareStatement(sql)) {
             ps.setObject(1, value);
@@ -85,7 +97,9 @@ public class DbUtils {
         }
     }
 
-    /** Подключение к БД. */
+    /**
+     * Подключение к БД.
+     */
     private static Connection connect() {
         try {
             return DriverManager.getConnection(DbConfig.DB_URL, DbConfig.DB_USER, DbConfig.PASSWORD);

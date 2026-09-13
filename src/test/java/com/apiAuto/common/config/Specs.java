@@ -32,9 +32,9 @@ public class Specs {
                 .log(LogDetail.ALL)
                 .addFilter(allureFilter)
                 .setConfig(RestAssured.config()
-                .httpClient(HttpClientConfig.httpClientConfig()
-                        .setParam("http.connection.timeout", PresentationTestProperties.HTTP_CONNECTION_TIMEOUT)
-                        .setParam("http.socket.timeout", PresentationTestProperties.HTTP_SOCKET_TIMEOUT)))
+                        .httpClient(HttpClientConfig.httpClientConfig()
+                                .setParam("http.connection.timeout", PresentationTestProperties.HTTP_CONNECTION_TIMEOUT)
+                                .setParam("http.socket.timeout", PresentationTestProperties.HTTP_SOCKET_TIMEOUT)))
                 .build();
     }
 

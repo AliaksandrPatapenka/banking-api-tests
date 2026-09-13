@@ -1,7 +1,7 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
-import com.apiAuto.presentation.properties.patch.UsersPatch;
 import com.apiAuto.common.helpers.JsonContext;
+import com.apiAuto.presentation.properties.patch.UsersPatch;
 import io.restassured.response.Response;
 
 import java.util.Map;
@@ -22,10 +22,11 @@ public class UserCreateTemplate {
                 .post(UsersPatch.ENDPOINT_USERS)
                 .then()
                 .spec(responseSpec())
+                .statusCode(200)
                 .extract().response();
     }
 
-    public static String userGetLogin(){
+    public static String userGetLogin() {
         Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
         String requestBody = JsonContext.toJson(jsonRequest);
         String userLogin = (String) jsonRequest.get("login");

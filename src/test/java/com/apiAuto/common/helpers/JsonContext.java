@@ -7,7 +7,7 @@ public class JsonContext {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
-     *Метод toJson() превращает Java-объект в JSON-строку для отправки в запросе.
+     * Метод toJson() превращает Java-объект в JSON-строку для отправки в запросе.
      */
     public static String toJson(Object object) {
         try {

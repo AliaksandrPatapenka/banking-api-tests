@@ -26,13 +26,13 @@ public final class UserData {
 
 
     /**
-     *Невалидные тестовые данные пользователя
+     * Невалидные тестовые данные пользователя
      */
     public static final String NON_EXISTENT_EMAIL = System.getProperty("user.nonExistentEmail", "nonExistentEmail@test.ru");
     public static final String INVALID_FORMAT_AGE = System.getProperty("user.invalidFormatEmail", "a");
 
     /**
-     *Тестовые данные
+     * Тестовые данные
      */
     public static final String EMAIL_TEMPLATE = System.getProperty("email.template", "Test_%s@example.com");
 }

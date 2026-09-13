@@ -24,11 +24,6 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class PostUsersTest {
-
-    /**
-     * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
-     */
-
     static class TestData {
         private static UserCreate defaultRequestBody() {
             return defaultRequestBody(Collections.emptyList());
@@ -60,11 +55,17 @@ public class PostUsersTest {
         PresentationDbCleanup.deleteUsers();
     }
 
+    /**
+     * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
+     */
+
     @Nested
     @DisplayName("POST /users. PositiveTests")
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
+        private static final String  USER_CREATE_SCHEMA = "schemas/presentation/userSchema/userCreateSchema.json";
+
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
         void userCreate() {
@@ -72,7 +73,7 @@ public class PostUsersTest {
 
             ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
                     .then()
-                    .body(matchesJsonSchemaInClasspath("schemas/presentation/userSchema/userCreateSchema.json"));
+                    .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
             DbAssert.assertCount(UserSql.SELECT_USER_COUNT, userCreate.getLogin(), 1);
 
@@ -92,7 +93,7 @@ public class PostUsersTest {
 
             ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
                     .then()
-                    .body(matchesJsonSchemaInClasspath("schemas/presentation/userSchema/userCreateSchema.json"));
+                    .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA   ));
 
             DbAssert.assertCount(UserSql.SELECT_USER_COUNT, userCreate.getLogin(), 1);
             UserDbAssert.assertDataUser(userCreate);
@@ -111,6 +112,7 @@ public class PostUsersTest {
     @DisplayName("POST /users. NegativeTests")
     @Order(2)
     class NegativeTests {
+        private  static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
 
         @Test
         @Order(1)
@@ -123,11 +125,11 @@ public class PostUsersTest {
 
             ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, requestBody, 500)
                     .then()
-                    .body(matchesJsonSchemaInClasspath("schemas/errorSchema/errorSchema.json"));
+                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
 
         @Test
-        @Order(1)
+        @Order(2)
         @DisplayName("Case1.2: Создание пользователя с существующим в базе данных логином")
         void userCreateStatus400() {
             String userLogin = UserCreateTemplate.userGetLogin();
@@ -136,7 +138,7 @@ public class PostUsersTest {
 
             ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 400)
                     .then()
-                    .body(matchesJsonSchemaInClasspath("schemas/errorSchema/errorSchema.json"));
+                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.apiAuto.common.base.config;
+package com.apiAuto.common.config;
 
 /**
  * Настройки подключения к PostgreSQL.

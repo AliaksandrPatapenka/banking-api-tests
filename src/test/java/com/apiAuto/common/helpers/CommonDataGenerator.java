@@ -1,6 +1,6 @@
 package com.apiAuto.common.helpers;
 
-import com.apiAuto.common.base.config.CommonData;
+import com.apiAuto.common.config.CommonData;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;

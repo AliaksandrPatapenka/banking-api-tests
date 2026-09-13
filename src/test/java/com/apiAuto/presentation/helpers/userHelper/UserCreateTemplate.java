@@ -1,13 +1,13 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
-import com.apiAuto.presentation.base.properties.patch.UsersPatch;
+import com.apiAuto.presentation.properties.patch.UsersPatch;
 import com.apiAuto.common.helpers.JsonContext;
 import io.restassured.response.Response;
 
 import java.util.Map;
 
-import static com.apiAuto.common.base.Specs.requestSpec;
-import static com.apiAuto.common.base.Specs.responseSpec;
+import static com.apiAuto.common.config.Specs.requestSpec;
+import static com.apiAuto.common.config.Specs.responseSpec;
 import static io.restassured.RestAssured.given;
 
 public class UserCreateTemplate {

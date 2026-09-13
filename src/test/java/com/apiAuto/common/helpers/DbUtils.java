@@ -1,6 +1,6 @@
 package com.apiAuto.common.helpers;
 
-import com.apiAuto.common.base.config.DbConfig;
+import com.apiAuto.common.config.DbConfig;
 
 import java.sql.*;
 import java.util.ArrayList;

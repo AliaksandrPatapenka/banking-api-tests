@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.base.properties.patch;
+package com.apiAuto.presentation.properties.patch;
 
 
 /**

@@ -1,6 +1,6 @@
-package com.apiAuto.common.base;
+package com.apiAuto.common.config;
 
-import com.apiAuto.presentation.base.properties.config.PresentationTestProperties;
+import com.apiAuto.presentation.properties.config.PresentationTestProperties;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;

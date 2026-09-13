@@ -1,13 +1,13 @@
 package com.apiAuto.presentation.test.users;
 
 
-import com.apiAuto.presentation.base.properties.patch.UsersPatch;
+import com.apiAuto.presentation.properties.patch.UsersPatch;
 import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
-import static com.apiAuto.common.base.Specs.requestSpec;
-import static com.apiAuto.common.base.Specs.responseSpec;
+import static com.apiAuto.common.config.Specs.requestSpec;
+import static com.apiAuto.common.config.Specs.responseSpec;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
@@ -39,7 +39,7 @@ public class GetUsersTest {
                     .statusCode(200)
                     .body("find { it.id == " + userId + " }.id", equalTo(userId))
                     .body("find { it.id == " + userId + " }.email", equalTo(userEmail))
-                    .body(matchesJsonSchemaInClasspath("schemas/presentation/userCrudSchema/userListSchema.json"));
+                    .body(matchesJsonSchemaInClasspath("schemas/presentation/userSchema/userListSchema.json"));
         }
     }
 }

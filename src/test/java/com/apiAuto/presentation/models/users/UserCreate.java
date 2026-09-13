@@ -10,7 +10,7 @@ public class UserCreate {
     private String hairColor;
     private List<String> friends;
 
-    public UserCreate(){};
+    public UserCreate(){}
 
     public String getLogin() {return login;}
     public String getName() {return name;}

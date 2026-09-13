@@ -29,13 +29,10 @@ public final class UserData {
      *Невалидные тестовые данные пользователя
      */
     public static final String NON_EXISTENT_EMAIL = System.getProperty("user.nonExistentEmail", "nonExistentEmail@test.ru");
-    public static final String INVALID_FORMAT_EMAIL = System.getProperty("user.invalidFormatEmail", "@@@");
-    public static final String INVALID_PASSWORD = System.getProperty("user.invalidPassword", "invalidPassword");
-
+    public static final String INVALID_FORMAT_AGE = System.getProperty("user.invalidFormatEmail", "a");
 
     /**
      *Тестовые данные
      */
-    public static final String IMAGE_URI = System.getProperty("image.uri", "https://test.com");
     public static final String EMAIL_TEMPLATE = System.getProperty("email.template", "Test_%s@example.com");
 }

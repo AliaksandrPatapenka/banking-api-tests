@@ -1,21 +1,25 @@
 package com.apiAuto.presentation.test.users;
 
-import com.apiAuto.common.helpers.*;
-import com.apiAuto.presentation.properties.patch.UsersPatch;
-import com.apiAuto.presentation.helpers.userHelper.UserSql;
-import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
+import com.apiAuto.common.helpers.ApiSteps;
+import com.apiAuto.common.helpers.CommonDataGenerator;
+import com.apiAuto.common.helpers.DbAssert;
+import com.apiAuto.common.helpers.JsonContext;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
+import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
+import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.models.users.UserCreate;
+import com.apiAuto.presentation.properties.patch.UsersPatch;
 import org.junit.jupiter.api.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.apiAuto.common.config.Specs.requestSpec;
-import static com.apiAuto.common.config.Specs.responseSpec;
-import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -25,21 +29,12 @@ public class PostUsersTest {
      * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
      */
 
-    @BeforeEach
-    void dbCleanup() {
-        PresentationDbCleanup.deleteFriends();
-        PresentationDbCleanup.deleteUsers();
-    }
-    @Nested
-    @DisplayName("POST /users. PositiveTests")
-    @Order(1)
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-    class PositiveTests {
-        private static UserCreate defaultRequestBody(){
+    static class TestData {
+        private static UserCreate defaultRequestBody() {
             return defaultRequestBody(Collections.emptyList());
         }
 
-        private static UserCreate defaultRequestBody(List<String> friends){
+        private static UserCreate defaultRequestBody(List<String> friends) {
             String timeIndex = CommonDataGenerator.timeIndex();
             String userLogin = CommonDataGenerator.generatorString(timeIndex);
             String userName = CommonDataGenerator.generatorString(timeIndex);
@@ -57,12 +52,23 @@ public class PostUsersTest {
 
             return userCreate;
         }
+    }
 
+    @BeforeEach
+    void dbCleanup() {
+        PresentationDbCleanup.deleteFriends();
+        PresentationDbCleanup.deleteUsers();
+    }
 
+    @Nested
+    @DisplayName("POST /users. PositiveTests")
+    @Order(1)
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    class PositiveTests {
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
         void userCreate() {
-            UserCreate userCreate = defaultRequestBody();
+            UserCreate userCreate = TestData.defaultRequestBody();
 
             ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
                     .then()
@@ -82,7 +88,7 @@ public class PostUsersTest {
                 friends.add(UserCreateTemplate.userGetLogin());
             }
 
-            UserCreate userCreate = defaultRequestBody(friends);
+            UserCreate userCreate = TestData.defaultRequestBody(friends);
 
             ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
                     .then()
@@ -97,8 +103,6 @@ public class PostUsersTest {
     }
 
 
-
-
     /**
      * ==================== НЕГАТИВНЫЕ ТЕСТЫ ====================
      */
@@ -110,21 +114,29 @@ public class PostUsersTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case1.1: Создание пользователя при отсутствии в запросе ключа email")
-        void userCreateInvalid() {
+        @DisplayName("Case1.1: Создание пользователя при отсутствии в запросе поля friends")
+        void userCreateStatus500() {
             Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
-            jsonRequest.remove("login");
+            jsonRequest.remove("friends");
 
             String requestBody = JsonContext.toJson(jsonRequest);
 
-            given(requestSpec())
-                    .body(requestBody)
-                    .when()
-                    .post(UsersPatch.ENDPOINT_USERS)
+            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, requestBody, 500)
                     .then()
-                    .spec(responseSpec())
-                    .statusCode(400)
-                    .body(matchesJsonSchemaInClasspath("schemas/errorSchema/400errorSchema.json"));
+                    .body(matchesJsonSchemaInClasspath("schemas/errorSchema/errorSchema.json"));
+        }
+
+        @Test
+        @Order(1)
+        @DisplayName("Case1.2: Создание пользователя с существующим в базе данных логином")
+        void userCreateStatus400() {
+            String userLogin = UserCreateTemplate.userGetLogin();
+            UserCreate userCreate = TestData.defaultRequestBody();
+            userCreate.setLogin(userLogin);
+
+            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 400)
+                    .then()
+                    .body(matchesJsonSchemaInClasspath("schemas/errorSchema/errorSchema.json"));
         }
     }
 }

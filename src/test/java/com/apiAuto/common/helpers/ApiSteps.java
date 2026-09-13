@@ -23,7 +23,7 @@ public class ApiSteps {
                                int status) {
         return given(spec)
                 .pathParams(pathParam)
-                .when(). get(endpoint)
+                .when().get(endpoint)
                 .then().statusCode(status)
                 .extract().response();
     }

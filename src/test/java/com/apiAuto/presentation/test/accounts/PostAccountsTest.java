@@ -16,12 +16,10 @@ import static com.apiAuto.common.config.Specs.requestSpec;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-
 public class PostAccountsTest {
 
     @BeforeEach
     void dbCleanup() {
-        PresentationDbCleanup.deleteFriends();
         PresentationDbCleanup.deleteUsers();
         PresentationDbCleanup.deleteAccounts();
     }
@@ -30,7 +28,7 @@ public class PostAccountsTest {
      * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
      */
     @Nested
-    @DisplayName("POST /users. PositiveTests")
+    @DisplayName("POST /accounts. PositiveTests")
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
@@ -77,7 +75,7 @@ public class PostAccountsTest {
      * ==================== НЕГАТИВНЫЕ ТЕСТЫ ====================
      */
     @Nested
-    @DisplayName("POST /users. NegativeTests")
+    @DisplayName("POST /accounts. NegativeTests")
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {

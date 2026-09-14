@@ -53,7 +53,7 @@ public class GetUsersLoginTest {
      * ==================== НЕГАТИВНЫЕ ТЕСТЫ ====================
      */
     @Nested
-    @DisplayName("POST /users. NegativeTests")
+    @DisplayName("GET /users{login}. NegativeTests")
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {

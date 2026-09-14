@@ -36,10 +36,13 @@ public class GetUsersLoginTest {
 
         @Test
         @DisplayName("Case 2.1: Получение пользователя по существующему в БД логину")
-        void userList() {
+        void getUserByLogin() {
             String userLogin = UserCreateTemplate.userGetLogin();
 
-            ApiSteps.get(requestSpec(), Map.of("login", userLogin), UsersPatch.ENDPOINT_USERS_BY_LOGIN, 200)
+            ApiSteps.get(requestSpec(),
+                            Map.of("login", userLogin),
+                            UsersPatch.ENDPOINT_USERS_BY_LOGIN,
+                            200)
                     .then()
                     .body("login", equalTo(userLogin))
                     .body(matchesJsonSchemaInClasspath(USER_BY_LOGIN_SCHEMA));
@@ -56,10 +59,13 @@ public class GetUsersLoginTest {
     class NegativeTests {
         @Test
         @DisplayName("Case 2.1: Получение пользователя по не существующему в БД логину")
-        void userList() {
+        void getUserByLoginNotExist() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 
-            ApiSteps.get(requestSpec(), Map.of("login", userLogin), UsersPatch.ENDPOINT_USERS_BY_LOGIN, 400)
+            ApiSteps.get(requestSpec(),
+                            Map.of("login", userLogin),
+                            UsersPatch.ENDPOINT_USERS_BY_LOGIN,
+                            400)
                     .then();
         }
 

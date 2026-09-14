@@ -10,7 +10,7 @@ import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
-import com.apiAuto.presentation.models.users.UserCreate;
+import com.apiAuto.presentation.models.users.CreateUser;
 import com.apiAuto.presentation.properties.patch.UsersPatch;
 import org.junit.jupiter.api.*;
 
@@ -25,11 +25,11 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class PostUsersTest {
     static class TestData {
-        private static UserCreate defaultRequestBody() {
+        private static CreateUser defaultRequestBody() {
             return defaultRequestBody(Collections.emptyList());
         }
 
-        private static UserCreate defaultRequestBody(List<String> friends) {
+        private static CreateUser defaultRequestBody(List<String> friends) {
             String timeIndex = CommonDataGenerator.timeIndex();
             String userLogin = CommonDataGenerator.generatorString(timeIndex);
             String userName = CommonDataGenerator.generatorString(timeIndex);
@@ -37,15 +37,15 @@ public class PostUsersTest {
             String userGender = PresentationDataGenerator.GenderGenerator.randomGender();
             String userHairColor = PresentationDataGenerator.HairColorGenerator.randomHairColor();
 
-            UserCreate userCreate = new UserCreate();
-            userCreate.setLogin(userLogin);
-            userCreate.setName(userName);
-            userCreate.setAge(userAge);
-            userCreate.setGender(userGender);
-            userCreate.setHairColor(userHairColor);
-            userCreate.setFriends(friends);
+            CreateUser createUser = new CreateUser();
+            createUser.setLogin(userLogin);
+            createUser.setName(userName);
+            createUser.setAge(userAge);
+            createUser.setGender(userGender);
+            createUser.setHairColor(userHairColor);
+            createUser.setFriends(friends);
 
-            return userCreate;
+            return createUser;
         }
     }
 
@@ -58,7 +58,6 @@ public class PostUsersTest {
     /**
      * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
      */
-
     @Nested
     @DisplayName("POST /users. PositiveTests")
     @Order(1)
@@ -68,36 +67,42 @@ public class PostUsersTest {
 
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
-        void userCreate() {
-            UserCreate userCreate = TestData.defaultRequestBody();
+        void createUser() {
+            CreateUser createUser = TestData.defaultRequestBody();
 
-            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
+            ApiSteps.post(requestSpec(),
+                            UsersPatch.ENDPOINT_USERS,
+                            createUser,
+                            200)
                     .then()
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
-            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, userCreate.getLogin(), 1);
+            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUser.getLogin(), 1);
 
-            UserDbAssert.assertDataUser(userCreate);
+            UserDbAssert.assertDataUser(createUser);
 
         }
 
         @Test
         @DisplayName("Case 1.2: Создание пользователя C Привязкой 3 друзей")
-        void userFriendsCreate() {
+        void friendsUserCreate() {
             List<String> friends = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 friends.add(UserCreateTemplate.userGetLogin());
             }
 
-            UserCreate userCreate = TestData.defaultRequestBody(friends);
+            CreateUser createUser = TestData.defaultRequestBody(friends);
 
-            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 200)
+            ApiSteps.post(requestSpec(),
+                            UsersPatch.ENDPOINT_USERS,
+                            createUser,
+                            200)
                     .then()
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
-            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, userCreate.getLogin(), 1);
-            UserDbAssert.assertDataUser(userCreate);
-            UserDbAssert.assertFriends(userCreate);
+            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUser.getLogin(), 1);
+            UserDbAssert.assertDataUser(createUser);
+            UserDbAssert.assertFriends(createUser);
         }
 
 
@@ -117,13 +122,16 @@ public class PostUsersTest {
         @Test
         @Order(1)
         @DisplayName("Case1.1: Создание пользователя при отсутствии в запросе поля friends")
-        void userCreateStatus500() {
+        void createUserStatus500() {
             Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
             jsonRequest.remove("friends");
 
             String requestBody = JsonContext.toJson(jsonRequest);
 
-            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, requestBody, 500)
+            ApiSteps.post(requestSpec(),
+                            UsersPatch.ENDPOINT_USERS,
+                            requestBody,
+                            500)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
@@ -131,12 +139,15 @@ public class PostUsersTest {
         @Test
         @Order(2)
         @DisplayName("Case1.2: Создание пользователя с существующим в базе данных логином")
-        void userCreateStatus400() {
+        void createUserStatus400() {
             String userLogin = UserCreateTemplate.userGetLogin();
-            UserCreate userCreate = TestData.defaultRequestBody();
-            userCreate.setLogin(userLogin);
+            CreateUser createUser = TestData.defaultRequestBody();
+            createUser.setLogin(userLogin);
 
-            ApiSteps.post(requestSpec(), UsersPatch.ENDPOINT_USERS, userCreate, 400)
+            ApiSteps.post(requestSpec(),
+                            UsersPatch.ENDPOINT_USERS,
+                            createUser,
+                            400)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }

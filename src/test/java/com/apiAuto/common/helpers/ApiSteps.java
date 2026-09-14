@@ -9,7 +9,21 @@ import static io.restassured.RestAssured.given;
 
 public class ApiSteps {
 
-    public static Response post(RequestSpecification spec, String endpoint, Object body, int status) {
+    public static Response post(RequestSpecification spec,
+                                String endpoint,
+                                Map<String, ?> queryParam,
+                                int status) {
+        return given(spec)
+                .queryParams(queryParam)
+                .when().post(endpoint)
+                .then().statusCode(status)
+                .extract().response();
+    }
+
+    public static Response post(RequestSpecification spec,
+                                String endpoint,
+                                Object body,
+                                int status) {
         return given(spec)
                 .body(body)
                 .when().post(endpoint)

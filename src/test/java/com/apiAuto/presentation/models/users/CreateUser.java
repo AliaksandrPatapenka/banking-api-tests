@@ -2,7 +2,7 @@ package com.apiAuto.presentation.models.users;
 
 import java.util.List;
 
-public class UserCreate {
+public class CreateUser {
     private String login;
     private String name;
     private int age;
@@ -10,7 +10,7 @@ public class UserCreate {
     private String hairColor;
     private List<String> friends;
 
-    public UserCreate() {
+    public CreateUser() {
     }
 
     public String getLogin() {

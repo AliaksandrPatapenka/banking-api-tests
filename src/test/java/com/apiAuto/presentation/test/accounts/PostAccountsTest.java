@@ -23,6 +23,7 @@ public class PostAccountsTest {
     void dbCleanup() {
         PresentationDbCleanup.deleteFriends();
         PresentationDbCleanup.deleteUsers();
+        PresentationDbCleanup.deleteAccounts();
     }
 
     /**

@@ -1,8 +1,8 @@
-package com.apiAuto.presentation.properties.patch;
+package com.apiAuto.presentation.patchs;
 
 
 /**
- * Patch Users CRUD
+ * Patch Users
  */
 public final class UsersPatch {
     public static final String ENDPOINT_USERS = System.getProperty("endpoint.users", "/users");

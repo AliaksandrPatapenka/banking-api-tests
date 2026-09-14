@@ -6,12 +6,12 @@ import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.common.helpers.JsonContext;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
+import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.models.CreateUser;
-import com.apiAuto.presentation.properties.patch.UsersPatch;
+import com.apiAuto.presentation.patchs.UsersPatch;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class PostUsersTest {
         void createUser() {
             CreateUser createUser = TestData.defaultRequestBody();
 
-            ApiSteps.post(requestSpec(),
+            ApiSteps.postBody(requestSpec(),
                             UsersPatch.ENDPOINT_USERS,
                             createUser,
                             200)
@@ -88,12 +88,12 @@ public class PostUsersTest {
         void friendsUserCreate() {
             List<String> friends = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                friends.add(UserCreateTemplate.userGetLogin());
+                friends.add(CreateUserTemplate.userGetLogin());
             }
 
             CreateUser createUser = TestData.defaultRequestBody(friends);
 
-            ApiSteps.post(requestSpec(),
+            ApiSteps.postBody(requestSpec(),
                             UsersPatch.ENDPOINT_USERS,
                             createUser,
                             200)
@@ -128,7 +128,7 @@ public class PostUsersTest {
 
             String requestBody = JsonContext.toJson(jsonRequest);
 
-            ApiSteps.post(requestSpec(),
+            ApiSteps.postBody(requestSpec(),
                             UsersPatch.ENDPOINT_USERS,
                             requestBody,
                             500)
@@ -140,11 +140,11 @@ public class PostUsersTest {
         @Order(2)
         @DisplayName("Case1.2: Создание пользователя с существующим в базе данных логином")
         void createUserStatus400() {
-            String userLogin = UserCreateTemplate.userGetLogin();
+            String userLogin = CreateUserTemplate.userGetLogin();
             CreateUser createUser = TestData.defaultRequestBody();
             createUser.setLogin(userLogin);
 
-            ApiSteps.post(requestSpec(),
+            ApiSteps.postBody(requestSpec(),
                             UsersPatch.ENDPOINT_USERS,
                             createUser,
                             400)

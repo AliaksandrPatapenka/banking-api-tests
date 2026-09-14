@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.properties.config;
+package com.apiAuto.presentation.properties;
 
 public final class PresentationTestProperties {
     public static final String BASE_URI = System.getProperty("base.url", "http://localhost:8081");

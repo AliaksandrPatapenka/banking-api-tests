@@ -5,11 +5,12 @@ import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
-import com.apiAuto.presentation.properties.config.UserData;
-import com.apiAuto.presentation.properties.patch.AccountPatch;
+import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
+import com.apiAuto.presentation.testData.UserData;
+import com.apiAuto.presentation.patchs.AccountPatch;
 import org.junit.jupiter.api.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static com.apiAuto.common.config.Specs.requestSpec;
@@ -38,9 +39,9 @@ public class PostAccountsTest {
         @Order(1)
         @DisplayName("Case 2.1: Создание счёта у пользователя, у которого отсутствуют счета")
         void createAccount() {
-            String userLogin = UserCreateTemplate.userGetLogin();
+            String userLogin = CreateUserTemplate.userGetLogin();
 
-            ApiSteps.post(requestSpec(),
+            ApiSteps.postQuery(requestSpec(),
                             AccountPatch.ENDPOINT_ACCOUNTS,
                             Map.of("userLogin", userLogin),
                             200)
@@ -48,17 +49,17 @@ public class PostAccountsTest {
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_CREATE_SCHEMA));
 
             DbAssert.assertCount(AccountSql.SELECT_ACCOUNT_COUNT, userLogin, 1);
-            AccountDbAssert.assertAccountBalance(userLogin, 0);
+            AccountDbAssert.assertAccountBalance(userLogin, new BigDecimal("0"));
         }
 
         @Test
         @Order(2)
         @DisplayName("Case 2.2: Создание счёта у пользователя, у которого уже есть счет")
         void createTwoAccount() {
-            String userLogin = UserCreateTemplate.userGetLogin();
+            String userLogin = CreateUserTemplate.userGetLogin();
 
             for (int i = 0; i < 2; i++) {
-                ApiSteps.post(requestSpec(),
+                ApiSteps.postQuery(requestSpec(),
                                 AccountPatch.ENDPOINT_ACCOUNTS,
                                 Map.of("userLogin", userLogin),
                                 200)
@@ -67,7 +68,7 @@ public class PostAccountsTest {
             }
 
             DbAssert.assertCount(AccountSql.SELECT_ACCOUNT_COUNT, userLogin, 2);
-            AccountDbAssert.assertAccountBalance(userLogin, 0);
+            AccountDbAssert.assertAccountBalance(userLogin, new BigDecimal("0"));
         }
     }
 
@@ -85,9 +86,9 @@ public class PostAccountsTest {
         @Order(1)
         @DisplayName("Case2.1: В параметрах запроса передается неверный ключ")
         void createUserStatus500() {
-            String userLogin = UserCreateTemplate.userGetLogin();
+            String userLogin = CreateUserTemplate.userGetLogin();
 
-            ApiSteps.post(requestSpec(),
+            ApiSteps.postQuery(requestSpec(),
                             AccountPatch.ENDPOINT_ACCOUNTS,
                             Map.of("keyLoginFalse", userLogin),
                             500)
@@ -97,11 +98,11 @@ public class PostAccountsTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case2.1: СОздание счета для несуществующего пользователя")
+        @DisplayName("Case2.1: Создание счета для несуществующего пользователя")
         void createUserStatus400() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 
-            ApiSteps.post(requestSpec(),
+            ApiSteps.postQuery(requestSpec(),
                             AccountPatch.ENDPOINT_ACCOUNTS,
                             Map.of("userLogin", userLogin),
                             400)

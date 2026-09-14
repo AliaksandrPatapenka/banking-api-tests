@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.properties.config;
+package com.apiAuto.presentation.testData;
 
 import java.io.InputStream;
 import java.util.Properties;

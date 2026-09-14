@@ -9,10 +9,10 @@ import static io.restassured.RestAssured.given;
 
 public class ApiSteps {
 
-    public static Response post(RequestSpecification spec,
-                                String endpoint,
-                                Map<String, ?> queryParam,
-                                int status) {
+    public static Response postQuery(RequestSpecification spec,
+                                     String endpoint,
+                                     Map<String, ?> queryParam,
+                                     int status) {
         return given(spec)
                 .queryParams(queryParam)
                 .when().post(endpoint)
@@ -20,11 +20,24 @@ public class ApiSteps {
                 .extract().response();
     }
 
-    public static Response post(RequestSpecification spec,
-                                String endpoint,
-                                Object body,
-                                int status) {
+    public static Response postBody(RequestSpecification spec,
+                                    String endpoint,
+                                    Object body,
+                                    int status) {
         return given(spec)
+                .body(body)
+                .when().post(endpoint)
+                .then().statusCode(status)
+                .extract().response();
+    }
+
+    public static Response postPatchBody(RequestSpecification spec,
+                                         String endpoint,
+                                         Map<String, ?> pathParam,
+                                         Object body,
+                                         int status) {
+        return given(spec)
+                .pathParams(pathParam)
                 .body(body)
                 .when().post(endpoint)
                 .then().statusCode(status)

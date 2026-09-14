@@ -3,9 +3,9 @@ package com.apiAuto.presentation.test.users;
 
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
-import com.apiAuto.presentation.properties.config.UserData;
-import com.apiAuto.presentation.properties.patch.UsersPatch;
+import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
+import com.apiAuto.presentation.testData.UserData;
+import com.apiAuto.presentation.patchs.UsersPatch;
 import org.junit.jupiter.api.*;
 
 import java.util.Map;
@@ -37,7 +37,7 @@ public class GetUsersLoginTest {
         @Test
         @DisplayName("Case 2.1: Получение пользователя по существующему в БД логину")
         void getUserByLogin() {
-            String userLogin = UserCreateTemplate.userGetLogin();
+            String userLogin = CreateUserTemplate.userGetLogin();
 
             ApiSteps.get(requestSpec(),
                             Map.of("login", userLogin),

@@ -5,7 +5,7 @@ import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.CreateAccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
-import com.apiAuto.presentation.patchs.AccountPatch;
+import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.testData.AccountData;
 import org.junit.jupiter.api.*;
 
@@ -36,14 +36,14 @@ public class AccountsDepositTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 3.1: Пополнение счета(max значение)")
+        @DisplayName("Case 3.1: Пополнение счета (max значение)")
         void accountDepositMax() {
             String userLogin = CreateUserTemplate.userGetLogin();
             CreateAccountTemplate.createAccount(userLogin);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),
-                            AccountPatch.ENDPOINT_ACCOUNTS_DEPOSIT,
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
                             Map.of("id", accountId),
                             AccountData.ACCOUNT_DEPOSIT_MAX,
                             200)
@@ -55,14 +55,14 @@ public class AccountsDepositTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 3.2: Пополнение счета(min значение)")
+        @DisplayName("Case 3.2: Пополнение счета (min значение)")
         void accountDepositMin() {
             String userLogin = CreateUserTemplate.userGetLogin();
             CreateAccountTemplate.createAccount(userLogin);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),
-                            AccountPatch.ENDPOINT_ACCOUNTS_DEPOSIT,
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
                             Map.of("id", accountId),
                             AccountData.ACCOUNT_DEPOSIT_MIN,
                             200)
@@ -86,14 +86,14 @@ public class AccountsDepositTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 3.1: Пополнение счета(Значение больше максимального)")
+        @DisplayName("Case 3.1: Пополнение счета (значение больше максимального)")
         void createUserStatus500() {
             String userLogin = CreateUserTemplate.userGetLogin();
             CreateAccountTemplate.createAccount(userLogin);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),
-                            AccountPatch.ENDPOINT_ACCOUNTS_DEPOSIT,
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
                             Map.of("id", accountId),
                             AccountData.ACCOUNT_DEPOSIT_ABOVE_MAX,
                             500)
@@ -103,14 +103,14 @@ public class AccountsDepositTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 3.2: Пополнение счета(отрицательное значение)")
+        @DisplayName("Case 3.2: Пополнение счета (отрицательное значение)")
         void createUserStatus400() {
             String userLogin = CreateUserTemplate.userGetLogin();
             CreateAccountTemplate.createAccount(userLogin);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),
-                            AccountPatch.ENDPOINT_ACCOUNTS_DEPOSIT,
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
                             Map.of("id", accountId),
                             AccountData.ACCOUNT_DEPOSIT_BELOW_ZERO,
                             400)

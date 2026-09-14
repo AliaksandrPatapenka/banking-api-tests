@@ -4,8 +4,8 @@ package com.apiAuto.presentation.test.users;
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
+import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.testData.UserData;
-import com.apiAuto.presentation.patchs.UsersPatch;
 import org.junit.jupiter.api.*;
 
 import java.util.Map;
@@ -41,7 +41,7 @@ public class GetUsersLoginTest {
 
             ApiSteps.get(requestSpec(),
                             Map.of("login", userLogin),
-                            UsersPatch.ENDPOINT_USERS_BY_LOGIN,
+                            UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
                             200)
                     .then()
                     .body("login", equalTo(userLogin))
@@ -58,13 +58,13 @@ public class GetUsersLoginTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
         @Test
-        @DisplayName("Case 2.1: Получение пользователя по не существующему в БД логину")
+        @DisplayName("Case 2.1: Получение пользователя по несуществующему в БД логину")
         void getUserByLoginNotExist() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 
             ApiSteps.get(requestSpec(),
                             Map.of("login", userLogin),
-                            UsersPatch.ENDPOINT_USERS_BY_LOGIN,
+                            UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
                             400)
                     .then();
         }

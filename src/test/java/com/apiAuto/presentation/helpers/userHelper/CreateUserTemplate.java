@@ -1,12 +1,11 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
 import com.apiAuto.common.helpers.ApiSteps;
-import com.apiAuto.presentation.patchs.UsersPatch;
+import com.apiAuto.presentation.endpoints.UsersEndpoints;
 
 import java.util.Map;
 
 import static com.apiAuto.common.config.Specs.requestSpec;
-import static io.restassured.RestAssured.given;
 
 public class CreateUserTemplate {
     public static String userGetLogin() {
@@ -14,7 +13,7 @@ public class CreateUserTemplate {
         String userLogin = (String) jsonRequest.get("login");
 
         ApiSteps.postBody(requestSpec(),
-                UsersPatch.ENDPOINT_USERS,
+                UsersEndpoints.ENDPOINT_USERS,
                 jsonRequest,
                 200);
 

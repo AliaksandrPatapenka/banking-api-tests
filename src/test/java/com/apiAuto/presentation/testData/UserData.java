@@ -14,7 +14,7 @@ public final class UserData {
         } catch (Exception e) {
             // ignore
         }
-    } // Загружает local.properties для локального запуска. В Jenkins переопределяется через -D.
+    } // Загружает local.properties для локального запуска. В Jenkins переопределяется через -D
 
     /**
      * Невалидные тестовые данные пользователя

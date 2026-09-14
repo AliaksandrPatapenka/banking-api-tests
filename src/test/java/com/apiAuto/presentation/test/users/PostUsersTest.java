@@ -11,7 +11,7 @@ import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.models.CreateUser;
-import com.apiAuto.presentation.patchs.UsersPatch;
+import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class PostUsersTest {
             CreateUser createUser = TestData.defaultRequestBody();
 
             ApiSteps.postBody(requestSpec(),
-                            UsersPatch.ENDPOINT_USERS,
+                            UsersEndpoints.ENDPOINT_USERS,
                             createUser,
                             200)
                     .then()
@@ -84,7 +84,7 @@ public class PostUsersTest {
         }
 
         @Test
-        @DisplayName("Case 1.2: Создание пользователя C Привязкой 3 друзей")
+        @DisplayName("Case 1.2: Создание пользователя с привязкой 3 друзей")
         void friendsUserCreate() {
             List<String> friends = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
@@ -94,7 +94,7 @@ public class PostUsersTest {
             CreateUser createUser = TestData.defaultRequestBody(friends);
 
             ApiSteps.postBody(requestSpec(),
-                            UsersPatch.ENDPOINT_USERS,
+                            UsersEndpoints.ENDPOINT_USERS,
                             createUser,
                             200)
                     .then()
@@ -121,7 +121,7 @@ public class PostUsersTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case1.1: Создание пользователя при отсутствии в запросе поля friends")
+        @DisplayName("Case 1.1: Создание пользователя при отсутствии в запросе поля friends")
         void createUserStatus500() {
             Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
             jsonRequest.remove("friends");
@@ -129,7 +129,7 @@ public class PostUsersTest {
             String requestBody = JsonContext.toJson(jsonRequest);
 
             ApiSteps.postBody(requestSpec(),
-                            UsersPatch.ENDPOINT_USERS,
+                            UsersEndpoints.ENDPOINT_USERS,
                             requestBody,
                             500)
                     .then()
@@ -138,14 +138,14 @@ public class PostUsersTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case1.2: Создание пользователя с существующим в базе данных логином")
+        @DisplayName("Case 1.2: Создание пользователя с существующим в базе данных логином")
         void createUserStatus400() {
             String userLogin = CreateUserTemplate.userGetLogin();
             CreateUser createUser = TestData.defaultRequestBody();
             createUser.setLogin(userLogin);
 
             ApiSteps.postBody(requestSpec(),
-                            UsersPatch.ENDPOINT_USERS,
+                            UsersEndpoints.ENDPOINT_USERS,
                             createUser,
                             400)
                     .then()

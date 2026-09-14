@@ -6,8 +6,8 @@ import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
+import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.testData.UserData;
-import com.apiAuto.presentation.patchs.AccountPatch;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -37,12 +37,12 @@ public class PostAccountsTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 2.1: Создание счёта у пользователя, у которого отсутствуют счета")
+        @DisplayName("Case 2.1: Создание счёта у пользователя, у которого отсутствуют счёта")
         void createAccount() {
             String userLogin = CreateUserTemplate.userGetLogin();
 
             ApiSteps.postQuery(requestSpec(),
-                            AccountPatch.ENDPOINT_ACCOUNTS,
+                            AccountEndpoints.ENDPOINT_ACCOUNTS,
                             Map.of("userLogin", userLogin),
                             200)
                     .then()
@@ -54,13 +54,13 @@ public class PostAccountsTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 2.2: Создание счёта у пользователя, у которого уже есть счет")
+        @DisplayName("Case 2.2: Создание счёта у пользователя, у которого уже есть счёт")
         void createTwoAccount() {
             String userLogin = CreateUserTemplate.userGetLogin();
 
             for (int i = 0; i < 2; i++) {
                 ApiSteps.postQuery(requestSpec(),
-                                AccountPatch.ENDPOINT_ACCOUNTS,
+                                AccountEndpoints.ENDPOINT_ACCOUNTS,
                                 Map.of("userLogin", userLogin),
                                 200)
                         .then()
@@ -84,12 +84,12 @@ public class PostAccountsTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case2.1: В параметрах запроса передается неверный ключ")
+        @DisplayName("Case 2.1: В параметрах запроса передается неверный ключ")
         void createUserStatus500() {
             String userLogin = CreateUserTemplate.userGetLogin();
 
             ApiSteps.postQuery(requestSpec(),
-                            AccountPatch.ENDPOINT_ACCOUNTS,
+                            AccountEndpoints.ENDPOINT_ACCOUNTS,
                             Map.of("keyLoginFalse", userLogin),
                             500)
                     .then()
@@ -98,12 +98,12 @@ public class PostAccountsTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case2.1: Создание счета для несуществующего пользователя")
+        @DisplayName("Case 2.2: Создание счёта для несуществующего пользователя")
         void createUserStatus400() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 
             ApiSteps.postQuery(requestSpec(),
-                            AccountPatch.ENDPOINT_ACCOUNTS,
+                            AccountEndpoints.ENDPOINT_ACCOUNTS,
                             Map.of("userLogin", userLogin),
                             400)
                     .then()

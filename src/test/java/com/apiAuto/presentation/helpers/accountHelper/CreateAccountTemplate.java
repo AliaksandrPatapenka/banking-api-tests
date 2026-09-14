@@ -2,8 +2,7 @@ package com.apiAuto.presentation.helpers.accountHelper;
 
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.common.helpers.DbAssert;
-import com.apiAuto.presentation.patchs.AccountPatch;
-import com.apiAuto.presentation.testData.AccountData;
+import com.apiAuto.presentation.endpoints.AccountEndpoints;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -11,9 +10,9 @@ import java.util.Map;
 import static com.apiAuto.common.config.Specs.requestSpec;
 
 public class CreateAccountTemplate {
-    public  static void createAccount(String userLogin){
+    public static void createAccount(String userLogin) {
         ApiSteps.postQuery(requestSpec(),
-                AccountPatch.ENDPOINT_ACCOUNTS,
+                AccountEndpoints.ENDPOINT_ACCOUNTS,
                 Map.of("userLogin", userLogin),
                 200);
 

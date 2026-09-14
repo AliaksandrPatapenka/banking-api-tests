@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.models.users;
+package com.apiAuto.presentation.models;
 
 import java.util.List;
 

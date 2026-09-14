@@ -10,7 +10,7 @@ import com.apiAuto.presentation.helpers.userHelper.UserCreateTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
-import com.apiAuto.presentation.models.users.CreateUser;
+import com.apiAuto.presentation.models.CreateUser;
 import com.apiAuto.presentation.properties.patch.UsersPatch;
 import org.junit.jupiter.api.*;
 

@@ -1,11 +1,11 @@
 package com.apiAuto.presentation.test.accounts;
 
 import com.apiAuto.common.helpers.ApiSteps;
+import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.testData.AccountData;
 import org.junit.jupiter.api.*;
 

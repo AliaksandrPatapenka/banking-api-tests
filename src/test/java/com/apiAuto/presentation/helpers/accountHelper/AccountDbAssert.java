@@ -15,7 +15,7 @@ public class AccountDbAssert {
     }
 
     public static BigDecimal getAccountBalance(String userLogin) {
-        return  (BigDecimal) DbUtils.getValue(AccountSql.SELECT_ACCOUNT_BALANCE, userLogin);
+        return (BigDecimal) DbUtils.getValue(AccountSql.SELECT_ACCOUNT_BALANCE, userLogin);
     }
 
     public static int getAccountId(String userLogin) {

@@ -2,9 +2,9 @@ package com.apiAuto.presentation.test.users;
 
 
 import com.apiAuto.common.helpers.ApiSteps;
+import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.testData.UserData;
 import org.junit.jupiter.api.*;
 

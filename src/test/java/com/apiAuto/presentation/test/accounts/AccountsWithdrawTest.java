@@ -20,7 +20,7 @@ public class AccountsWithdrawTest {
     private record AccountContext(String userLogin, int accountId) {
     }
 
-     private static class TestData {
+    private static class TestData {
         private static AccountContext createAccount() {
             String userLogin = UserTemplate.userGetLogin();
             AccountTemplate.createAccount(userLogin);

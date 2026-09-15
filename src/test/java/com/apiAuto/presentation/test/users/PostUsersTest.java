@@ -4,14 +4,14 @@ import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.common.helpers.CommonDataGenerator;
 import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.common.helpers.JsonContext;
+import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
+import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import com.apiAuto.presentation.models.CreateUser;
-import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;

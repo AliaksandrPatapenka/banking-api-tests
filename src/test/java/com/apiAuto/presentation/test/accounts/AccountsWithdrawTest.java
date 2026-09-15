@@ -1,5 +1,6 @@
 package com.apiAuto.presentation.test.accounts;
 
+import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
@@ -22,15 +23,15 @@ public class AccountsWithdrawTest {
 
     private static class TestData {
         private static AccountContext createAccount() {
-            String userLogin = UserTemplate.userGetLogin();
-            AccountTemplate.createAccount(userLogin);
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
+            AccountTemplate.createAccount(userLogin, HttpStatus.OK);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             return new AccountContext(userLogin, accountId);
         }
 
         private static BigDecimal depositAndGetBalance(AccountContext ctx) {
-            AccountTemplate.accountDeposit(ctx.accountId());
+            AccountTemplate.accountDeposit(ctx.accountId(), HttpStatus.OK);
             return AccountDbAssert.getAccountBalance(ctx.userLogin());
         }
     }

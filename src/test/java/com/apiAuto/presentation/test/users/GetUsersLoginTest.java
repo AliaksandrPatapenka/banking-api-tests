@@ -1,6 +1,7 @@
 package com.apiAuto.presentation.test.users;
 
 
+import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
@@ -37,12 +38,12 @@ public class GetUsersLoginTest {
         @Test
         @DisplayName("Case 2.1: Получение пользователя по существующему в БД логину")
         void getUserByLogin() {
-            String userLogin = UserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             ApiSteps.get(requestSpec(),
                             Map.of("login", userLogin),
                             UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
-                            200)
+                            HttpStatus.OK)
                     .then()
                     .body("login", equalTo(userLogin))
                     .body(matchesJsonSchemaInClasspath(USER_BY_LOGIN_SCHEMA));
@@ -57,6 +58,8 @@ public class GetUsersLoginTest {
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
+        private static final String ERROR_SCHEMA = "schemas/presentation/userSchema/errorSchema.json";
+
         @Test
         @DisplayName("Case 2.1: Получение пользователя по несуществующему в БД логину")
         void getUserByLoginNotExist() {
@@ -65,9 +68,9 @@ public class GetUsersLoginTest {
             ApiSteps.get(requestSpec(),
                             Map.of("login", userLogin),
                             UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
-                            400)
-                    .then();
+                            HttpStatus.BAD_REQUEST)
+                    .then()
+                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
-
     }
 }

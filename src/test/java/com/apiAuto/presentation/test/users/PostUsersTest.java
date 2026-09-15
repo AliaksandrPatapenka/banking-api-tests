@@ -71,7 +71,6 @@ public class PostUsersTest {
 
             DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUser.getLogin(), 1);
             UserDbAssert.assertDataUser(createUser);
-
         }
 
         @Test
@@ -92,8 +91,6 @@ public class PostUsersTest {
             UserDbAssert.assertDataUser(createUser);
             UserDbAssert.assertFriends(createUser);
         }
-
-
     }
 
 
@@ -115,7 +112,6 @@ public class PostUsersTest {
 
             UserTemplate.createUser(createUser, HttpStatus.INTERNAL_ERROR)
                     .then()
-                    .statusCode(500)
                     .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
 
@@ -129,7 +125,6 @@ public class PostUsersTest {
 
             UserTemplate.createUser(createUser, HttpStatus.BAD_REQUEST)
                     .then()
-                    .statusCode(400)
                     .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
     }

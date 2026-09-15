@@ -43,5 +43,4 @@ public class Specs {
                 .log(LogDetail.ALL)
                 .build();
     }
-
 }

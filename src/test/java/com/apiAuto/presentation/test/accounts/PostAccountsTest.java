@@ -1,5 +1,6 @@
 package com.apiAuto.presentation.test.accounts;
 
+import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.endpoints.AccountEndpoints;
@@ -39,7 +40,7 @@ public class PostAccountsTest {
         @Order(1)
         @DisplayName("Case 3.1: Создание счёта у пользователя, у которого отсутствуют счёта")
         void createAccount() {
-            String userLogin = UserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             ApiSteps.postQuery(requestSpec(),
                             AccountEndpoints.ENDPOINT_ACCOUNTS,
@@ -56,7 +57,7 @@ public class PostAccountsTest {
         @Order(2)
         @DisplayName("Case 3.2: Создание счёта у пользователя, у которого уже есть счёт")
         void createTwoAccount() {
-            String userLogin = UserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             for (int i = 0; i < 2; i++) {
                 ApiSteps.postQuery(requestSpec(),
@@ -86,7 +87,7 @@ public class PostAccountsTest {
         @Order(1)
         @DisplayName("Case 3.1: В параметрах запроса передается неверный ключ")
         void createUserStatus500() {
-            String userLogin = UserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             ApiSteps.postQuery(requestSpec(),
                             AccountEndpoints.ENDPOINT_ACCOUNTS,

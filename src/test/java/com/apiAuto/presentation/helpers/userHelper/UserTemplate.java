@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static com.apiAuto.common.config.Specs.requestSpec;
 
-public class CreateUserTemplate {
+public class UserTemplate {
     public static String userGetLogin() {
         Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
         String userLogin = (String) jsonRequest.get("login");

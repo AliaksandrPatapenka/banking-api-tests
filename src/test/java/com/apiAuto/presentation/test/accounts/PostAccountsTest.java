@@ -5,7 +5,7 @@ import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
+import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.testData.UserData;
 import org.junit.jupiter.api.*;
@@ -39,7 +39,7 @@ public class PostAccountsTest {
         @Order(1)
         @DisplayName("Case 2.1: Создание счёта у пользователя, у которого отсутствуют счёта")
         void createAccount() {
-            String userLogin = CreateUserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin();
 
             ApiSteps.postQuery(requestSpec(),
                             AccountEndpoints.ENDPOINT_ACCOUNTS,
@@ -56,7 +56,7 @@ public class PostAccountsTest {
         @Order(2)
         @DisplayName("Case 2.2: Создание счёта у пользователя, у которого уже есть счёт")
         void createTwoAccount() {
-            String userLogin = CreateUserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin();
 
             for (int i = 0; i < 2; i++) {
                 ApiSteps.postQuery(requestSpec(),
@@ -86,7 +86,7 @@ public class PostAccountsTest {
         @Order(1)
         @DisplayName("Case 2.1: В параметрах запроса передается неверный ключ")
         void createUserStatus500() {
-            String userLogin = CreateUserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin();
 
             ApiSteps.postQuery(requestSpec(),
                             AccountEndpoints.ENDPOINT_ACCOUNTS,

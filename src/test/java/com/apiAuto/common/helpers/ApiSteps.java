@@ -37,6 +37,7 @@ public class ApiSteps {
                                          Object body,
                                          int status) {
         return given(spec)
+                .log().all()
                 .pathParams(pathParam)
                 .body(body)
                 .when().post(endpoint)

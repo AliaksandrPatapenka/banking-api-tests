@@ -6,7 +6,7 @@ import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.common.helpers.JsonContext;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.CreateUserTemplate;
+import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
@@ -88,7 +88,7 @@ public class PostUsersTest {
         void friendsUserCreate() {
             List<String> friends = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                friends.add(CreateUserTemplate.userGetLogin());
+                friends.add(UserTemplate.userGetLogin());
             }
 
             CreateUser createUser = TestData.defaultRequestBody(friends);
@@ -140,7 +140,7 @@ public class PostUsersTest {
         @Order(2)
         @DisplayName("Case 1.2: Создание пользователя с существующим в базе данных логином")
         void createUserStatus400() {
-            String userLogin = CreateUserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin();
             CreateUser createUser = TestData.defaultRequestBody();
             createUser.setLogin(userLogin);
 

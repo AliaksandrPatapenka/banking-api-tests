@@ -1,5 +1,6 @@
 package com.apiAuto.presentation.test.accounts;
 
+import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
@@ -38,9 +39,9 @@ public class AccountsDepositTest {
         @Order(1)
         @DisplayName("Case 4.1: Пополнение счета (max значение)")
         void accountDepositMax() {
-            String userLogin = UserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
-            AccountTemplate.createAccount(userLogin);
+            AccountTemplate.createAccount(userLogin, HttpStatus.OK);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),
@@ -58,9 +59,9 @@ public class AccountsDepositTest {
         @Order(2)
         @DisplayName("Case 4.2: Пополнение счета (min значение)")
         void accountDepositMin() {
-            String userLogin = UserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
-            AccountTemplate.createAccount(userLogin);
+            AccountTemplate.createAccount(userLogin, HttpStatus.OK);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),
@@ -90,8 +91,8 @@ public class AccountsDepositTest {
         @Order(1)
         @DisplayName("Case 4.1: Пополнение счета (значение больше максимального)")
         void createUserStatus500() {
-            String userLogin = UserTemplate.userGetLogin();
-            AccountTemplate.createAccount(userLogin);
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
+            AccountTemplate.createAccount(userLogin, HttpStatus.INTERNAL_ERROR);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),
@@ -107,8 +108,8 @@ public class AccountsDepositTest {
         @Order(2)
         @DisplayName("Case 4.2: Пополнение счета (отрицательное значение)")
         void createUserStatus400() {
-            String userLogin = UserTemplate.userGetLogin();
-            AccountTemplate.createAccount(userLogin);
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
+            AccountTemplate.createAccount(userLogin, HttpStatus.BAD_REQUEST);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
             ApiSteps.postPatchBody(requestSpec(),

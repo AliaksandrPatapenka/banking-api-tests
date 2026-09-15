@@ -12,22 +12,22 @@ public class ApiSteps {
     public static Response postQuery(RequestSpecification spec,
                                      String endpoint,
                                      Map<String, ?> queryParam,
-                                     int status) {
+                                     int httpStatus) {
         return given(spec)
                 .queryParams(queryParam)
                 .when().post(endpoint)
-                .then().statusCode(status)
+                .then().statusCode(httpStatus)
                 .extract().response();
     }
 
     public static Response postBody(RequestSpecification spec,
                                     String endpoint,
                                     Object body,
-                                    int status) {
+                                    int httpStatus) {
         return given(spec)
                 .body(body)
                 .when().post(endpoint)
-                .then().statusCode(status)
+                .then().statusCode(httpStatus)
                 .extract().response();
     }
 
@@ -35,23 +35,23 @@ public class ApiSteps {
                                          String endpoint,
                                          Map<String, ?> pathParam,
                                          Object body,
-                                         int status) {
+                                         int httpStatus) {
         return given(spec)
                 .pathParams(pathParam)
                 .body(body)
                 .when().post(endpoint)
-                .then().statusCode(status)
+                .then().statusCode(httpStatus)
                 .extract().response();
     }
 
     public static Response get(RequestSpecification spec,
                                Map<String, ?> pathParam,
                                String endpoint,
-                               int status) {
+                               int httpStatus) {
         return given(spec)
                 .pathParams(pathParam)
                 .when().get(endpoint)
-                .then().statusCode(status)
+                .then().statusCode(httpStatus)
                 .extract().response();
     }
 }

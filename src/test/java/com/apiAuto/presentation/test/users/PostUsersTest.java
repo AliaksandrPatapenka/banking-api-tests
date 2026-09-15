@@ -1,14 +1,11 @@
 package com.apiAuto.presentation.test.users;
 
-import com.apiAuto.common.helpers.ApiSteps;
+import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.CommonDataGenerator;
 import com.apiAuto.common.helpers.DbAssert;
-import com.apiAuto.common.helpers.JsonContext;
-import com.apiAuto.presentation.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
-import com.apiAuto.presentation.helpers.userHelper.UserJsonTemplate;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import com.apiAuto.presentation.models.CreateUser;
@@ -17,9 +14,7 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import static com.apiAuto.common.config.Specs.requestSpec;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
@@ -70,15 +65,11 @@ public class PostUsersTest {
         void createUser() {
             CreateUser createUser = TestData.defaultRequestBody();
 
-            ApiSteps.postBody(requestSpec(),
-                            UsersEndpoints.ENDPOINT_USERS,
-                            createUser,
-                            200)
+            UserTemplate.createUser(createUser, HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
             DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUser.getLogin(), 1);
-
             UserDbAssert.assertDataUser(createUser);
 
         }
@@ -88,15 +79,12 @@ public class PostUsersTest {
         void friendsUserCreate() {
             List<String> friends = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                friends.add(UserTemplate.userGetLogin());
+                friends.add(UserTemplate.userGetLogin(HttpStatus.OK));
             }
 
             CreateUser createUser = TestData.defaultRequestBody(friends);
 
-            ApiSteps.postBody(requestSpec(),
-                            UsersEndpoints.ENDPOINT_USERS,
-                            createUser,
-                            200)
+            UserTemplate.createUser(createUser,HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
@@ -123,16 +111,11 @@ public class PostUsersTest {
         @Order(1)
         @DisplayName("Case 1.1: Создание пользователя при отсутствии в запросе поля friends")
         void createUserStatus500() {
-            Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
-            jsonRequest.remove("friends");
+            CreateUser createUser = new CreateUser();
 
-            String requestBody = JsonContext.toJson(jsonRequest);
-
-            ApiSteps.postBody(requestSpec(),
-                            UsersEndpoints.ENDPOINT_USERS,
-                            requestBody,
-                            500)
+            UserTemplate.createUser(createUser, HttpStatus.INTERNAL_ERROR)
                     .then()
+                    .statusCode(500)
                     .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
 
@@ -140,15 +123,13 @@ public class PostUsersTest {
         @Order(2)
         @DisplayName("Case 1.2: Создание пользователя с существующим в базе данных логином")
         void createUserStatus400() {
-            String userLogin = UserTemplate.userGetLogin();
+            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
             CreateUser createUser = TestData.defaultRequestBody();
             createUser.setLogin(userLogin);
 
-            ApiSteps.postBody(requestSpec(),
-                            UsersEndpoints.ENDPOINT_USERS,
-                            createUser,
-                            400)
+            UserTemplate.createUser(createUser, HttpStatus.BAD_REQUEST)
                     .then()
+                    .statusCode(400)
                     .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
         }
     }

@@ -9,18 +9,18 @@ import java.util.Map;
 import static com.apiAuto.common.config.Specs.requestSpec;
 
 public class AccountTemplate {
-    public static void createAccount(String userLogin) {
+    public static void createAccount(String userLogin, int httpStatus) {
         ApiSteps.postQuery(requestSpec(),
                 AccountEndpoints.ENDPOINT_ACCOUNTS,
                 Map.of("userLogin", userLogin),
-                200);
+                httpStatus);
     }
 
-    public static void accountDeposit(int accountId) {
+    public static void accountDeposit(int accountId, int httpStatus) {
         ApiSteps.postPatchBody(requestSpec(),
                 AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
                 Map.of("id", accountId),
                 AccountData.ACCOUNT_DEPOSIT_MAX,
-                200);
+                httpStatus);
     }
 }

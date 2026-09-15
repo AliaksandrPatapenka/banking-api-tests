@@ -36,7 +36,7 @@ public class AccountsDepositTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 3.1: Пополнение счета (max значение)")
+        @DisplayName("Case 4.1: Пополнение счета (max значение)")
         void accountDepositMax() {
             String userLogin = UserTemplate.userGetLogin();
 
@@ -56,7 +56,7 @@ public class AccountsDepositTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 3.2: Пополнение счета (min значение)")
+        @DisplayName("Case 4.2: Пополнение счета (min значение)")
         void accountDepositMin() {
             String userLogin = UserTemplate.userGetLogin();
 
@@ -88,7 +88,7 @@ public class AccountsDepositTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 3.1: Пополнение счета (значение больше максимального)")
+        @DisplayName("Case 4.1: Пополнение счета (значение больше максимального)")
         void createUserStatus500() {
             String userLogin = UserTemplate.userGetLogin();
             AccountTemplate.createAccount(userLogin);
@@ -105,7 +105,7 @@ public class AccountsDepositTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 3.2: Пополнение счета (отрицательное значение)")
+        @DisplayName("Case 4.2: Пополнение счета (отрицательное значение)")
         void createUserStatus400() {
             String userLogin = UserTemplate.userGetLogin();
             AccountTemplate.createAccount(userLogin);

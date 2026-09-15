@@ -4,9 +4,9 @@ import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.presentation.endpoints.AccountEndpoints;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
+import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.testData.AccountData;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -17,27 +17,27 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class AccountsWithdrawTest {
-    public record AccountContext(String userLogin, int accountId){}
+    private record AccountContext(String userLogin, int accountId) {
+    }
 
-    static class TestData{
-        private static AccountContext createAccount(){
-             String userLogin = UserTemplate.userGetLogin();
-             AccountTemplate.createAccount(userLogin);
-             int accountId = AccountDbAssert.getAccountId(userLogin);
+     private static class TestData {
+        private static AccountContext createAccount() {
+            String userLogin = UserTemplate.userGetLogin();
+            AccountTemplate.createAccount(userLogin);
+            int accountId = AccountDbAssert.getAccountId(userLogin);
 
-             return new AccountContext(userLogin, accountId);
+            return new AccountContext(userLogin, accountId);
         }
 
-        private static BigDecimal getBalance(AccountContext var){
-            AccountTemplate.accountDeposit(var.accountId());
-            return AccountDbAssert.getAccountBalance(var.userLogin());
+        private static BigDecimal depositAndGetBalance(AccountContext ctx) {
+            AccountTemplate.accountDeposit(ctx.accountId());
+            return AccountDbAssert.getAccountBalance(ctx.userLogin());
         }
     }
 
 
-
-    @BeforeEach
-    void dbCleanup() {
+    @BeforeAll
+    static void dbCleanup() {
         PresentationDbCleanup.deleteUsers();
         PresentationDbCleanup.deleteAccounts();
     }
@@ -55,19 +55,42 @@ public class AccountsWithdrawTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 2.1: Снятие суммы со счёта при достаточном балансе")
-        void createAccount() {
-            AccountContext var = TestData.createAccount();
+        @DisplayName("Case 5.1: Списание части баланса со счёта при достаточном балансе")
+        void withdrawPart() {
+            AccountContext ctx = TestData.createAccount();
+            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            BigDecimal debitAmount = PresentationDataGenerator.debitAmount(startBalance);
 
-            System.out.println("body = " + AccountData.ACCOUNT_DEPOSIT_WITHDRAW);
             ApiSteps.postPatchBody(requestSpec(),
                             AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
-                            Map.of("id", var.accountId ),
-                            AccountData.ACCOUNT_DEPOSIT_WITHDRAW,
+                            Map.of("id", ctx.accountId),
+                            debitAmount,
                             200)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
+
+            BigDecimal finishBalance = startBalance.subtract(debitAmount);
+            AccountDbAssert.assertAccountBalance(ctx.userLogin(), finishBalance);
         }
+
+        @Test
+        @Order(2)
+        @DisplayName("Case 5.1: Списание всего баланса со счёта при достаточном балансе")
+        void withdrawAll() {
+            AccountContext ctx = TestData.createAccount();
+            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            ApiSteps.postPatchBody(requestSpec(),
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
+                            Map.of("id", ctx.accountId),
+                            startBalance,
+                            200)
+                    .then()
+                    .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
+
+            BigDecimal finishBalance = startBalance.subtract(startBalance);
+            AccountDbAssert.assertAccountBalance(ctx.userLogin(), finishBalance);
+        }
+
 
     }
 

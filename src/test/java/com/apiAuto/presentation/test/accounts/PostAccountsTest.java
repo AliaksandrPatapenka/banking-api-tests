@@ -37,7 +37,7 @@ public class PostAccountsTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 2.1: Создание счёта у пользователя, у которого отсутствуют счёта")
+        @DisplayName("Case 3.1: Создание счёта у пользователя, у которого отсутствуют счёта")
         void createAccount() {
             String userLogin = UserTemplate.userGetLogin();
 
@@ -54,7 +54,7 @@ public class PostAccountsTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 2.2: Создание счёта у пользователя, у которого уже есть счёт")
+        @DisplayName("Case 3.2: Создание счёта у пользователя, у которого уже есть счёт")
         void createTwoAccount() {
             String userLogin = UserTemplate.userGetLogin();
 
@@ -84,7 +84,7 @@ public class PostAccountsTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 2.1: В параметрах запроса передается неверный ключ")
+        @DisplayName("Case 3.1: В параметрах запроса передается неверный ключ")
         void createUserStatus500() {
             String userLogin = UserTemplate.userGetLogin();
 
@@ -98,7 +98,7 @@ public class PostAccountsTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 2.2: Создание счёта для несуществующего пользователя")
+        @DisplayName("Case 3.2: Создание счёта для несуществующего пользователя")
         void createUserStatus400() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 

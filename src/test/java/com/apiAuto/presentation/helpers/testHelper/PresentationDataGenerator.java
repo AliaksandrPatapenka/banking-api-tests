@@ -1,9 +1,15 @@
 package com.apiAuto.presentation.helpers.testHelper;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PresentationDataGenerator {
+
+    public PresentationDataGenerator() {
+    }
 
     public static class GenderGenerator {
         private static final String[] gender = {
@@ -28,8 +34,16 @@ public class PresentationDataGenerator {
         }
     }
 
+    /**
+     * Генератор рандомного числа от 18 до 80
+     */
     public static int randomAge() {
         return 18 + new SecureRandom().nextInt(63); // 63 = 80 - 18 + 1
+    }
+
+    public static BigDecimal debitAmount(BigDecimal balance) {
+        int divisor = ThreadLocalRandom.current().nextInt(1, 101);   // 1..100
+        return balance.divide(BigDecimal.valueOf(divisor), 2, RoundingMode.DOWN);
     }
 
 }

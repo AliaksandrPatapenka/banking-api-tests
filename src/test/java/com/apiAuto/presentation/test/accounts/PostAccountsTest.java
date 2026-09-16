@@ -3,12 +3,16 @@ package com.apiAuto.presentation.test.accounts;
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.common.helpers.DbAssert;
-import com.apiAuto.presentation.endpoints.AccountEndpoints;
+import com.apiAuto.presentation.conctants.endpoints.AccountEndpoints;
+import com.apiAuto.presentation.conctants.queryParam.AccountQueryParam;
+import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
+import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
+import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.testData.UserData;
+import com.apiAuto.presentation.conctants.testData.UserData;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -20,8 +24,8 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class PostAccountsTest {
 
-    @BeforeEach
-    void dbCleanup() {
+    @BeforeAll
+    static void dbCleanup() {
         PresentationDbCleanup.deleteUsers();
         PresentationDbCleanup.deleteAccounts();
     }
@@ -34,7 +38,7 @@ public class PostAccountsTest {
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
-        private static final String ACCOUNT_CREATE_SCHEMA = "schemas/presentation/accountSchema/accountCreateSchema.json";
+        private static final String ACCOUNT_CREATE_SCHEMA = AccountSchemas.ACCOUNT_CREATE_SCHEMA;
 
         @Test
         @Order(1)
@@ -42,10 +46,7 @@ public class PostAccountsTest {
         void createAccount() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
-            ApiSteps.postQuery(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS,
-                            Map.of("userLogin", userLogin),
-                            200)
+            AccountTemplate.createAccount(userLogin, HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_CREATE_SCHEMA));
 
@@ -60,10 +61,7 @@ public class PostAccountsTest {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             for (int i = 0; i < 2; i++) {
-                ApiSteps.postQuery(requestSpec(),
-                                AccountEndpoints.ENDPOINT_ACCOUNTS,
-                                Map.of("userLogin", userLogin),
-                                200)
+                AccountTemplate.createAccount(userLogin, HttpStatus.OK)
                         .then()
                         .body(matchesJsonSchemaInClasspath(ACCOUNT_CREATE_SCHEMA));
             }
@@ -81,7 +79,8 @@ public class PostAccountsTest {
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
-        private static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
+        private static final String ERROR_400_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
+        private static final String ERROR_500_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
 
         @Test
         @Order(1)
@@ -91,10 +90,10 @@ public class PostAccountsTest {
 
             ApiSteps.postQuery(requestSpec(),
                             AccountEndpoints.ENDPOINT_ACCOUNTS,
-                            Map.of("keyLoginFalse", userLogin),
+                            Map.of(AccountQueryParam.KEY_LOGIN_FAKE, userLogin),
                             500)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_500_SCHEMA));
         }
 
         @Test
@@ -103,12 +102,9 @@ public class PostAccountsTest {
         void createUserStatus400() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 
-            ApiSteps.postQuery(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS,
-                            Map.of("userLogin", userLogin),
-                            400)
+            AccountTemplate.createAccount(userLogin, HttpStatus.BAD_REQUEST)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
         }
     }
 }

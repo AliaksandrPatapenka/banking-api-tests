@@ -88,6 +88,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- JDBC-драйвер PostgreSQL -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.5.1</version>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

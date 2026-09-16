@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.testData;
+package com.apiAuto.presentation.conctants.testData;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -20,5 +20,4 @@ public final class UserData {
      * Невалидные тестовые данные пользователя
      */
     public static final String LOGIN_NOT_EXIST = System.getProperty("user.loginNotExist", "loginNotExist");
-
 }

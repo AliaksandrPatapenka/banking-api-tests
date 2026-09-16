@@ -1,25 +1,22 @@
 package com.apiAuto.presentation.test.accounts;
 
 import com.apiAuto.common.config.HttpStatus;
-import com.apiAuto.common.helpers.ApiSteps;
-import com.apiAuto.presentation.endpoints.AccountEndpoints;
+import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
+import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.testData.AccountData;
+import com.apiAuto.presentation.conctants.testData.AccountData;
 import org.junit.jupiter.api.*;
 
-import java.util.Map;
-
-import static com.apiAuto.common.config.Specs.requestSpec;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class AccountsDepositTest {
 
-    @BeforeEach
-    void dbCleanup() {
+    @BeforeAll
+    static void dbCleanup() {
         PresentationDbCleanup.deleteUsers();
         PresentationDbCleanup.deleteAccounts();
     }
@@ -33,7 +30,7 @@ public class AccountsDepositTest {
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
-        private static final String ACCOUNT_DEPOSIT_SCHEMA = "schemas/presentation/accountSchema/accountDepositSchema.json";
+        private static final String ACCOUNT_DEPOSIT_SCHEMA = AccountSchemas.ACCOUNT_DEPOSIT_SCHEMA;
 
         @Test
         @Order(1)
@@ -44,11 +41,9 @@ public class AccountsDepositTest {
             AccountTemplate.createAccount(userLogin, HttpStatus.OK);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
-                            Map.of("id", accountId),
+            AccountTemplate.accountDeposit(accountId,
                             AccountData.ACCOUNT_DEPOSIT_MAX,
-                            200)
+                            HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
 
@@ -64,17 +59,14 @@ public class AccountsDepositTest {
             AccountTemplate.createAccount(userLogin, HttpStatus.OK);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
-                            Map.of("id", accountId),
+            AccountTemplate.accountDeposit(accountId,
                             AccountData.ACCOUNT_DEPOSIT_MIN,
-                            200)
+                            HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
 
             AccountDbAssert.assertAccountBalance(userLogin, AccountData.ACCOUNT_DEPOSIT_MIN);
         }
-
     }
 
     /**
@@ -85,23 +77,22 @@ public class AccountsDepositTest {
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
-        private static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
+        private static final String ERROR_400_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
+        private static final String ERROR_500_SCHEMA = ErrorSchemas.ERROR_500_SCHEMA;
 
         @Test
         @Order(1)
         @DisplayName("Case 4.1: Пополнение счета (значение больше максимального)")
         void createUserStatus500() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-            AccountTemplate.createAccount(userLogin, HttpStatus.INTERNAL_ERROR);
+            AccountTemplate.createAccount(userLogin, HttpStatus.OK);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
-                            Map.of("id", accountId),
+            AccountTemplate.accountDeposit(accountId,
                             AccountData.ACCOUNT_DEPOSIT_ABOVE_MAX,
-                            500)
+                            HttpStatus.INTERNAL_ERROR)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_500_SCHEMA));
         }
 
         @Test
@@ -109,16 +100,14 @@ public class AccountsDepositTest {
         @DisplayName("Case 4.2: Пополнение счета (отрицательное значение)")
         void createUserStatus400() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-            AccountTemplate.createAccount(userLogin, HttpStatus.BAD_REQUEST);
+            AccountTemplate.createAccount(userLogin, HttpStatus.OK);
             int accountId = AccountDbAssert.getAccountId(userLogin);
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
-                            Map.of("id", accountId),
+            AccountTemplate.accountDeposit(accountId,
                             AccountData.ACCOUNT_DEPOSIT_BELOW_ZERO,
-                            400)
+                            HttpStatus.BAD_REQUEST)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
         }
     }
 }

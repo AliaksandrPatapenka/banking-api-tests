@@ -1,7 +1,7 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
 import com.apiAuto.common.helpers.ApiSteps;
-import com.apiAuto.presentation.endpoints.UsersEndpoints;
+import com.apiAuto.presentation.conctants.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.models.CreateUser;
 import io.restassured.response.Response;
 

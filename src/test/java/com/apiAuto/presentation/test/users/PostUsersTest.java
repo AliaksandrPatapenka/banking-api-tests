@@ -3,6 +3,8 @@ package com.apiAuto.presentation.test.users;
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.CommonDataGenerator;
 import com.apiAuto.common.helpers.DbAssert;
+import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.conctants.schemasPatchs.UserSchemas;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
@@ -20,6 +22,12 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class PostUsersTest {
     static class TestData {
+        @BeforeAll
+        static void dbCleanup() {
+            PresentationDbCleanup.deleteFriends();
+            PresentationDbCleanup.deleteUsers();
+        }
+
         private static CreateUser defaultRequestBody() {
             return defaultRequestBody(Collections.emptyList());
         }
@@ -44,12 +52,6 @@ public class PostUsersTest {
         }
     }
 
-    @BeforeEach
-    void dbCleanup() {
-        PresentationDbCleanup.deleteFriends();
-        PresentationDbCleanup.deleteUsers();
-    }
-
     /**
      * ==================== ПОЗИТИВНЫЕ ТЕСТЫ ====================
      */
@@ -58,7 +60,7 @@ public class PostUsersTest {
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
-        private static final String USER_CREATE_SCHEMA = "schemas/presentation/userSchema/userCreateSchema.json";
+        private static final String USER_CREATE_SCHEMA = UserSchemas.USER_CREATE_SCHEMA;
 
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
@@ -102,7 +104,8 @@ public class PostUsersTest {
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
-        private static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
+        private static final String ERROR_400_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
+        private static final String ERROR_500_SCHEMA = ErrorSchemas.ERROR_500_SCHEMA;
 
         @Test
         @Order(1)
@@ -112,7 +115,7 @@ public class PostUsersTest {
 
             UserTemplate.createUser(createUser, HttpStatus.INTERNAL_ERROR)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_500_SCHEMA));
         }
 
         @Test
@@ -125,7 +128,7 @@ public class PostUsersTest {
 
             UserTemplate.createUser(createUser, HttpStatus.BAD_REQUEST)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
         }
     }
 }

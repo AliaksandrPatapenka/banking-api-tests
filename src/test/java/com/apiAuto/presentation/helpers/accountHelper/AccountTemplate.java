@@ -1,26 +1,36 @@
 package com.apiAuto.presentation.helpers.accountHelper;
 
 import com.apiAuto.common.helpers.ApiSteps;
-import com.apiAuto.presentation.endpoints.AccountEndpoints;
-import com.apiAuto.presentation.testData.AccountData;
+import com.apiAuto.presentation.conctants.endpoints.AccountEndpoints;
+import com.apiAuto.presentation.conctants.queryParam.AccountQueryParam;
+import io.restassured.response.Response;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import static com.apiAuto.common.config.Specs.requestSpec;
 
 public class AccountTemplate {
-    public static void createAccount(String userLogin, int httpStatus) {
-        ApiSteps.postQuery(requestSpec(),
+    public static Response createAccount(String userLogin, int httpStatus) {
+        return ApiSteps.postQuery(requestSpec(),
                 AccountEndpoints.ENDPOINT_ACCOUNTS,
-                Map.of("userLogin", userLogin),
+                Map.of(AccountQueryParam.USER_LOGIN, userLogin),
                 httpStatus);
     }
 
-    public static void accountDeposit(int accountId, int httpStatus) {
-        ApiSteps.postPatchBody(requestSpec(),
+    public static Response accountDeposit(int accountId, BigDecimal deposit, int httpStatus) {
+        return ApiSteps.postPatchBody(requestSpec(),
                 AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
-                Map.of("id", accountId),
-                AccountData.ACCOUNT_DEPOSIT_MAX,
+                Map.of(AccountQueryParam.ID, accountId),
+                deposit,
+                httpStatus);
+    }
+
+    public static Response accountWithdraw(int accountId, BigDecimal startBalance, int httpStatus) {
+        return ApiSteps.postPatchBody(requestSpec(),
+                AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
+                Map.of(AccountQueryParam.ID, accountId),
+                startBalance,
                 httpStatus);
     }
 }

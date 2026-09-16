@@ -1,23 +1,28 @@
 package com.apiAuto.presentation.test.accounts;
 
 import com.apiAuto.common.config.HttpStatus;
-import com.apiAuto.common.helpers.ApiSteps;
-import com.apiAuto.presentation.endpoints.AccountEndpoints;
+import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
+import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
+import com.apiAuto.presentation.conctants.testData.AccountData;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
-import static com.apiAuto.common.config.Specs.requestSpec;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class AccountsWithdrawTest {
+    @BeforeAll
+    static void dbCleanup() {
+        PresentationDbCleanup.deleteUsers();
+        PresentationDbCleanup.deleteAccounts();
+    }
+
     private record AccountContext(String userLogin, int accountId) {
     }
 
@@ -31,16 +36,11 @@ public class AccountsWithdrawTest {
         }
 
         private static BigDecimal depositAndGetBalance(AccountContext ctx) {
-            AccountTemplate.accountDeposit(ctx.accountId(), HttpStatus.OK);
+            AccountTemplate.accountDeposit(ctx.accountId(),
+                    AccountData.ACCOUNT_DEPOSIT_MAX,
+                    HttpStatus.OK);
             return AccountDbAssert.getAccountBalance(ctx.userLogin());
         }
-    }
-
-
-    @BeforeAll
-    static void dbCleanup() {
-        PresentationDbCleanup.deleteUsers();
-        PresentationDbCleanup.deleteAccounts();
     }
 
     /**
@@ -52,7 +52,7 @@ public class AccountsWithdrawTest {
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
-        private static final String ACCOUNT_WITHDRAW_SCHEMA = "schemas/presentation/accountSchema/accountWithdrawSchema.json";
+        private static final String ACCOUNT_WITHDRAW_SCHEMA = AccountSchemas.ACCOUNT_WITHDRAW_SCHEMA;
 
         @Test
         @Order(1)
@@ -62,11 +62,9 @@ public class AccountsWithdrawTest {
             BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
             BigDecimal debitAmount = PresentationDataGenerator.debitAmount(startBalance);
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
-                            Map.of("id", ctx.accountId),
+            AccountTemplate.accountWithdraw(ctx.accountId(),
                             debitAmount,
-                            200)
+                            HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
@@ -81,11 +79,9 @@ public class AccountsWithdrawTest {
             AccountContext ctx = TestData.createAccount();
             BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
-                            Map.of("id", ctx.accountId),
+            AccountTemplate.accountWithdraw(ctx.accountId(),
                             startBalance,
-                            200)
+                            HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
@@ -101,11 +97,9 @@ public class AccountsWithdrawTest {
             BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
             BigDecimal debitAmount = new BigDecimal("0.00");
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
-                            Map.of("id", ctx.accountId),
+            AccountTemplate.accountWithdraw(ctx.accountId(),
                             debitAmount,
-                            200)
+                            HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
@@ -121,7 +115,7 @@ public class AccountsWithdrawTest {
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
-        private static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
+        private static final String ERROR_400_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
 
         @Test
         @Order(1)
@@ -131,13 +125,11 @@ public class AccountsWithdrawTest {
             BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
             BigDecimal debitAmount = startBalance.add(new BigDecimal("0.01"));
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
-                            Map.of("id", ctx.accountId),
+            AccountTemplate.accountWithdraw(ctx.accountId,
                             debitAmount,
-                            400)
+                            HttpStatus.BAD_REQUEST)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
 
             AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
         }
@@ -150,13 +142,11 @@ public class AccountsWithdrawTest {
             BigDecimal startBalance = AccountDbAssert.getAccountBalance(ctx.userLogin());
             BigDecimal debitAmount = new BigDecimal("0.01");
 
-            ApiSteps.postPatchBody(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
-                            Map.of("id", ctx.accountId),
-                            debitAmount,
-                            400)
+          AccountTemplate.accountWithdraw(ctx.accountId(),
+                          debitAmount,
+                          HttpStatus.BAD_REQUEST)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
 
             AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
         }

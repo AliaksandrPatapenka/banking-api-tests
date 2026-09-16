@@ -52,7 +52,7 @@ public class AccountsWithdrawTest {
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTests {
-        private static final String ACCOUNT_DEPOSIT_SCHEMA = "schemas/presentation/accountSchema/accountWithdrawSchema.json";
+        private static final String ACCOUNT_WITHDRAW_SCHEMA = "schemas/presentation/accountSchema/accountWithdrawSchema.json";
 
         @Test
         @Order(1)
@@ -68,7 +68,7 @@ public class AccountsWithdrawTest {
                             debitAmount,
                             200)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
             BigDecimal finishBalance = startBalance.subtract(debitAmount);
             AccountDbAssert.assertAccountBalance(ctx.userLogin(), finishBalance);
@@ -76,23 +76,41 @@ public class AccountsWithdrawTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 5.1: Списание всего баланса со счёта при достаточном балансе")
+        @DisplayName("Case 5.2: Списание всего баланса со счёта при достаточном балансе")
         void withdrawAll() {
             AccountContext ctx = TestData.createAccount();
             BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+
             ApiSteps.postPatchBody(requestSpec(),
                             AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
                             Map.of("id", ctx.accountId),
                             startBalance,
                             200)
                     .then()
-                    .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
+                    .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
             BigDecimal finishBalance = startBalance.subtract(startBalance);
             AccountDbAssert.assertAccountBalance(ctx.userLogin(), finishBalance);
         }
 
+        @Test
+        @Order(3)
+        @DisplayName("Case 5.3: Списание со счёта нулевого значения (баланс нет нулевой)")
+        void withdrawZero() {
+            AccountContext ctx = TestData.createAccount();
+            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            BigDecimal debitAmount = new BigDecimal("0.00");
 
+            ApiSteps.postPatchBody(requestSpec(),
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
+                            Map.of("id", ctx.accountId),
+                            debitAmount,
+                            200)
+                    .then()
+                    .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
+
+            AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
+        }
     }
 
     /**
@@ -103,6 +121,44 @@ public class AccountsWithdrawTest {
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
+        private static final String ERROR_SCHEMA = "schemas/errorSchema/errorSchema.json";
 
+        @Test
+        @Order(1)
+        @DisplayName("Case 5.1: Списание суммы, превышающей текущий баланс (не нулевой)")
+        void withdrawPartExceedingBalance() {
+            AccountContext ctx = TestData.createAccount();
+            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            BigDecimal debitAmount = startBalance.add(new BigDecimal("0.01"));
+
+            ApiSteps.postPatchBody(requestSpec(),
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
+                            Map.of("id", ctx.accountId),
+                            debitAmount,
+                            400)
+                    .then()
+                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+
+            AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
+        }
+
+        @Test
+        @Order(2)
+        @DisplayName("Case 5.2: Списание со счёта при нулевом балансе")
+        void withdrawBalanceZero() {
+            AccountContext ctx = TestData.createAccount();
+            BigDecimal startBalance = AccountDbAssert.getAccountBalance(ctx.userLogin());
+            BigDecimal debitAmount = new BigDecimal("0.01");
+
+            ApiSteps.postPatchBody(requestSpec(),
+                            AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
+                            Map.of("id", ctx.accountId),
+                            debitAmount,
+                            400)
+                    .then()
+                    .body(matchesJsonSchemaInClasspath(ERROR_SCHEMA));
+
+            AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
+        }
     }
 }

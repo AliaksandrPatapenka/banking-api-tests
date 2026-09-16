@@ -1,11 +1,9 @@
 package com.apiAuto.presentation.test.users;
 
 import com.apiAuto.common.config.HttpStatus;
-import com.apiAuto.common.helpers.CommonDataGenerator;
 import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.conctants.schemasPatchs.UserSchemas;
-import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
@@ -14,42 +12,16 @@ import com.apiAuto.presentation.models.CreateUser;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
 public class PostUsersTest {
-    static class TestData {
-        @BeforeAll
-        static void dbCleanup() {
-            PresentationDbCleanup.deleteFriends();
-            PresentationDbCleanup.deleteUsers();
-        }
-
-        private static CreateUser defaultRequestBody() {
-            return defaultRequestBody(Collections.emptyList());
-        }
-
-        private static CreateUser defaultRequestBody(List<String> friends) {
-            String timeIndex = CommonDataGenerator.timeIndex();
-            String userLogin = CommonDataGenerator.generatorString(timeIndex);
-            String userName = CommonDataGenerator.generatorString(timeIndex);
-            int userAge = PresentationDataGenerator.randomAge();
-            String userGender = PresentationDataGenerator.GenderGenerator.randomGender();
-            String userHairColor = PresentationDataGenerator.HairColorGenerator.randomHairColor();
-
-            CreateUser createUser = new CreateUser();
-            createUser.setLogin(userLogin);
-            createUser.setName(userName);
-            createUser.setAge(userAge);
-            createUser.setGender(userGender);
-            createUser.setHairColor(userHairColor);
-            createUser.setFriends(friends);
-
-            return createUser;
-        }
+    @BeforeAll
+    static void dbCleanup() {
+        PresentationDbCleanup.deleteFriends();
+        PresentationDbCleanup.deleteUsers();
     }
 
     /**
@@ -65,7 +37,7 @@ public class PostUsersTest {
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
         void createUser() {
-            CreateUser createUser = TestData.defaultRequestBody();
+            CreateUser createUser = UserTemplate.defaultRequestBody();
 
             UserTemplate.createUser(createUser, HttpStatus.OK)
                     .then()
@@ -83,9 +55,9 @@ public class PostUsersTest {
                 friends.add(UserTemplate.userGetLogin(HttpStatus.OK));
             }
 
-            CreateUser createUser = TestData.defaultRequestBody(friends);
+            CreateUser createUser = UserTemplate.defaultRequestBody(friends);
 
-            UserTemplate.createUser(createUser,HttpStatus.OK)
+            UserTemplate.createUser(createUser, HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
@@ -123,7 +95,7 @@ public class PostUsersTest {
         @DisplayName("Case 1.2: Создание пользователя с существующим в базе данных логином")
         void createUserStatus400() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-            CreateUser createUser = TestData.defaultRequestBody();
+            CreateUser createUser = UserTemplate.defaultRequestBody();
             createUser.setLogin(userLogin);
 
             UserTemplate.createUser(createUser, HttpStatus.BAD_REQUEST)

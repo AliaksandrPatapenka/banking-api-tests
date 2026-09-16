@@ -97,7 +97,7 @@ public class AccountsDepositTest {
 
         @Test
         @Order(2)
-        @DisplayName("Case 4.2: Пополнение счета (отрицательное значение)")
+        @DisplayName("Case 4.1: Пополнение счета (отрицательное значение)")
         void createUserStatus400() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
             AccountTemplate.createAccount(userLogin, HttpStatus.OK);

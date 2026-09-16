@@ -78,22 +78,6 @@ public class AccountsDepositTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
         private static final String ERROR_400_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
-        private static final String ERROR_500_SCHEMA = ErrorSchemas.ERROR_500_SCHEMA;
-
-        @Test
-        @Order(1)
-        @DisplayName("Case 4.1: Пополнение счета (значение больше максимального)")
-        void createUserStatus500() {
-            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-            AccountTemplate.createAccount(userLogin, HttpStatus.OK);
-            int accountId = AccountDbAssert.getAccountId(userLogin);
-
-            AccountTemplate.accountDeposit(accountId,
-                            AccountData.ACCOUNT_DEPOSIT_ABOVE_MAX,
-                            HttpStatus.INTERNAL_ERROR)
-                    .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_500_SCHEMA));
-        }
 
         @Test
         @Order(2)

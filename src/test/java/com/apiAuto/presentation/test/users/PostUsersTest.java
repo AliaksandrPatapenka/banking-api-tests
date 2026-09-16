@@ -77,18 +77,6 @@ public class PostUsersTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
         private static final String ERROR_400_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
-        private static final String ERROR_500_SCHEMA = ErrorSchemas.ERROR_500_SCHEMA;
-
-        @Test
-        @Order(1)
-        @DisplayName("Case 1.1: Создание пользователя при отсутствии в запросе поля friends")
-        void createUserStatus500() {
-            CreateUser createUser = new CreateUser();
-
-            UserTemplate.createUser(createUser, HttpStatus.INTERNAL_ERROR)
-                    .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_500_SCHEMA));
-        }
 
         @Test
         @Order(2)

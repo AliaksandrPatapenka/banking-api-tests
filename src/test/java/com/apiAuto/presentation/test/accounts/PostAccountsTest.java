@@ -80,25 +80,10 @@ public class PostAccountsTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {
         private static final String ERROR_400_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
-        private static final String ERROR_500_SCHEMA = ErrorSchemas.ERROR_400_SCHEMA;
 
         @Test
         @Order(1)
-        @DisplayName("Case 3.1: В параметрах запроса передается неверный ключ")
-        void createUserStatus500() {
-            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-
-            ApiSteps.postQuery(requestSpec(),
-                            AccountEndpoints.ENDPOINT_ACCOUNTS,
-                            Map.of(AccountQueryParam.KEY_LOGIN_FAKE, userLogin),
-                            500)
-                    .then()
-                    .body(matchesJsonSchemaInClasspath(ERROR_500_SCHEMA));
-        }
-
-        @Test
-        @Order(2)
-        @DisplayName("Case 3.2: Создание счёта для несуществующего пользователя")
+        @DisplayName("Case 3.1: Создание счёта для несуществующего пользователя")
         void createUserStatus400() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 

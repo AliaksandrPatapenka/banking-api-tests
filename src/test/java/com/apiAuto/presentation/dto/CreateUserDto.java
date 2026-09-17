@@ -1,8 +1,8 @@
-package com.apiAuto.presentation.models;
+package com.apiAuto.presentation.dto;
 
 import java.util.List;
 
-public class CreateUser {
+public class CreateUserDto {
     private String login;
     private String name;
     private int age;
@@ -10,7 +10,7 @@ public class CreateUser {
     private String hairColor;
     private List<String> friends;
 
-    public CreateUser() {
+    public CreateUserDto() {
     }
 
     public String getLogin() {

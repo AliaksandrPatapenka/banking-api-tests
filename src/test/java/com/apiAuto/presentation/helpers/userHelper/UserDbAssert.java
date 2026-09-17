@@ -1,7 +1,7 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
 import com.apiAuto.common.helpers.DbUtils;
-import com.apiAuto.presentation.models.CreateUser;
+import com.apiAuto.presentation.dto.CreateUserDto;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class UserDbAssert {
-    public static void assertDataUser(CreateUser expected) {
+    public static void assertDataUser(CreateUserDto expected) {
         Map<String, Object> user = DbUtils.getRow(
                 UserSql.SELECT_USER_BY_LOGIN, expected.getLogin());
 
@@ -24,7 +24,7 @@ public class UserDbAssert {
         assertEquals(expected.getHairColor(), user.get("hair_color"), "Цвет волос не совпадает");
     }
 
-    public static void assertFriends(CreateUser expected) {
+    public static void assertFriends(CreateUserDto expected) {
         Map<String, Object> user = DbUtils.getRow(
                 UserSql.SELECT_USER_BY_LOGIN, expected.getLogin());
 

@@ -25,7 +25,18 @@ public class JsonContext {
      */
     public static Map<String, Object> toMap(String json) {
         try {
-            return new ObjectMapper().readValue(json, new TypeReference<Map<String, Object>>() {});
+            return new ObjectMapper().readValue(json, new TypeReference<>() {});
+        } catch (Exception e) {
+            throw new RuntimeException("Не удалось распарсить JSON: " + json, e);
+        }
+    }
+
+    /**
+     * Парсит JSON-строку в объект указанного класса.
+     */
+    public static <T> T fromJson(String json, Class<T> type) {
+        try {
+            return new ObjectMapper().readValue(json, type);
         } catch (Exception e) {
             throw new RuntimeException("Не удалось распарсить JSON: " + json, e);
         }

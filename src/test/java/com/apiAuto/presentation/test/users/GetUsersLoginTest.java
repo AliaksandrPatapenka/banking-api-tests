@@ -2,7 +2,7 @@ package com.apiAuto.presentation.test.users;
 
 
 import com.apiAuto.common.config.HttpStatus;
-import com.apiAuto.common.helpers.ApiSteps;
+import com.apiAuto.common.helpers.RequestTemplate;
 import com.apiAuto.presentation.conctants.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.conctants.queryParam.UserQueryParam;
 import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
@@ -42,7 +42,7 @@ public class GetUsersLoginTest {
         void getUserByLogin() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
-            ApiSteps.get(requestSpec(),
+            RequestTemplate.get(requestSpec(),
                             Map.of(UserQueryParam.USER_LOGIN, userLogin),
                             UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
                             HttpStatus.OK)
@@ -67,7 +67,7 @@ public class GetUsersLoginTest {
         void getUser400() {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 
-            ApiSteps.get(requestSpec(),
+            RequestTemplate.get(requestSpec(),
                             Map.of(UserQueryParam.USER_LOGIN, userLogin),
                             UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
                             HttpStatus.BAD_REQUEST)

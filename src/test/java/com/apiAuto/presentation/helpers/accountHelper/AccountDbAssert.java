@@ -19,6 +19,6 @@ public class AccountDbAssert {
     }
 
     public static int getAccountId(String userLogin) {
-        return ((Number) Objects.requireNonNull(DbUtils.getValue(AccountSql.SELECT_ACCOUNT_ID, userLogin))).intValue();
+        return ((Number) DbUtils.getValue(AccountSql.SELECT_ACCOUNT_ID, userLogin)).intValue();
     }
 }

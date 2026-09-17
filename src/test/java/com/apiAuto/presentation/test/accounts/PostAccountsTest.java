@@ -1,10 +1,7 @@
 package com.apiAuto.presentation.test.accounts;
 
 import com.apiAuto.common.config.HttpStatus;
-import com.apiAuto.common.helpers.ApiSteps;
 import com.apiAuto.common.helpers.DbAssert;
-import com.apiAuto.presentation.conctants.endpoints.AccountEndpoints;
-import com.apiAuto.presentation.conctants.queryParam.AccountQueryParam;
 import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
 import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
@@ -16,9 +13,7 @@ import com.apiAuto.presentation.conctants.testData.UserData;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
-import static com.apiAuto.common.config.Specs.requestSpec;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)

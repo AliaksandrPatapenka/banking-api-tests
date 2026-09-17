@@ -13,7 +13,7 @@ import org.junit.jupiter.api.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-public class AccountsDepositTest {
+public class PostAccountDepositTest {
 
     @BeforeAll
     static void dbCleanup() {

@@ -8,7 +8,4 @@ public class HttpStatus {
 
     // 4xx
     public static final int BAD_REQUEST = 400;
-
-    // 5xx
-    public static final int INTERNAL_ERROR = 500;
 }

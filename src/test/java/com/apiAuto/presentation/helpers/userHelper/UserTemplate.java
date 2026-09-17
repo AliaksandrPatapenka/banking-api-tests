@@ -1,10 +1,10 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
-import com.apiAuto.common.helpers.ApiSteps;
+import com.apiAuto.common.helpers.RequestTemplate;
 import com.apiAuto.common.helpers.CommonDataGenerator;
 import com.apiAuto.presentation.conctants.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
-import com.apiAuto.presentation.models.CreateUser;
+import com.apiAuto.presentation.dto.CreateUserDto;
 import io.restassured.response.Response;
 
 import java.util.Collections;
@@ -18,7 +18,7 @@ public class UserTemplate {
         Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();
         String userLogin = (String) jsonRequest.get("login");
 
-        ApiSteps.postBody(requestSpec(),
+        RequestTemplate.postBody(requestSpec(),
                 UsersEndpoints.ENDPOINT_USERS,
                 jsonRequest,
                 httpStatus);
@@ -26,18 +26,18 @@ public class UserTemplate {
         return userLogin;
     }
 
-    public static Response createUser(CreateUser createUser,  int httpStatus) {
-        return ApiSteps.postBody(requestSpec(),
+    public static Response createUser(CreateUserDto createUserDto, int httpStatus) {
+        return RequestTemplate.postBody(requestSpec(),
                 UsersEndpoints.ENDPOINT_USERS,
-                createUser,
+                createUserDto,
                 httpStatus);
     }
 
-    public static CreateUser defaultRequestBody() {
+    public static CreateUserDto defaultRequestBody() {
         return defaultRequestBody(Collections.emptyList());
     }
 
-    public static CreateUser defaultRequestBody(List<String> friends) {
+    public static CreateUserDto defaultRequestBody(List<String> friends) {
         String timeIndex = CommonDataGenerator.timeIndex();
         String userLogin = CommonDataGenerator.generatorString(timeIndex);
         String userName = CommonDataGenerator.generatorString(timeIndex);
@@ -45,15 +45,15 @@ public class UserTemplate {
         String userGender = PresentationDataGenerator.GenderGenerator.randomGender();
         String userHairColor = PresentationDataGenerator.HairColorGenerator.randomHairColor();
 
-        CreateUser createUser = new CreateUser();
-        createUser.setLogin(userLogin);
-        createUser.setName(userName);
-        createUser.setAge(userAge);
-        createUser.setGender(userGender);
-        createUser.setHairColor(userHairColor);
-        createUser.setFriends(friends);
+        CreateUserDto requestBody = new CreateUserDto();
+        requestBody.setLogin(userLogin);
+        requestBody.setName(userName);
+        requestBody.setAge(userAge);
+        requestBody.setGender(userGender);
+        requestBody.setHairColor(userHairColor);
+        requestBody.setFriends(friends);
 
-        return createUser;
+        return requestBody;
     }
 
 }

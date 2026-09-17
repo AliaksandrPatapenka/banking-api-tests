@@ -8,7 +8,7 @@ import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.models.CreateUser;
+import com.apiAuto.presentation.dto.CreateUserDto;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -37,14 +37,14 @@ public class PostUsersTest {
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
         void createUser() {
-            CreateUser createUser = UserTemplate.defaultRequestBody();
+            CreateUserDto requestBody = UserTemplate.defaultRequestBody();
 
-            UserTemplate.createUser(createUser, HttpStatus.OK)
+            UserTemplate.createUser(requestBody, HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
-            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUser.getLogin(), 1);
-            UserDbAssert.assertDataUser(createUser);
+            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, requestBody.getLogin(), 1);
+            UserDbAssert.assertDataUser(requestBody);
         }
 
         @Test
@@ -55,15 +55,15 @@ public class PostUsersTest {
                 friends.add(UserTemplate.userGetLogin(HttpStatus.OK));
             }
 
-            CreateUser createUser = UserTemplate.defaultRequestBody(friends);
+            CreateUserDto createUserDto = UserTemplate.defaultRequestBody(friends);
 
-            UserTemplate.createUser(createUser, HttpStatus.OK)
+            UserTemplate.createUser(createUserDto, HttpStatus.OK)
                     .then()
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
-            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUser.getLogin(), 1);
-            UserDbAssert.assertDataUser(createUser);
-            UserDbAssert.assertFriends(createUser);
+            DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUserDto.getLogin(), 1);
+            UserDbAssert.assertDataUser(createUserDto);
+            UserDbAssert.assertFriends(createUserDto);
         }
     }
 
@@ -83,10 +83,10 @@ public class PostUsersTest {
         @DisplayName("Case 1.2: Создание пользователя с существующим в базе данных логином")
         void createUserStatus400() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-            CreateUser createUser = UserTemplate.defaultRequestBody();
-            createUser.setLogin(userLogin);
+            CreateUserDto createUserDto = UserTemplate.defaultRequestBody();
+            createUserDto.setLogin(userLogin);
 
-            UserTemplate.createUser(createUser, HttpStatus.BAD_REQUEST)
+            UserTemplate.createUser(createUserDto, HttpStatus.BAD_REQUEST)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
         }

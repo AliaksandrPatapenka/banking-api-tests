@@ -7,19 +7,22 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class KafkaHelper {
 
-    private KafkaHelper() {}
+    private KafkaHelper() {
+    }
 
     /**
      * Читает одно сообщение из топика, подходящее под фильтр.
      * Ждёт не дольше timeout. Кидает AssertionError, если ничего не пришло.
      */
-    public static String readOneMatching(String topic, Predicate<String> filter, Duration timeout) {
+    public static String oneByFilter(String topic, int accountId, String eventName, Duration timeout) {
         KafkaConsumer<String, String> consumer =
                 new KafkaConsumer<>(KafkaConfig.consumerProps("test-" + UUID.randomUUID()));
 
@@ -36,7 +39,12 @@ public final class KafkaHelper {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
 
                 for (ConsumerRecord<String, String> record : records) {
-                    if (filter.test(record.value())) {
+                    if (!String.valueOf(accountId).equals(record.key())) {
+                        continue;
+                    }
+
+                    Map<String, Object> event = JsonContext.toMap(record.value());
+                    if (eventName.equals(event.get("eventName"))) {
                         return record.value();
                     }
                 }
@@ -48,8 +56,10 @@ public final class KafkaHelper {
         }
     }
 
-    /** Читает одно сообщение по ключу. */
-    public static String readOneByKey(String topic, String key, Duration timeout) {
+    /**
+     * Читает одно сообщение по ключу(String).
+     */
+    public static String oneByKeyString(String topic, String key, Duration timeout) {
         try (KafkaConsumer<String, String> consumer =
                      new KafkaConsumer<>(KafkaConfig.consumerProps("test-" + UUID.randomUUID()))) {
 
@@ -62,6 +72,27 @@ public final class KafkaHelper {
             while (System.currentTimeMillis() < deadline) {
                 for (var record : consumer.poll(Duration.ofSeconds(1))) {
                     if (key.equals(record.key())) return record.value();
+                }
+            }
+            throw new AssertionError("Сообщение с ключом '" + key + "' не найдено за " + timeout.toSeconds() + " сек");
+        }
+    }
+
+    /** Читает одно сообщение по ключу(int). */
+    public static String oneByKeyInt(String topic, int key, Duration timeout) {
+        try (KafkaConsumer<String, String> consumer =
+                     new KafkaConsumer<>(KafkaConfig.consumerProps("test-" + UUID.randomUUID()))) {
+
+            consumer.assign(consumer.partitionsFor(topic).stream()
+                    .map(p -> new TopicPartition(topic, p.partition()))
+                    .toList());
+            consumer.seekToBeginning(consumer.assignment());
+
+            String keyStr = String.valueOf(key);                    // ← добавил
+            long deadline = System.currentTimeMillis() + timeout.toMillis();
+            while (System.currentTimeMillis() < deadline) {
+                for (var record : consumer.poll(Duration.ofSeconds(1))) {
+                    if (keyStr.equals(record.key())) return record.value();   // ← key → keyStr
                 }
             }
             throw new AssertionError("Сообщение с ключом '" + key + "' не найдено за " + timeout.toSeconds() + " сек");

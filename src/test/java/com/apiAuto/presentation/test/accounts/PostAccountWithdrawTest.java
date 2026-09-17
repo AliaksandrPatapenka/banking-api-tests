@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @TestClassOrder(ClassOrderer.OrderAnnotation.class)
-public class AccountsWithdrawTest {
+public class PostAccountWithdrawTest {
     @BeforeAll
     static void dbCleanup() {
         PresentationDbCleanup.deleteUsers();

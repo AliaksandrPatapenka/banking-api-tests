@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
-public class ApiSteps {
+public class RequestTemplate {
 
     public static Response postQuery(RequestSpecification spec,
                                      String endpoint,

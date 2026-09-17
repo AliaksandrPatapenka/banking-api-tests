@@ -4,12 +4,12 @@ import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
 import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.conctants.testData.UserData;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.conctants.testData.UserData;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;

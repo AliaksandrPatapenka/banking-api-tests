@@ -30,7 +30,7 @@ public class UserKafkaTest {
     @DisplayName("UserKafkaEvent. PositiveTests")
     @Order(1)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-    class PositiveTest{
+    class PositiveTest {
         @Test
         @DisplayName("Case 3.1 Event Kafka: Пользователь создан")
         void userCreateKafkaEvent() {

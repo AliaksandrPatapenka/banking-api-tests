@@ -7,10 +7,8 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class KafkaHelper {
@@ -78,7 +76,9 @@ public final class KafkaHelper {
         }
     }
 
-    /** Читает одно сообщение по ключу(int). */
+    /**
+     * Читает одно сообщение по ключу(int).
+     */
     public static String oneByKeyInt(String topic, int key, Duration timeout) {
         try (KafkaConsumer<String, String> consumer =
                      new KafkaConsumer<>(KafkaConfig.consumerProps("test-" + UUID.randomUUID()))) {

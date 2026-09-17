@@ -1,7 +1,8 @@
 package com.apiAuto.common.config;
 
 public class HttpStatus {
-    private HttpStatus() {}
+    private HttpStatus() {
+    }
 
     // 2xx
     public static final int OK = 200;

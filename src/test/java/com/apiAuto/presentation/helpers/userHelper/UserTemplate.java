@@ -1,10 +1,10 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
-import com.apiAuto.common.helpers.RequestTemplate;
 import com.apiAuto.common.helpers.CommonDataGenerator;
+import com.apiAuto.common.helpers.RequestTemplate;
 import com.apiAuto.presentation.conctants.endpoints.UsersEndpoints;
-import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.dto.CreateUserDto;
+import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import io.restassured.response.Response;
 
 import java.util.Collections;

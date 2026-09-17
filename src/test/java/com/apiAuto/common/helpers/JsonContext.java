@@ -28,7 +28,8 @@ public class JsonContext {
         try {
             ObjectMapper mapper = new ObjectMapper()
                     .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-            return mapper.readValue(json, new TypeReference<>() {});
+            return mapper.readValue(json, new TypeReference<>() {
+            });
         } catch (Exception e) {
             throw new RuntimeException("Не удалось распарсить JSON: " + json, e);
         }

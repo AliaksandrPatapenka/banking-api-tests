@@ -4,11 +4,11 @@ import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.conctants.schemasPatchs.UserSchemas;
+import com.apiAuto.presentation.dto.CreateUserDto;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.dto.CreateUserDto;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;

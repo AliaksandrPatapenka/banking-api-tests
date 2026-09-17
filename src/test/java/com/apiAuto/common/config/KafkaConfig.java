@@ -7,16 +7,12 @@ import java.time.Duration;
 import java.util.Properties;
 
 public final class KafkaConfig {
-    private KafkaConfig() {}
+    private KafkaConfig() {
+    }
 
-    public static final String BOOTSTRAP_SERVERS =
-            System.getProperty("kafka.bootstrap.servers", "localhost:9092");
+    public static final String BOOTSTRAP_SERVERS = System.getProperty("kafka.bootstrap.servers", "localhost:9092");
 
-    public static final Duration EVENT_WAIT_TIMEOUT =
-            Duration.ofSeconds(Long.parseLong(
-                    System.getProperty("kafka.wait.timeout.seconds", "10")));
-
-    public static final String TEST_GROUP_ID_PREFIX = "test-consumer-";
+    public static final Duration EVENT_WAIT_TIMEOUT = Duration.ofSeconds(Long.parseLong(System.getProperty("kafka.wait.timeout.seconds", "10")));
 
     public static Properties consumerProps(String groupId) {
         Properties props = new Properties();

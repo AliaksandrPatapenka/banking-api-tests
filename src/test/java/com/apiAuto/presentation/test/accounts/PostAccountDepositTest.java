@@ -3,11 +3,11 @@ package com.apiAuto.presentation.test.accounts;
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
 import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.conctants.testData.AccountData;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.conctants.testData.AccountData;
 import org.junit.jupiter.api.*;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;

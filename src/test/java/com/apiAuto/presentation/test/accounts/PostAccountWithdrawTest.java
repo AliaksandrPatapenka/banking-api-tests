@@ -3,12 +3,12 @@ package com.apiAuto.presentation.test.accounts;
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
 import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.conctants.testData.AccountData;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
-import com.apiAuto.presentation.conctants.testData.AccountData;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -142,9 +142,9 @@ public class PostAccountWithdrawTest {
             BigDecimal startBalance = AccountDbAssert.getAccountBalance(ctx.userLogin());
             BigDecimal debitAmount = new BigDecimal("0.01");
 
-          AccountTemplate.accountWithdraw(ctx.accountId(),
-                          debitAmount,
-                          HttpStatus.BAD_REQUEST)
+            AccountTemplate.accountWithdraw(ctx.accountId(),
+                            debitAmount,
+                            HttpStatus.BAD_REQUEST)
                     .then()
                     .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
 

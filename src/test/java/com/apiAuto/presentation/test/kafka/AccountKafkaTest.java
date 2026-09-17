@@ -2,14 +2,11 @@ package com.apiAuto.presentation.test.kafka;
 
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.config.KafkaConfig;
-import com.apiAuto.common.helpers.DbUtils;
 import com.apiAuto.common.helpers.JsonContext;
 import com.apiAuto.common.helpers.KafkaHelper;
 import com.apiAuto.presentation.conctants.testData.AccountData;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
-import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
-import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;
 

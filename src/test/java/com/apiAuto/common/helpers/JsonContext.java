@@ -2,6 +2,7 @@ package com.apiAuto.common.helpers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
@@ -25,7 +26,9 @@ public class JsonContext {
      */
     public static Map<String, Object> toMap(String json) {
         try {
-            return new ObjectMapper().readValue(json, new TypeReference<>() {});
+            ObjectMapper mapper = new ObjectMapper()
+                    .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+            return mapper.readValue(json, new TypeReference<>() {});
         } catch (Exception e) {
             throw new RuntimeException("Не удалось распарсить JSON: " + json, e);
         }

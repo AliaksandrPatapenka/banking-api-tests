@@ -81,12 +81,14 @@ public class AccountKafkaTest {
 
             Map<String, Object> account = eventData.get(0);
             BigDecimal balance = new BigDecimal(account.get("balance").toString());
+            Map<String, Object> transaction = eventData.get(1);
+            BigDecimal amount = new BigDecimal(transaction.get("amount").toString());
 
             assertEquals("Пополнение счёта", event.get("eventName"));
             assertEquals(accountId, account.get("id"));
             assertEquals(userLogin, account.get("userLogin"));
             assertEquals(AccountData.ACCOUNT_DEPOSIT_MAX, balance);
-            assertEquals(AccountData.ACCOUNT_DEPOSIT_MAX, account.get("amount"));
+            assertEquals(AccountData.ACCOUNT_DEPOSIT_MAX, amount);
         }
     }
 }

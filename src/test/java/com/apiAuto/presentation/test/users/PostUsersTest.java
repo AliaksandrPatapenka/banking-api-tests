@@ -2,11 +2,11 @@ package com.apiAuto.presentation.test.users;
 
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.DbAssert;
-import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
-import com.apiAuto.presentation.conctants.schemasPatchs.UserSchemas;
+import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.constants.schemasPatchs.UserSchemas;
 import com.apiAuto.presentation.dto.CreateUserDto;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.UserDbAssert;
+import com.apiAuto.presentation.helpers.userHelper.UserDb;
 import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;
@@ -44,7 +44,7 @@ public class PostUsersTest {
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
             DbAssert.assertCount(UserSql.SELECT_USER_COUNT, requestBody.getLogin(), 1);
-            UserDbAssert.assertDataUser(requestBody);
+            UserDb.assertDataUser(requestBody);
         }
 
         @Test
@@ -62,8 +62,8 @@ public class PostUsersTest {
                     .body(matchesJsonSchemaInClasspath(USER_CREATE_SCHEMA));
 
             DbAssert.assertCount(UserSql.SELECT_USER_COUNT, createUserDto.getLogin(), 1);
-            UserDbAssert.assertDataUser(createUserDto);
-            UserDbAssert.assertFriends(createUserDto);
+            UserDb.assertDataUser(createUserDto);
+            UserDb.assertFriends(createUserDto);
         }
     }
 

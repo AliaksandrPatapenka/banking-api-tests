@@ -7,7 +7,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AccountDbAssert {
+public class AccountDb {
     public static void assertAccountBalance(String userLogin, BigDecimal expected) {
         BigDecimal actual = (BigDecimal) DbUtils.getValue(AccountSql.SELECT_ACCOUNT_BALANCE, userLogin);
         assertEquals(0, Objects.requireNonNull(actual).compareTo(expected), "Баланс не совпадает");

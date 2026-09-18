@@ -1,8 +1,8 @@
 package com.apiAuto.presentation.helpers.accountHelper;
 
 import com.apiAuto.common.helpers.RequestTemplate;
-import com.apiAuto.presentation.conctants.endpoints.AccountEndpoints;
-import com.apiAuto.presentation.conctants.queryParam.AccountQueryParam;
+import com.apiAuto.presentation.constants.endpoints.AccountEndpoints;
+import com.apiAuto.presentation.constants.queryParam.AccountQueryParam;
 import io.restassured.response.Response;
 
 import java.math.BigDecimal;
@@ -19,18 +19,18 @@ public class AccountTemplate {
     }
 
     public static Response accountDeposit(int accountId, BigDecimal deposit, int httpStatus) {
-        return RequestTemplate.postPatchBody(requestSpec(),
+        return RequestTemplate.postBodyPatch(requestSpec(),
                 AccountEndpoints.ENDPOINT_ACCOUNTS_DEPOSIT,
                 Map.of(AccountQueryParam.ID, accountId),
                 deposit,
                 httpStatus);
     }
 
-    public static Response accountWithdraw(int accountId, BigDecimal startBalance, int httpStatus) {
-        return RequestTemplate.postPatchBody(requestSpec(),
+    public static Response accountWithdraw(int accountId, BigDecimal debitAmount, int httpStatus) {
+        return RequestTemplate.postBodyPatch(requestSpec(),
                 AccountEndpoints.ENDPOINT_ACCOUNTS_WITHDRAW,
                 Map.of(AccountQueryParam.ID, accountId),
-                startBalance,
+                debitAmount,
                 httpStatus);
     }
 }

@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.conctants.queryParam;
+package com.apiAuto.presentation.constants.queryParam;
 
 public class AccountQueryParam {
     private AccountQueryParam() {

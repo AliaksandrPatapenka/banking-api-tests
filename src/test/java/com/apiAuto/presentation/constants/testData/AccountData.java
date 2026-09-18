@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.conctants.testData;
+package com.apiAuto.presentation.constants.testData;
 
 import java.math.BigDecimal;
 

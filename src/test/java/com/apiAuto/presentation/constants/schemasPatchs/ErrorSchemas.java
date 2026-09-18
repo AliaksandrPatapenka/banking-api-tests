@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.conctants.schemasPatchs;
+package com.apiAuto.presentation.constants.schemasPatchs;
 
 public class ErrorSchemas {
     private ErrorSchemas() {

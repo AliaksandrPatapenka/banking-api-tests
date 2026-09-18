@@ -1,4 +1,4 @@
-package com.apiAuto.presentation.conctants.endpoints;
+package com.apiAuto.presentation.constants.endpoints;
 
 
 public final class AccountEndpoints {

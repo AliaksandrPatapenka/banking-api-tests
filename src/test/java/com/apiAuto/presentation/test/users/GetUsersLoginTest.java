@@ -3,11 +3,11 @@ package com.apiAuto.presentation.test.users;
 
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.RequestTemplate;
-import com.apiAuto.presentation.conctants.endpoints.UsersEndpoints;
-import com.apiAuto.presentation.conctants.queryParam.UserQueryParam;
-import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
-import com.apiAuto.presentation.conctants.schemasPatchs.UserSchemas;
-import com.apiAuto.presentation.conctants.testData.UserData;
+import com.apiAuto.presentation.constants.endpoints.UsersEndpoints;
+import com.apiAuto.presentation.constants.queryParam.UserQueryParam;
+import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.constants.schemasPatchs.UserSchemas;
+import com.apiAuto.presentation.constants.testData.UserData;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;

@@ -2,10 +2,10 @@ package com.apiAuto.presentation.test.accounts;
 
 import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.helpers.DbAssert;
-import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
-import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
-import com.apiAuto.presentation.conctants.testData.UserData;
-import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
+import com.apiAuto.presentation.constants.schemasPatchs.AccountSchemas;
+import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.constants.testData.UserData;
+import com.apiAuto.presentation.helpers.accountHelper.AccountDb;
 import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
@@ -46,7 +46,7 @@ public class PostAccountsTest {
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_CREATE_SCHEMA));
 
             DbAssert.assertCount(AccountSql.SELECT_ACCOUNT_COUNT, userLogin, 1);
-            AccountDbAssert.assertAccountBalance(userLogin, new BigDecimal("0"));
+            AccountDb.assertAccountBalance(userLogin, new BigDecimal("0"));
         }
 
         @Test
@@ -62,7 +62,7 @@ public class PostAccountsTest {
             }
 
             DbAssert.assertCount(AccountSql.SELECT_ACCOUNT_COUNT, userLogin, 2);
-            AccountDbAssert.assertAccountBalance(userLogin, new BigDecimal("0"));
+            AccountDb.assertAccountBalance(userLogin, new BigDecimal("0"));
         }
     }
 

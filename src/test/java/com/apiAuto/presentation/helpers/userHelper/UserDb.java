@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-public class UserDbAssert {
+public class UserDb {
     public static void assertDataUser(CreateUserDto expected) {
         Map<String, Object> user = DbUtils.getRow(
                 UserSql.SELECT_USER_BY_LOGIN, expected.getLogin());

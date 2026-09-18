@@ -1,10 +1,10 @@
 package com.apiAuto.presentation.test.accounts;
 
 import com.apiAuto.common.config.HttpStatus;
-import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
-import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
-import com.apiAuto.presentation.conctants.testData.AccountData;
-import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
+import com.apiAuto.presentation.constants.schemasPatchs.AccountSchemas;
+import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.constants.testData.AccountData;
+import com.apiAuto.presentation.helpers.accountHelper.AccountDb;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
@@ -39,7 +39,7 @@ public class PostAccountDepositTest {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             AccountTemplate.createAccount(userLogin, HttpStatus.OK);
-            int accountId = AccountDbAssert.getAccountId(userLogin);
+            int accountId = AccountDb.getAccountId(userLogin);
 
             AccountTemplate.accountDeposit(accountId,
                             AccountData.ACCOUNT_DEPOSIT_MAX,
@@ -47,7 +47,7 @@ public class PostAccountDepositTest {
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
 
-            AccountDbAssert.assertAccountBalance(userLogin, AccountData.ACCOUNT_DEPOSIT_MAX);
+            AccountDb.assertAccountBalance(userLogin, AccountData.ACCOUNT_DEPOSIT_MAX);
         }
 
         @Test
@@ -57,7 +57,7 @@ public class PostAccountDepositTest {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             AccountTemplate.createAccount(userLogin, HttpStatus.OK);
-            int accountId = AccountDbAssert.getAccountId(userLogin);
+            int accountId = AccountDb.getAccountId(userLogin);
 
             AccountTemplate.accountDeposit(accountId,
                             AccountData.ACCOUNT_DEPOSIT_MIN,
@@ -65,7 +65,7 @@ public class PostAccountDepositTest {
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_DEPOSIT_SCHEMA));
 
-            AccountDbAssert.assertAccountBalance(userLogin, AccountData.ACCOUNT_DEPOSIT_MIN);
+            AccountDb.assertAccountBalance(userLogin, AccountData.ACCOUNT_DEPOSIT_MIN);
         }
     }
 
@@ -85,7 +85,7 @@ public class PostAccountDepositTest {
         void createUserStatus400() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
             AccountTemplate.createAccount(userLogin, HttpStatus.OK);
-            int accountId = AccountDbAssert.getAccountId(userLogin);
+            int accountId = AccountDb.getAccountId(userLogin);
 
             AccountTemplate.accountDeposit(accountId,
                             AccountData.ACCOUNT_DEPOSIT_BELOW_ZERO,

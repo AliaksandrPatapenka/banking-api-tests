@@ -8,50 +8,61 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 
 public class RequestTemplate {
-
     public static Response postQuery(RequestSpecification spec,
                                      String endpoint,
                                      Map<String, ?> queryParam,
                                      int httpStatus) {
-        return given(spec)
+        Response response = given(spec)
                 .queryParams(queryParam)
                 .when().post(endpoint)
-                .then().statusCode(httpStatus)
-                .extract().response();
+                .then().extract().response();
+
+        HttpAssert.httpStatusAssert(response, httpStatus);
+
+        return response;
     }
 
     public static Response postBody(RequestSpecification spec,
                                     String endpoint,
                                     Object body,
                                     int httpStatus) {
-        return given(spec)
+        Response response = given(spec)
                 .body(body)
                 .when().post(endpoint)
-                .then().statusCode(httpStatus)
-                .extract().response();
+                .then().extract().response();
+
+        HttpAssert.httpStatusAssert(response, httpStatus);
+
+        return response;
     }
 
-    public static Response postPatchBody(RequestSpecification spec,
+    public static Response postBodyPatch(RequestSpecification spec,
                                          String endpoint,
                                          Map<String, ?> pathParam,
                                          Object body,
                                          int httpStatus) {
-        return given(spec)
+        Response response = given(spec)
                 .pathParams(pathParam)
                 .body(body)
                 .when().post(endpoint)
-                .then().statusCode(httpStatus)
-                .extract().response();
+                .then().extract().response();
+
+        HttpAssert.httpStatusAssert(response, httpStatus);
+
+        return response;
     }
 
     public static Response get(RequestSpecification spec,
                                Map<String, ?> pathParam,
                                String endpoint,
                                int httpStatus) {
-        return given(spec)
+        Response response = given(spec)
                 .pathParams(pathParam)
                 .when().get(endpoint)
-                .then().statusCode(httpStatus)
-                .extract().response();
+                .then().extract().response();
+
+        HttpAssert.httpStatusAssert(response, httpStatus);
+
+        return response;
     }
 }

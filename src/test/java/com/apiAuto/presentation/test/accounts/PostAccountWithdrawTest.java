@@ -1,10 +1,10 @@
 package com.apiAuto.presentation.test.accounts;
 
 import com.apiAuto.common.config.HttpStatus;
-import com.apiAuto.presentation.conctants.schemasPatchs.AccountSchemas;
-import com.apiAuto.presentation.conctants.schemasPatchs.ErrorSchemas;
-import com.apiAuto.presentation.conctants.testData.AccountData;
-import com.apiAuto.presentation.helpers.accountHelper.AccountDbAssert;
+import com.apiAuto.presentation.constants.schemasPatchs.AccountSchemas;
+import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.constants.testData.AccountData;
+import com.apiAuto.presentation.helpers.accountHelper.AccountDb;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
@@ -30,7 +30,7 @@ public class PostAccountWithdrawTest {
         private static AccountContext createAccount() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
             AccountTemplate.createAccount(userLogin, HttpStatus.OK);
-            int accountId = AccountDbAssert.getAccountId(userLogin);
+            int accountId = AccountDb.getAccountId(userLogin);
 
             return new AccountContext(userLogin, accountId);
         }
@@ -39,7 +39,7 @@ public class PostAccountWithdrawTest {
             AccountTemplate.accountDeposit(ctx.accountId(),
                     AccountData.ACCOUNT_DEPOSIT_MAX,
                     HttpStatus.OK);
-            return AccountDbAssert.getAccountBalance(ctx.userLogin());
+            return AccountDb.getAccountBalance(ctx.userLogin());
         }
     }
 
@@ -69,7 +69,7 @@ public class PostAccountWithdrawTest {
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
             BigDecimal finishBalance = startBalance.subtract(debitAmount);
-            AccountDbAssert.assertAccountBalance(ctx.userLogin(), finishBalance);
+            AccountDb.assertAccountBalance(ctx.userLogin(), finishBalance);
         }
 
         @Test
@@ -86,7 +86,7 @@ public class PostAccountWithdrawTest {
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
             BigDecimal finishBalance = startBalance.subtract(startBalance);
-            AccountDbAssert.assertAccountBalance(ctx.userLogin(), finishBalance);
+            AccountDb.assertAccountBalance(ctx.userLogin(), finishBalance);
         }
 
         @Test
@@ -103,7 +103,7 @@ public class PostAccountWithdrawTest {
                     .then()
                     .body(matchesJsonSchemaInClasspath(ACCOUNT_WITHDRAW_SCHEMA));
 
-            AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
+            AccountDb.assertAccountBalance(ctx.userLogin(), startBalance);
         }
     }
 
@@ -131,7 +131,7 @@ public class PostAccountWithdrawTest {
                     .then()
                     .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
 
-            AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
+            AccountDb.assertAccountBalance(ctx.userLogin(), startBalance);
         }
 
         @Test
@@ -139,7 +139,7 @@ public class PostAccountWithdrawTest {
         @DisplayName("Case 5.2: Списание со счёта при нулевом балансе")
         void withdrawBalanceZero() {
             AccountContext ctx = TestData.createAccount();
-            BigDecimal startBalance = AccountDbAssert.getAccountBalance(ctx.userLogin());
+            BigDecimal startBalance = AccountDb.getAccountBalance(ctx.userLogin());
             BigDecimal debitAmount = new BigDecimal("0.01");
 
             AccountTemplate.accountWithdraw(ctx.accountId(),
@@ -148,7 +148,7 @@ public class PostAccountWithdrawTest {
                     .then()
                     .body(matchesJsonSchemaInClasspath(ERROR_400_SCHEMA));
 
-            AccountDbAssert.assertAccountBalance(ctx.userLogin(), startBalance);
+            AccountDb.assertAccountBalance(ctx.userLogin(), startBalance);
         }
     }
 }

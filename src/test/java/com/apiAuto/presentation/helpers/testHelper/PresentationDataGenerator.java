@@ -41,6 +41,9 @@ public class PresentationDataGenerator {
         return 18 + new SecureRandom().nextInt(63); // 63 = 80 - 18 + 1
     }
 
+    /**
+     * Генератор Суммы списания с баланса
+     */
     public static BigDecimal debitAmount(BigDecimal balance) {
         int divisor = ThreadLocalRandom.current().nextInt(1, 101);   // 1..100
         return balance.divide(BigDecimal.valueOf(divisor), 2, RoundingMode.DOWN);

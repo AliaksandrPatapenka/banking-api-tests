@@ -1,13 +1,13 @@
 package com.apiAuto.presentation.test.users;
 
-import com.apiAuto.common.config.HttpStatus;
+import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.constants.schemasPatchs.UserSchemas;
+import com.apiAuto.presentation.constants.sql.UserSql;
 import com.apiAuto.presentation.dto.CreateUserDto;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserDb;
-import com.apiAuto.presentation.helpers.userHelper.UserSql;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;
 
@@ -66,7 +66,6 @@ public class PostUsersTest {
             UserDb.assertFriends(createUserDto);
         }
     }
-
 
     /**
      * ==================== НЕГАТИВНЫЕ ТЕСТЫ ====================

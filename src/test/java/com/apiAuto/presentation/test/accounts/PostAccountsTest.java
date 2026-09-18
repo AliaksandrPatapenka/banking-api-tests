@@ -1,12 +1,12 @@
 package com.apiAuto.presentation.test.accounts;
 
-import com.apiAuto.common.config.HttpStatus;
+import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.common.helpers.DbAssert;
 import com.apiAuto.presentation.constants.schemasPatchs.AccountSchemas;
 import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
+import com.apiAuto.presentation.constants.sql.AccountSql;
 import com.apiAuto.presentation.constants.testData.UserData;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDb;
-import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;

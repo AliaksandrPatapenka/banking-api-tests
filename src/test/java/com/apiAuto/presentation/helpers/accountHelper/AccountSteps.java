@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.helpers.accountHelper;
 
-import com.apiAuto.common.config.HttpStatus;
+import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.presentation.constants.testData.AccountData;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;

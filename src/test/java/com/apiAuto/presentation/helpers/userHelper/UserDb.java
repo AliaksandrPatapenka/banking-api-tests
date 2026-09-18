@@ -1,6 +1,7 @@
 package com.apiAuto.presentation.helpers.userHelper;
 
 import com.apiAuto.common.helpers.DbUtils;
+import com.apiAuto.presentation.constants.sql.UserSql;
 import com.apiAuto.presentation.dto.CreateUserDto;
 
 import java.util.HashSet;

@@ -1,7 +1,11 @@
 package com.apiAuto.presentation.constants.kafka;
 
 public class AccountKafkaConst {
-    public  static final String EVENT_ACCOUNT_CREATE = "Создание счёта";
+    private AccountKafkaConst() {
+
+    }
+
+    public static final String EVENT_ACCOUNT_CREATE = "Создание счёта";
     public static final String EVENT_ACCOUNT_DEPOSIT = "Пополнение счёта";
     public static final String EVENT_ACCOUNT_WITHDRAWAL = "Снятие со счёта";
 

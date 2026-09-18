@@ -1,6 +1,9 @@
 package com.apiAuto.presentation.constants.kafka;
 
 public class UserKafkaConst {
+    private UserKafkaConst() {
+    }
+
     public static final String EVENT_USER_CREATED = "Пользователь создан";
 
     public static final String KEY_LOGIN = "login";

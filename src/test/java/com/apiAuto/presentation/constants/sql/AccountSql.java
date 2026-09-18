@@ -1,6 +1,9 @@
-package com.apiAuto.presentation.helpers.accountHelper;
+package com.apiAuto.presentation.constants.sql;
 
 public class AccountSql {
+    private AccountSql() {
+    }
+
     public static String SELECT_ACCOUNT_COUNT = "SELECT COUNT(*) FROM accounts WHERE user_login like ?";
     public static String SELECT_ACCOUNT_BALANCE = "SELECT balance FROM accounts WHERE user_login like ?";
     public static String SELECT_ACCOUNT_ID = "SELECT id FROM accounts WHERE user_login like ?";

@@ -11,6 +11,9 @@ public class PresentationDataGenerator {
     public PresentationDataGenerator() {
     }
 
+    /**
+     * Выбор пола
+     */
     public static class GenderGenerator {
         private static final String[] gender = {
                 "MALE", "FEMALE"
@@ -22,6 +25,9 @@ public class PresentationDataGenerator {
         }
     }
 
+    /**
+     * Выбор цвета волос
+     */
     public static class HairColorGenerator {
         private static final String[] colors = {
                 "White", "Black", "Red", "Yellow", "Orange",

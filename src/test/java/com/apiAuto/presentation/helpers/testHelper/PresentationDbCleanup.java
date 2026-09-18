@@ -1,8 +1,8 @@
 package com.apiAuto.presentation.helpers.testHelper;
 
 import com.apiAuto.common.helpers.DbUtils;
-import com.apiAuto.presentation.helpers.accountHelper.AccountSql;
-import com.apiAuto.presentation.helpers.userHelper.UserSql;
+import com.apiAuto.presentation.constants.sql.AccountSql;
+import com.apiAuto.presentation.constants.sql.UserSql;
 
 public class PresentationDbCleanup {
     public static void deleteUsers() {
@@ -16,5 +16,4 @@ public class PresentationDbCleanup {
     public static void deleteAccounts() {
         DbUtils.delete(AccountSql.DELETE_ACCOUNT_BY_USER_LOGIN, "Test_%");
     }
-
 }

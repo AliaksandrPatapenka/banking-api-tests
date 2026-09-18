@@ -1,7 +1,7 @@
 package com.apiAuto.presentation.test.users;
 
 
-import com.apiAuto.common.config.HttpStatus;
+import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.common.helpers.RequestTemplate;
 import com.apiAuto.presentation.constants.endpoints.UsersEndpoints;
 import com.apiAuto.presentation.constants.queryParam.UserQueryParam;

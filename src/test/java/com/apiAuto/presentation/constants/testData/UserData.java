@@ -6,6 +6,9 @@ import java.util.Properties;
 public final class UserData {
     private static final Properties props = new Properties();
 
+    private UserData() {
+    }
+
     static {
         try (InputStream in = UserData.class.getResourceAsStream("/local.properties")) {
             if (in != null) {
@@ -19,6 +22,5 @@ public final class UserData {
     /**
      * Невалидные тестовые данные пользователя
      */
-    public static final String LOGIN_NOT_EXIST =
-            System.getProperty("user.loginNotExist", "loginNotExist");
+    public static final String LOGIN_NOT_EXIST = System.getProperty("user.loginNotExist", "loginNotExist");
 }

@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.test.accounts;
 
-import com.apiAuto.common.config.HttpStatus;
+import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.presentation.constants.schemasPatchs.AccountSchemas;
 import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.constants.testData.AccountData;

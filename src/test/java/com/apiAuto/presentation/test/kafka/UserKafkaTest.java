@@ -1,7 +1,7 @@
 package com.apiAuto.presentation.test.kafka;
 
-import com.apiAuto.common.config.HttpStatus;
 import com.apiAuto.common.config.KafkaConfig;
+import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.common.helpers.JsonContext;
 import com.apiAuto.common.helpers.KafkaHelper;
 import com.apiAuto.presentation.constants.kafka.TopicKafka;

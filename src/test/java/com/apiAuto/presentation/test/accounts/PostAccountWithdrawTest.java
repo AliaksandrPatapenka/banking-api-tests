@@ -1,14 +1,13 @@
 package com.apiAuto.presentation.test.accounts;
 
-import com.apiAuto.common.config.HttpStatus;
+import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.presentation.constants.schemasPatchs.AccountSchemas;
 import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
-import com.apiAuto.presentation.constants.testData.AccountData;
 import com.apiAuto.presentation.helpers.accountHelper.AccountDb;
+import com.apiAuto.presentation.helpers.accountHelper.AccountSteps;
 import com.apiAuto.presentation.helpers.accountHelper.AccountTemplate;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
-import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -21,26 +20,6 @@ public class PostAccountWithdrawTest {
     static void dbCleanup() {
         PresentationDbCleanup.deleteUsers();
         PresentationDbCleanup.deleteAccounts();
-    }
-
-    private record AccountContext(String userLogin, int accountId) {
-    }
-
-    private static class TestData {
-        private static AccountContext createAccount() {
-            String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-            AccountTemplate.createAccount(userLogin, HttpStatus.OK);
-            int accountId = AccountDb.getAccountId(userLogin);
-
-            return new AccountContext(userLogin, accountId);
-        }
-
-        private static BigDecimal depositAndGetBalance(AccountContext ctx) {
-            AccountTemplate.accountDeposit(ctx.accountId(),
-                    AccountData.ACCOUNT_DEPOSIT_MAX,
-                    HttpStatus.OK);
-            return AccountDb.getAccountBalance(ctx.userLogin());
-        }
     }
 
     /**
@@ -58,8 +37,8 @@ public class PostAccountWithdrawTest {
         @Order(1)
         @DisplayName("Case 5.1: Списание части баланса со счёта при достаточном балансе")
         void withdrawPart() {
-            AccountContext ctx = TestData.createAccount();
-            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            AccountSteps.AccountContext ctx = AccountSteps.createAccount();
+            BigDecimal startBalance = AccountSteps.depositAndGetBalance(ctx);
             BigDecimal debitAmount = PresentationDataGenerator.debitAmount(startBalance);
 
             AccountTemplate.accountWithdraw(ctx.accountId(),
@@ -76,8 +55,8 @@ public class PostAccountWithdrawTest {
         @Order(2)
         @DisplayName("Case 5.2: Списание всего баланса со счёта при достаточном балансе")
         void withdrawAll() {
-            AccountContext ctx = TestData.createAccount();
-            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            AccountSteps.AccountContext ctx = AccountSteps.createAccount();
+            BigDecimal startBalance = AccountSteps.depositAndGetBalance(ctx);
 
             AccountTemplate.accountWithdraw(ctx.accountId(),
                             startBalance,
@@ -93,8 +72,8 @@ public class PostAccountWithdrawTest {
         @Order(3)
         @DisplayName("Case 5.3: Списание со счёта нулевого значения (баланс нет нулевой)")
         void withdrawZero() {
-            AccountContext ctx = TestData.createAccount();
-            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            AccountSteps.AccountContext ctx = AccountSteps.createAccount();
+            BigDecimal startBalance = AccountSteps.depositAndGetBalance(ctx);
             BigDecimal debitAmount = new BigDecimal("0.00");
 
             AccountTemplate.accountWithdraw(ctx.accountId(),
@@ -121,11 +100,11 @@ public class PostAccountWithdrawTest {
         @Order(1)
         @DisplayName("Case 5.1: Списание суммы, превышающей текущий баланс (не нулевой)")
         void withdrawPartExceedingBalance() {
-            AccountContext ctx = TestData.createAccount();
-            BigDecimal startBalance = TestData.depositAndGetBalance(ctx);
+            AccountSteps.AccountContext ctx = AccountSteps.createAccount();
+            BigDecimal startBalance = AccountSteps.depositAndGetBalance(ctx);
             BigDecimal debitAmount = startBalance.add(new BigDecimal("0.01"));
 
-            AccountTemplate.accountWithdraw(ctx.accountId,
+            AccountTemplate.accountWithdraw(ctx.accountId(),
                             debitAmount,
                             HttpStatus.BAD_REQUEST)
                     .then()
@@ -138,7 +117,7 @@ public class PostAccountWithdrawTest {
         @Order(2)
         @DisplayName("Case 5.2: Списание со счёта при нулевом балансе")
         void withdrawBalanceZero() {
-            AccountContext ctx = TestData.createAccount();
+            AccountSteps.AccountContext ctx = AccountSteps.createAccount();
             BigDecimal startBalance = AccountDb.getAccountBalance(ctx.userLogin());
             BigDecimal debitAmount = new BigDecimal("0.01");
 

@@ -24,3 +24,4 @@ allure-report/
 *.log
 .env
 checkList.md
+README_old.md

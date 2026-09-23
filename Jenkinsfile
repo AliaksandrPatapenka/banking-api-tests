@@ -5,13 +5,10 @@ pipeline {
     // 1. ПАРАМЕТРЫ СБОРКИ
     // ====================================================
     parameters {
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/testAuthApiDemo', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/testAuthApiDemo')
+        string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/banking-api-tests', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/banking-api-tests')
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
-        choice(name: 'TEST_SUITE', choices: ['all', 'auth', 'users'], description: 'Пакет тестов. По умолчанию "all"')
+        choice(name: 'TEST_SUITE', choices: ['all', 'accounts', 'users', 'kafka'], description: 'Пакет тестов. По умолчанию "all"')
         string(name: 'BASE_URL', defaultValue: 'http://localhost:8081', description: 'Базовый URL API. По умолчанию http://localhost:8081')
-        string(name: 'BASE_PATHS', defaultValue: '/api/v1', description: 'Базовый путь API. По умолчанию /api/v1')
-        string(name: 'USER_EMAIL', defaultValue: '', description: 'Email пользователя для авторизации. По умолчанию подставится Email дефолтного пользователя ')
-        password(name: 'USER_PASSWORD', defaultValue: '', description: 'Пароль пользователя для авторизации. По умолчанию подставится пароль дефолтного пользователя ')
     }
 
     // ====================================================
@@ -64,9 +61,6 @@ pipeline {
                             try {
                                 def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
 
-                                // Используем одинарные кавычки, чтобы Groovy не интерполировал переменные.
-                                // Параметры BASE_URL и BASE_PATHS подставляем через конкатенацию,
-                                // так как они не являются секретами.
                                 sh '''
                                     mvn clean test -e \
                                     -Dbase.uri=''' + params.BASE_URL + ''' \

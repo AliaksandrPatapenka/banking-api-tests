@@ -6,9 +6,9 @@ pipeline {
     // ====================================================
     parameters {
         string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/banking-api-tests', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/banking-api-tests')
+        choice(name: 'ENVIRONMENT', choices: ['ci', 'stage', 'prod'], description: 'Стенд')
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         choice(name: 'TEST_SUITE', choices: ['all', 'accounts', 'users', 'kafka'], description: 'Пакет тестов. По умолчанию "all"')
-        choice(name: 'ENVIRONMENT', choices: ['ci', 'stage', 'prod'], description: 'Стенд')
     }
 
     // ====================================================

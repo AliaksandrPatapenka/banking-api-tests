@@ -102,7 +102,7 @@ public class DbUtils {
      */
     private static Connection connect() {
         try {
-            return DriverManager.getConnection(DbConfig.DB_URL, DbConfig.DB_USER, DbConfig.PASSWORD);
+            return DriverManager.getConnection(DbConfig.DB_URL, DbConfig.DB_USER, DbConfig.DB_PASSWORD);
         } catch (SQLException e) {
             throw new RuntimeException("Не удалось подключиться к БД", e);
         }

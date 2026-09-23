@@ -8,7 +8,7 @@ pipeline {
         string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/banking-api-tests', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/banking-api-tests')
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         choice(name: 'TEST_SUITE', choices: ['all', 'accounts', 'users', 'kafka'], description: 'Пакет тестов. По умолчанию "all"')
-        string(name: 'BASE_URL', defaultValue: 'http://presentation:8081', description: 'Базовый URL API. По умолчанию http://presentation:8081')
+        choice(name: 'ENVIRONMENT', choices: ['ci', 'stage', 'prod'], description: 'Стенд')
     }
 
     // ====================================================
@@ -28,6 +28,7 @@ pipeline {
                 script {
                     def buildUrl = "http://localhost:8085/job/${JOB_NAME}/${BUILD_NUMBER}/"
                     def repoName = params.REPO_URL.tokenize('/')[-1].replace('.git', '')
+                    def envVars = readProperties file: "ci/${params.ENVIRONMENT}.env"
                     boolean testsFailed = false
 
                     try {
@@ -63,9 +64,9 @@ pipeline {
 
                                 sh '''
                                     mvn clean test -e \
-                                    -Ddb.url=jdbc:postgresql://postgres:5432/postgres \
-                                    -Dkafka.bootstrap.servers=kafka:9092 \
-                                    -Dbase.url=''' + params.BASE_URL + ''' \
+                                    -Ddb.url=''' + envVars.DB_URL + ''' \
+                                    -Dkafka.servers=''' + envVars.KAFKA_BOOTSTRAP + ''' \
+                                    -Dbase.url=''' + envVars.BASE_URL + ''' \
                                     -Dtest=''' + testPattern
                             } catch (Exception e) {
                                 testsFailed = true
@@ -113,9 +114,6 @@ pipeline {
         }
     }
 
-    // ====================================================
-    // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
-    // ====================================================
     // ====================================================
     // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
     // ====================================================

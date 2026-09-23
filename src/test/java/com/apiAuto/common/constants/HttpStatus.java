@@ -1,6 +1,6 @@
 package com.apiAuto.common.constants;
 
-public class HttpStatus {
+public final class HttpStatus {
     private HttpStatus() {
     }
 

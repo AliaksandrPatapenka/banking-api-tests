@@ -1,6 +1,6 @@
 package com.apiAuto.common.constants;
 
-public class KafkaConst {
+public final class KafkaConst {
     private KafkaConst() {
     }
 

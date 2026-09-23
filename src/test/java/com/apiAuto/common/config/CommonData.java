@@ -1,6 +1,6 @@
 package com.apiAuto.common.config;
 
-public class CommonData {
+public final class CommonData {
     private CommonData() {
     }
 

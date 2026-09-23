@@ -10,7 +10,7 @@ public final class KafkaConfig {
     private KafkaConfig() {
     }
 
-    public static final String BOOTSTRAP_SERVERS = System.getProperty("kafka.bootstrap.servers", "localhost:9092");
+    public static final String BOOTSTRAP_SERVERS = System.getProperty("kafka.servers", "localhost:9092");
 
     public static final Duration EVENT_WAIT_TIMEOUT = Duration.ofSeconds(Long.parseLong(System.getProperty("kafka.wait.timeout.seconds", "10")));
 

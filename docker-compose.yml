@@ -60,6 +60,19 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
 
+  # === App ===
+  presentation:
+    image: eclipse-temurin:21-jre
+    container_name: presentation
+    volumes:
+      - /home/aliaksandr/IdeaProjects/Banking-system/Presentation/build/libs:/app
+    command: java -jar /app/Presentation.jar
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres_data:
   jenkins_data_final:

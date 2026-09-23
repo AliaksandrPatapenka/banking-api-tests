@@ -116,16 +116,11 @@ pipeline {
     // ====================================================
     // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
     // ====================================================
-    post {
-        always {
-            publishHTML([
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : 'target/site/allure-maven-plugin',
-                    reportFiles          : 'index.html',
-                    reportName           : 'Allure Report'
-            ])
-        }
-    }
+  allure([
+    includeProperties: false,
+    jdk: '',
+    properties: [],
+    reportBuildPolicy: 'ALWAYS',
+    results: [[path: 'target/allure-results']]
+    ])
 }

@@ -116,11 +116,18 @@ pipeline {
     // ====================================================
     // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
     // ====================================================
-  allure([
-    includeProperties: false,
-    jdk: '',
-    properties: [],
-    reportBuildPolicy: 'ALWAYS',
-    results: [[path: 'target/allure-results']]
-    ])
+    // ====================================================
+    // 4. ДЕЙСТВИЯ ПОСЛЕ СБОРКИ (всегда)
+    // ====================================================
+    post {
+        always {
+            allure([
+                includeProperties: false,
+                jdk: '',
+                properties: [],
+                reportBuildPolicy: 'ALWAYS',
+                results: [[path: 'target/allure-results']]
+            ])
+        }
+    }
 }

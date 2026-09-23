@@ -64,7 +64,7 @@ pipeline {
                                 sh '''
                                     mvn clean test -e \
                                     -Ddb.url=jdbc:postgresql://postgres:5432/postgres \
-                                    -Dbase.uri=''' + params.BASE_URL + ''' \
+                                    -Dbase.url=''' + params.BASE_URL + ''' \
                                     -Dbase.path=''' + params.BASE_PATHS + ''' \
                                     -Duser.email=$USERNAME \
                                     -Duser.password=$PASSWORD \

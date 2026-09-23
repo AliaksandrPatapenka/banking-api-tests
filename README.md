@@ -2,7 +2,7 @@
 
 Автоматизированные тесты для REST API банковского сервиса с использованием **RestAssured**, **JUnit 5**, **Allure Reports** и интеграцией с **Jenkins**. Реализованы генерация тестовых данных, валидация JSON Schema, проверка данных в **PostgreSQL**, проверка **Kafka**-событий и отправка уведомлений в Telegram о результатах сборки.
 
-Фреймворк покрывает тестами REST API банковского сервиса (блоки users и accounts, а также Kafka-события), развёрнутого локально (по умолчанию `http://localhost:8081/api/v1`).
+Фреймворк покрывает тестами REST API банковского сервиса (блоки users и accounts, а также Kafka-события), развёрнутого локально.
 
 ---
 
@@ -94,8 +94,6 @@ mvn clean test; allure generate target/allure-results --clean -o allure-report; 
 - `TEST_SUITE` — пакет тестов
 - `BASE_URL` — базовый URL API
 - `BASE_PATHS` — базовый путь API
-- `USER_EMAIL` — email для авторизации (подставляется из Jenkins Credentials)
-- `USER_PASSWORD` — пароль для авторизации (подставляется из Jenkins Credentials)
 
 ---
 

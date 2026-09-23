@@ -64,6 +64,7 @@ pipeline {
                                 sh '''
                                     mvn clean test -e \
                                     -Ddb.url=jdbc:postgresql://postgres:5432/postgres \
+                                    -Dkafka.bootstrap.servers=kafka:9092 \
                                     -Dbase.url=''' + params.BASE_URL + ''' \
                                     -Dbase.path=''' + params.BASE_PATHS + ''' \
                                     -Duser.email=$USERNAME \

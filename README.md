@@ -130,11 +130,9 @@ docker compose up -d
   - `presentation/all` — все тесты сервиса presentation
   - `presentation/accounts`, `presentation/users`, `presentation/kafka` — отдельные пакеты тестов
 
-**Учётные данные Jenkins:**
+**Страница запуска сборки в Jenkins:**
+![](screen/s1.jpeg)
 
-- `db-password-<ENVIRONMENT>` — пароль БД текущего стенда
-- `telegram.token` — токен Telegram-бота
-- `user-credentials` — логин/пароль для тестируемого API
 
 ---
 
@@ -147,12 +145,19 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 - ⚠️ Тесты **УПАЛИ!**
 - ❌ Тесты **НЕ ЗАПУСТИЛИСЬ!**
 
+**Пример уведомлений в Telegram:**
+![](screen/s6.jpeg)
 ---
 
 ## Allure-отчетность
 
-После выполнения тестов генерируется детальный Allure-отчет (`mvn allure:report`), который публикуется в Jenkins
-(плагин Allure, результаты из `target/allure-results`).
+После выполнения тестов генерируется детальный Allure-отчет, который публикуется в Jenkins.
+
+**Пример отчета (Тест пройден успешно):**
+![](screen/s8.jpeg)
+
+Пример отчета (Тест упал):
+![](screen/s7.jpeg)
 
 ---
 

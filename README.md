@@ -5,7 +5,7 @@ Reports** и интеграцией с **Jenkins**. Реализованы ге�
 **PostgreSQL**, проверка **Kafka**-событий и отправка уведомлений в Telegram о результатах сборки.
 
 Инфраструктура поднимается через **Docker Compose**: PostgreSQL, Zookeeper, Kafka,
-Jenkins и тестируемое приложение Presentation).
+Jenkins и тестируемое приложение presentation.
 
 ---
 
@@ -37,7 +37,7 @@ src/test/java/com/apiAuto/
 │   └── helpers/                 # Вспомогательные классы
 │
 └── presentation/                # Слой тестирования банковского API (сервис Presentation)
-    ├── config/                  # Конфигурация  сервиса presentation
+    ├── config/                  # Конфигурация сервиса presentation
     │
     ├── constants/
     │   ├── endpoints/           # Endpoints
@@ -168,15 +168,15 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 | 2        |         | GET /users/{login} — Получение пользователя по логину |                                                             |            |
 |          | Case2.1 | GET /users/{login}                                    | Получение пользователя по существующему в БД логину         | 200        |
 | 3        |         | POST /accounts — Создание счёта                       |                                                             |            |
-|          | Case3.1 | POST /accounts                                        | Создание счёта у пользователя, у которого отсутствуют счёта | 200        |
+|          | Case3.1 | POST /accounts                                        | Создание счёта у пользователя, у которого отсутствуют счета | 200        |
 |          | Case3.2 | POST /accounts                                        | Создание счёта у пользователя, у которого уже есть счёт     | 200        |
 | 4        |         | POST /accounts/{id}/deposit — Пополнение счёта        |                                                             |            |
-|          | Case4.1 | POST /accounts/{id}/deposit                           | Пополнение счета (max значение)                             | 200        |
-|          | Case4.2 | POST /accounts/{id}/deposit                           | Пополнение счета (min значение)                             | 200        |
+|          | Case4.1 | POST /accounts/{id}/deposit                           | Пополнение счёта (max значение)                             | 200        |
+|          | Case4.2 | POST /accounts/{id}/deposit                           | Пополнение счёта (min значение)                             | 200        |
 | 5        |         | POST /accounts/{id}/withdraw — Списание со счёта      |                                                             |            |
 |          | Case5.1 | POST /accounts/{id}/withdraw                          | Списание части баланса со счёта при достаточном балансе     | 200        |
 |          | Case5.2 | POST /accounts/{id}/withdraw                          | Списание всего баланса со счёта при достаточном балансе     | 200        |
-|          | Case5.3 | POST /accounts/{id}/withdraw                          | Списание со счёта нулевого значения (баланс нет нулевой)    | 200        |
+|          | Case5.3 | POST /accounts/{id}/withdraw                          | Списание со счёта нулевого значения (баланс ненулевой)      | 200        |
 
 ## Негативные тесты
 
@@ -189,7 +189,7 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 | 3        |         | POST /accounts — Создание счёта                       |                                                            |            |
 |          | Case3.1 | POST /accounts                                        | Создание счёта для несуществующего пользователя            | 400        |
 | 4        |         | POST /accounts/{id}/deposit — Пополнение счёта        |                                                            |            |
-|          | Case4.1 | POST /accounts/{id}/deposit                           | Пополнение счета (отрицательное значение)                  | 400        |
+|          | Case4.1 | POST /accounts/{id}/deposit                           | Пополнение счёта (отрицательное значение)                  | 400        |
 | 5        |         | POST /accounts/{id}/withdraw — Списание со счёта      |                                                            |            |
 |          | Case5.1 | POST /accounts/{id}/withdraw                          | Списание суммы, превышающей текущий баланс (не нулевой)    | 400        |
 |          | Case5.2 | POST /accounts/{id}/withdraw                          | Списание со счёта при нулевом балансе                      | 400        |

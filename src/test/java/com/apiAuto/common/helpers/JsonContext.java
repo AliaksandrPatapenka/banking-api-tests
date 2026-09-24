@@ -26,7 +26,7 @@ public class JsonContext {
     }
 
     /**
-     * Метод toJson() превращает Java-строку в JSON-обьект для отправки в запросе.
+     * Метод toMap() превращает Java-строку в JSON-обьект для отправки в запросе.
      */
     public static Map<String, Object> toMap(String json) {
         try {

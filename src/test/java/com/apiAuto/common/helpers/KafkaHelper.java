@@ -91,11 +91,11 @@ public final class KafkaHelper {
                     .toList());
             consumer.seekToBeginning(consumer.assignment());
 
-            String keyStr = String.valueOf(key);                    // ← добавил
+            String keyStr = String.valueOf(key);
             long deadline = System.currentTimeMillis() + timeout.toMillis();
             while (System.currentTimeMillis() < deadline) {
                 for (var record : consumer.poll(Duration.ofSeconds(1))) {
-                    if (keyStr.equals(record.key())) return record.value();   // ← key → keyStr
+                    if (keyStr.equals(record.key())) return record.value();
                 }
             }
             throw new AssertionError("Сообщение с ключом '" + key + "' не найдено за " + timeout.toSeconds() + " сек");

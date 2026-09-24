@@ -37,7 +37,7 @@ public class PostAccountsTest {
 
         @Test
         @Order(1)
-        @DisplayName("Case 3.1: Создание счёта у пользователя, у которого отсутствуют счёта")
+        @DisplayName("Case 3.1: Создание счёта у пользователя, у которого отсутствуют счета")
         void createAccount() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 

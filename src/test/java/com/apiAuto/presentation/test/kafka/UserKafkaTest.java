@@ -33,7 +33,7 @@ public class UserKafkaTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class PositiveTest {
         @Test
-        @DisplayName("Case 3.1: Event Kafka - Пользователь создан")
+        @DisplayName("Case 3.1 Event Kafka: Пользователь создан")
         void userCreateKafkaEvent() {
             CreateUserDto requestBody = UserTemplate.defaultRequestBody();
             UserTemplate.createUser(requestBody, HttpStatus.OK);

@@ -52,7 +52,7 @@ public class PresentationDataGenerator {
     }
 
     /**
-     * Генератор Суммы списания с баланса
+     * Генератор cуммы списания c баланса
      */
     public static BigDecimal debitAmount(BigDecimal balance) {
         int divisor = ThreadLocalRandom.current().nextInt(1, 101);   // 1..100

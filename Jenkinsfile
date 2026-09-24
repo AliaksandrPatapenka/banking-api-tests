@@ -61,46 +61,51 @@ pipeline {
                             git branch: "${params.BRANCH_NAME}",
                                     url: "${params.REPO_URL}"
 
+                            // --------------------------------------------
+                            // 3.3. ЗАПУСК ТЕСТОВ с параметрами
+                            // --------------------------------------------
+                            try {
+                                def parts = params.TESTS.split('/')
+                                def service = parts[0]
+                                def suite = parts[1]
+                                def testArg = suite == 'all' ? '' : "-Dtest=${suite}/*"
 
-                          // --------------------------------------------
-                          // 3.3. ЗАПУСК ТЕСТОВ с параметрами
-                          // --------------------------------------------
-                          try {
-                              def parts = params.TESTS.split('/')
-                              def service = parts[0]
-                              def suite = parts[1]
-                              def testPattern = suite == 'all' ? '' : suite + '/*'
+                                // Один clean на весь прогон — до цикла.
+                                // Иначе mvn clean в цикле будет стирать target/allure-results
+                                // от предыдущих сервисов, и в отчёт попадёт только последний.
+                                sh 'mvn clean'
 
-                              if (service == 'all') {
-                                  // Читаем список сервисов из файловой системы
-                                  def services = sh(
-                                      script: "ls src/test/resources/config/${params.ENVIRONMENT}/ | sed 's/.properties\\$//'",
-                                      returnStdout: true
-                                  ).trim().split('\n')
+                                if (service == 'all') {
+                                    // Список сервисов читаем из файловой системы:
+                                    // все файлы .properties в config/<ENVIRONMENT>/
+                                    def services = sh(
+                                        script: 'ls src/test/resources/config/' + params.ENVIRONMENT + '/',
+                                        returnStdout: true
+                                    ).trim().split('\n').collect { it.replace('.properties', '') }
 
-                                  services.each { svc ->
-                                      sh '''
-                                          mvn clean test -e \
-                                          -Dservice=''' + svc + ''' \
-                                          -Dprofile=''' + params.ENVIRONMENT + ''' \
-                                          -Ddb.password=$DB_PASSWORD \
-                                          -Dtest=''' + testPattern + '''
-                                      '''
-                                  }
-                              } else {
-                                  sh '''
-                                      mvn clean test -e \
-                                      -Dservice=''' + service + ''' \
-                                      -Dprofile=''' + params.ENVIRONMENT + ''' \
-                                      -Ddb.password=$DB_PASSWORD \
-                                      -Dtest=''' + testPattern + '''
-                                  '''
-                              }
-                          } catch (Exception e) {
-                              testsFailed = true
-                              currentBuild.result = 'UNSTABLE'
-                              echo "Error in test execution: ${e.message}"
-                          }
+                                    services.each { svc ->
+                                        sh """
+                                            mvn test -e \
+                                            -Dservice=${svc} \
+                                            -Dprofile=${params.ENVIRONMENT} \
+                                            -Ddb.password=\$DB_PASSWORD \
+                                            ${testArg}
+                                        """
+                                    }
+                                } else {
+                                    sh """
+                                        mvn test -e \
+                                        -Dservice=${service} \
+                                        -Dprofile=${params.ENVIRONMENT} \
+                                        -Ddb.password=\$DB_PASSWORD \
+                                        ${testArg}
+                                    """
+                                }
+                            } catch (Exception e) {
+                                testsFailed = true
+                                currentBuild.result = 'UNSTABLE'
+                                echo "Error in test execution: ${e.message}"
+                            }
 
                             // --------------------------------------------
                             // 3.4. Генерация ALLURE-ОТЧЁТА

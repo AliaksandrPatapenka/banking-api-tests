@@ -25,4 +25,4 @@ allure-report/
 .env
 checkList.md
 README_old.md
-src/test/resources/ci/local.env
+src/test/resources/config/*-local.properties

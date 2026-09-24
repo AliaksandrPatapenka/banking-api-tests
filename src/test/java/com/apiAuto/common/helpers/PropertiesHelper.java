@@ -1,7 +1,5 @@
 package com.apiAuto.common.helpers;
 
-import com.apiAuto.presentation.constants.testData.UserData;
-
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -9,7 +7,13 @@ public class PropertiesHelper {
     public static final Properties props = new Properties();
 
     static {
-        try (InputStream in = UserData.class.getResourceAsStream("/local.properties")) {
+        String service = System.getProperty("service", "presentation");
+        String profile = System.getProperty("profile", "local");
+        load("/config/" + profile + "/" + service + ".properties");
+    }
+
+    private static void load(String path) {
+        try (InputStream in = PropertiesHelper.class.getResourceAsStream(path)) {
             if (in != null) {
                 props.load(in);
             }

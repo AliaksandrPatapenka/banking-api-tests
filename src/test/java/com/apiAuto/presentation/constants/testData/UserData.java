@@ -1,23 +1,7 @@
 package com.apiAuto.presentation.constants.testData;
 
-import java.io.InputStream;
-import java.util.Properties;
 
 public final class UserData {
-    private static final Properties props = new Properties();
-
-    private UserData() {
-    }
-
-    static {
-        try (InputStream in = UserData.class.getResourceAsStream("/local.properties")) {
-            if (in != null) {
-                props.load(in);
-            }
-        } catch (Exception e) {
-            // ignore
-        }
-    } // Загружает local.properties для локального запуска. В Jenkins переопределяется через -D
 
     /**
      * Невалидные тестовые данные пользователя

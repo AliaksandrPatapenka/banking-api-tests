@@ -41,7 +41,7 @@ public class AccountKafkaTest {
             String eventJson = KafkaHelper.oneByKeyInt(
                     TopicKafka.TOPIC_ACCOUNT_EVENTS,
                     ctx.accountId(),
-                    KafkaConfig.EVENT_WAIT_TIMEOUT
+                    KafkaConfig.EVENT_TIMEOUT
             );
 
             Map<String, Object> event = JsonContext.toMap(eventJson);
@@ -66,7 +66,7 @@ public class AccountKafkaTest {
                     TopicKafka.TOPIC_ACCOUNT_EVENTS,
                     ctx.accountId(),
                     AccountKafkaConst.EVENT_ACCOUNT_DEPOSIT,
-                    KafkaConfig.EVENT_WAIT_TIMEOUT
+                    KafkaConfig.EVENT_TIMEOUT
             );
 
             Map<String, Object> event = JsonContext.toMap(eventJson);
@@ -98,7 +98,7 @@ public class AccountKafkaTest {
                     TopicKafka.TOPIC_ACCOUNT_EVENTS,
                     ctx.accountId(),
                     AccountKafkaConst.EVENT_ACCOUNT_WITHDRAWAL,
-                    KafkaConfig.EVENT_WAIT_TIMEOUT
+                    KafkaConfig.EVENT_TIMEOUT
             );
 
             Map<String, Object> event = JsonContext.toMap(eventJson);

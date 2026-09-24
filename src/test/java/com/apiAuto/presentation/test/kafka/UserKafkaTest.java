@@ -41,7 +41,7 @@ public class UserKafkaTest {
             String eventJson = KafkaHelper.oneByKeyString(
                     TopicKafka.TOPIC_USER_EVENTS,
                     requestBody.getLogin(),
-                    KafkaConfig.EVENT_WAIT_TIMEOUT
+                    KafkaConfig.EVENT_TIMEOUT
             );
 
             Map<String, Object> event = JsonContext.toMap(eventJson);

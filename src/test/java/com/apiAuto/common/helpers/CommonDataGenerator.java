@@ -39,8 +39,6 @@ public class CommonDataGenerator {
         String template = CommonData.DEFAULT_STRING;
         return String.format(template, timeIndex);
     }
-
-
 }
 
 

@@ -28,11 +28,11 @@ pipeline {
                 script {
                     def buildUrl = "http://localhost:8085/job/${JOB_NAME}/${BUILD_NUMBER}/"
                     def repoName = params.REPO_URL.tokenize('/')[-1].replace('.git', '')
-                    def envVars = readProperties file: "ci/${params.ENVIRONMENT}.env"
                     boolean testsFailed = false
 
                     try {
                         withCredentials([
+                                string(credentialsId: "db-password-${params.ENVIRONMENT}", variable: 'DB_PASSWORD'),
                                 string(credentialsId: 'telegram.token', variable: 'TOKEN'),
                                 usernamePassword(credentialsId: 'user-credentials',
                                         usernameVariable: 'USERNAME',
@@ -46,7 +46,7 @@ pipeline {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=🚀 Тесты <b>ЗАПУЩЕНЫ!</b>\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${env.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
+                                -d "text=🚀 Тесты <b>ЗАПУЩЕНЫ!</b>\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${params.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
 
@@ -64,9 +64,9 @@ pipeline {
 
                                 sh '''
                                     mvn clean test -e \
-                                    -Ddb.url=''' + envVars.DB_URL + ''' \
-                                    -Dkafka.servers=''' + envVars.KAFKA_BOOTSTRAP + ''' \
-                                    -Dbase.url=''' + envVars.BASE_URL + ''' \
+                                    -Dservice=presentation \
+                                    -Dprofile=''' + params.ENVIRONMENT + ''' \
+                                    -Ddb.password=$DB_PASSWORD \
                                     -Dtest=''' + testPattern
                             } catch (Exception e) {
                                 testsFailed = true
@@ -89,7 +89,7 @@ pipeline {
                             sh """
                                 curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                                 -d "chat_id=-1004366972797" \
-                                -d "text=❌ Тесты <b>НЕ ЗАПУСТИЛИСЬ</b>!\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${env.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
+                                -d "text=❌ Тесты <b>НЕ ЗАПУСТИЛИСЬ</b>!\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${params.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                                 -d "parse_mode=HTML"
                             """
                         }
@@ -105,7 +105,7 @@ pipeline {
                         sh """
                             curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
                             -d "chat_id=-1004366972797" \
-                            -d "text=${statusIcon} ${statusText}\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${env.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
+                            -d "text=${statusIcon} ${statusText}\n       -\n       Проект: <code>${repoName}</code>\n       Ветка: <code>${params.BRANCH_NAME}</code>\n       -\n       Тесты: <code>[${JOB_NAME}]</code>\n       Номер запуска: <code>${BUILD_NUMBER}</code>\n       Запустил: <code>${env.BUILD_USER}</code>\n\n<code>${buildUrl}</code>" \
                             -d "parse_mode=HTML"
                         """
                     }

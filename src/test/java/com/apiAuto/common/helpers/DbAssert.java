@@ -14,5 +14,4 @@ public class DbAssert {
 
         assertEquals(expected, count, "Количество строк по запросу = " + param);
     }
-
 }

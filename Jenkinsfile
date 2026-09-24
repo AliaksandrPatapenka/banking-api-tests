@@ -8,7 +8,7 @@ pipeline {
         string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/banking-api-tests', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/banking-api-tests')
         choice(name: 'ENVIRONMENT', choices: ['ci', 'stage', 'prod'], description: 'Стенд')
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
-        choice(name: 'TEST_SUITE', choices: ['all', 'accounts', 'users', 'kafka'], description: 'Пакет тестов. По умолчанию "all"')
+        choice(name: 'TESTS', choices: ['presentation/all', 'presentation/accounts', 'presentation/users', 'presentation/kafka'], description: 'Сервис и пакет тестов. По умолчанию "all"')
     }
 
     // ====================================================
@@ -60,11 +60,14 @@ pipeline {
                             // 3.3. ЗАПУСК ТЕСТОВ с параметрами
                             // --------------------------------------------
                             try {
-                                def testPattern = params.TEST_SUITE == 'all' ? '' : params.TEST_SUITE + '/*'
+                                def parts = params.TESTS.split('/')
+                                def service = parts[0]
+                                def suite = parts[1]
+                                def testPattern = suite == 'all' ? '' : suite + '/*'
 
                                 sh '''
                                     mvn clean test -e \
-                                    -Dservice=presentation \
+                                    -Dservice=''' + service + ''' \
                                     -Dprofile=''' + params.ENVIRONMENT + ''' \
                                     -Ddb.password=$DB_PASSWORD \
                                     -Dtest=''' + testPattern

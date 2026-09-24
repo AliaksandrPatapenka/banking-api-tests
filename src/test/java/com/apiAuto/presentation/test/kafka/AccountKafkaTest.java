@@ -87,7 +87,7 @@ public class AccountKafkaTest {
         }
 
         @Test
-        @Order(2)
+        @Order(3)
         @DisplayName("Case 6.3 Event Kafka: Снятие со счёта")
         void accountWithdraw() {
             AccountSteps.AccountContext ctx = AccountSteps.createAccount();

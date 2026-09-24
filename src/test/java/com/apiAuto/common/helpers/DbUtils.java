@@ -41,7 +41,7 @@ public class DbUtils {
     }
 
     /**
-     * DELETE/UPDATE/INSERT. Возвращает число затронутых строк.
+     * DELETE/UPDATE/INSERT
      */
     public static void delete(String sql, Object value) {
         try (var con = connect(); var ps = con.prepareStatement(sql)) {

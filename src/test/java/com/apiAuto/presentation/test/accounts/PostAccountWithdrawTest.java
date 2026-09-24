@@ -90,7 +90,7 @@ public class PostAccountWithdrawTest {
      * ==================== НЕГАТИВНЫЕ ТЕСТЫ ====================
      */
     @Nested
-    @DisplayName("GET AccountsWithdraw. NegativeTests")
+    @DisplayName("POST AccountsWithdraw. NegativeTests")
     @Order(2)
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class NegativeTests {

@@ -70,36 +70,46 @@ pipeline {
                                 def suite = parts[1]
                                 def testArg = suite == 'all' ? '' : "-Dtest=${suite}/*"
 
-                                // Один clean на весь прогон — до цикла.
-                                // Иначе mvn clean в цикле будет стирать target/allure-results
-                                // от предыдущих сервисов, и в отчёт попадёт только последний.
                                 sh 'mvn clean'
 
                                 if (service == 'all') {
-                                    // Список сервисов читаем из файловой системы:
-                                    // все файлы .properties в config/<ENVIRONMENT>/
                                     def services = sh(
                                         script: 'ls src/test/resources/config/' + params.ENVIRONMENT + '/',
                                         returnStdout: true
                                     ).trim().split('\n').collect { it.replace('.properties', '') }
 
                                     services.each { svc ->
-                                        sh """
+                                        def exitCode = sh(
+                                            script: """
+                                                mvn test -e \
+                                                -Dservice=${svc} \
+                                                -Dprofile=${params.ENVIRONMENT} \
+                                                -Ddb.password=\$DB_PASSWORD \
+                                                ${testArg}
+                                            """,
+                                            returnStatus: true
+                                        )
+                                        if (exitCode != 0) {
+                                            testsFailed = true
+                                            currentBuild.result = 'UNSTABLE'
+                                            echo "Сервис ${svc} упал с кодом ${exitCode}"
+                                        }
+                                    }
+                                } else {
+                                    def exitCode = sh(
+                                        script: """
                                             mvn test -e \
-                                            -Dservice=${svc} \
+                                            -Dservice=${service} \
                                             -Dprofile=${params.ENVIRONMENT} \
                                             -Ddb.password=\$DB_PASSWORD \
                                             ${testArg}
-                                        """
+                                        """,
+                                        returnStatus: true
+                                    )
+                                    if (exitCode != 0) {
+                                        testsFailed = true
+                                        currentBuild.result = 'UNSTABLE'
                                     }
-                                } else {
-                                    sh """
-                                        mvn test -e \
-                                        -Dservice=${service} \
-                                        -Dprofile=${params.ENVIRONMENT} \
-                                        -Ddb.password=\$DB_PASSWORD \
-                                        ${testArg}
-                                    """
                                 }
                             } catch (Exception e) {
                                 testsFailed = true

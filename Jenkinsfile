@@ -6,9 +6,14 @@ pipeline {
     // ====================================================
     parameters {
         string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/banking-api-tests', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/banking-api-tests')
-        choice(name: 'ENVIRONMENT', choices: ['ci', 'stage', 'prod'], description: 'Стенд')
+        choice(name: 'ENVIRONMENT', choices: ['teststand'], description: 'Стенд')
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
-        choice(name: 'TESTS', choices: ['presentation/all', 'presentation/accounts', 'presentation/users', 'presentation/kafka'], description: 'Сервис и пакет тестов. По умолчанию "all"')
+        choice(name: 'TESTS', choices: [
+               'all/all',
+               'presentation/all',
+               'presentation/accounts',
+               'presentation/users',
+               'presentation/kafka'], description: 'Сервис и пакет тестов. По умолчанию "all"')
     }
 
     // ====================================================
@@ -56,26 +61,46 @@ pipeline {
                             git branch: "${params.BRANCH_NAME}",
                                     url: "${params.REPO_URL}"
 
-                            // --------------------------------------------
-                            // 3.3. ЗАПУСК ТЕСТОВ с параметрами
-                            // --------------------------------------------
-                            try {
-                                def parts = params.TESTS.split('/')
-                                def service = parts[0]
-                                def suite = parts[1]
-                                def testPattern = suite == 'all' ? '' : suite + '/*'
 
-                                sh '''
-                                    mvn clean test -e \
-                                    -Dservice=''' + service + ''' \
-                                    -Dprofile=''' + params.ENVIRONMENT + ''' \
-                                    -Ddb.password=$DB_PASSWORD \
-                                    -Dtest=''' + testPattern
-                            } catch (Exception e) {
-                                testsFailed = true
-                                currentBuild.result = 'UNSTABLE'
-                                echo "Error in test execution: ${e.message}"
-                            }
+                          // --------------------------------------------
+                          // 3.3. ЗАПУСК ТЕСТОВ с параметрами
+                          // --------------------------------------------
+                          try {
+                              def parts = params.TESTS.split('/')
+                              def service = parts[0]
+                              def suite = parts[1]
+                              def testPattern = suite == 'all' ? '' : suite + '/*'
+
+                              if (service == 'all') {
+                                  // Читаем список сервисов из файловой системы
+                                  def services = sh(
+                                      script: "ls src/test/resources/config/${params.ENVIRONMENT}/ | sed 's/.properties\\$//'",
+                                      returnStdout: true
+                                  ).trim().split('\n')
+
+                                  services.each { svc ->
+                                      sh '''
+                                          mvn clean test -e \
+                                          -Dservice=''' + svc + ''' \
+                                          -Dprofile=''' + params.ENVIRONMENT + ''' \
+                                          -Ddb.password=$DB_PASSWORD \
+                                          -Dtest=''' + testPattern + '''
+                                      '''
+                                  }
+                              } else {
+                                  sh '''
+                                      mvn clean test -e \
+                                      -Dservice=''' + service + ''' \
+                                      -Dprofile=''' + params.ENVIRONMENT + ''' \
+                                      -Ddb.password=$DB_PASSWORD \
+                                      -Dtest=''' + testPattern + '''
+                                  '''
+                              }
+                          } catch (Exception e) {
+                              testsFailed = true
+                              currentBuild.result = 'UNSTABLE'
+                              echo "Error in test execution: ${e.message}"
+                          }
 
                             // --------------------------------------------
                             // 3.4. Генерация ALLURE-ОТЧЁТА

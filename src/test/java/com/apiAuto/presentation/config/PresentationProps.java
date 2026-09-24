@@ -2,6 +2,10 @@ package com.apiAuto.presentation.config;
 
 import com.apiAuto.common.helpers.PropertiesHelper;
 
+/**
+ * Настройки сервиса presentation: базовый URL и таймауты HTTP-соединения (из системных свойств или properties-файла)
+ */
+
 public final class PresentationProps {
     public static final String BASE_URI = System.getProperty(
             "base.url", PropertiesHelper.props.getProperty("base.url"));

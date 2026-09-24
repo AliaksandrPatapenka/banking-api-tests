@@ -7,6 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
+/**
+ * Утилита для работы с JSON через Jackson
+ */
+
 public class JsonContext {
     private static final ObjectMapper mapper = new ObjectMapper();
 

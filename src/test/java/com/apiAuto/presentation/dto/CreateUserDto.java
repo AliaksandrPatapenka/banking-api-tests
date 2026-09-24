@@ -2,6 +2,10 @@ package com.apiAuto.presentation.dto;
 
 import java.util.List;
 
+/**
+ * DTO тела запроса на создание пользователя
+ */
+
 public class CreateUserDto {
     private String login;
     private String name;

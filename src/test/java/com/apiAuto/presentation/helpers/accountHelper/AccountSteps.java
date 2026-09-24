@@ -8,6 +8,10 @@ import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 
 import java.math.BigDecimal;
 
+/**
+ * Составные шаги тестов аккаунтов
+ */
+
 public class AccountSteps {
     public record AccountContext(String userLogin, int accountId) {
     }

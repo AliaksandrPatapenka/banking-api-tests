@@ -11,6 +11,9 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Проверки данных пользователя в БД
+ */
 
 public class UserDb {
     public static void assertDataUser(CreateUserDto expected) {

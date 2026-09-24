@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Генератор JSON-шаблона пользователя со случайными данными (Map для тела запроса)
+ */
+
 public class UserJsonTemplate {
     public static Map<String, Object> userJsonTemplate() {
         String timeIndex = CommonDataGenerator.timeIndex();

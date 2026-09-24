@@ -4,8 +4,8 @@
 Reports** и интеграцией с **Jenkins**. Реализованы генерация тестовых данных, валидация JSON Schema, проверка данных в
 **PostgreSQL**, проверка **Kafka**-событий и отправка уведомлений в Telegram о результатах сборки.
 
-Фреймворк покрывает тестами REST API банковского сервиса (блоки users и accounts, а также Kafka-события), развёрнутого
-локально.
+Инфраструктура поднимается через **Docker Compose**: PostgreSQL, Zookeeper, Kafka,
+Jenkins и тестируемое приложение Presentation).
 
 ---
 
@@ -22,6 +22,7 @@ Reports** и интеграцией с **Jenkins**. Реализованы ге�
 | **PostgreSQL (JDBC)**     | 42.7.3 |
 | **Kafka Clients**         | 3.5.1  |
 | **Maven**                 | 3.x    |
+| **Docker Compose**        | -      |
 | **Jenkins**               | -      |
 
 ---
@@ -31,28 +32,27 @@ Reports** и интеграцией с **Jenkins**. Реализованы ге�
 ```
 src/test/java/com/apiAuto/
 ├── common/                      # Общие настройки и утилиты
-│   ├── config/                  # Конфигурация (CommonData, DbConfig, KafkaConfig, Specs)
-│   ├── constants/               # Общие константы (HttpStatus, KafkaConst)
-│   └── helpers/                 # Вспомогательные классы (DbUtils, DbAssert, HttpAssert,
-│                                # KafkaHelper, RequestTemplate, JsonContext, CommonDataGenerator)
+│   ├── config/                  # Конфигурация
+│   ├── constants/               # Общие константы
+│   └── helpers/                 # Вспомогательные классы
 │
-└── presentation/                # Слой тестирования банковского API
+└── presentation/                # Слой тестирования банковского API (сервис Presentation)
+    ├── config/                  # Конфигурация  сервиса presentation
+    │
     ├── constants/
-    │   ├── endpoints/           # Endpoints (UsersEndpoints, AccountEndpoints)
+    │   ├── endpoints/           # Endpoints
     │   ├── kafka/               # Kafka-константы (TopicKafka, UserKafkaConst, AccountKafkaConst)
     │   ├── queryParam/          # Query-параметры (UserQueryParam, AccountQueryParam)
-    │   ├── schemasPatchs/       # Пути к JSON Schema (UserSchemas, AccountSchemas, ErrorSchemas)
-    │   ├── sql/                 # SQL-запросы (UserSql, AccountSql)
-    │   └── testData/            # Тестовые данные (UserData, AccountData)
+    │   ├── schemasPatchs/       # Пути к JSON Schema
+    │   ├── sql/                 # SQL-запросы
+    │   └── testData/            # Тестовые данные
     │
-    ├── dto/                     # POJO-модели для запросов (CreateUserDto)
+    ├── dto/                     # POJO-модели для запросов
     │
     ├── helpers/                 # Вспомогательные классы
     │   ├── accountHelper/       # Помощники для счетов (AccountSteps, AccountTemplate, AccountDb)
-    │   ├── testHelper/          # Генерация данных, очистка БД (PresentationDataGenerator, PresentationDbCleanup)
-    │   └── userHelper/          # Шаблоны и работа с БД для пользователей (UserTemplate, UserJsonTemplate, UserDb)
-    │
-    ├── properties/              # Свойства тестов (PresentationTestProperties)
+    │   ├── testHelper/          # Генерация данных, очистка БД
+    │   └── userHelper/          # Шаблоны и работа с БД для пользователей
     │
     └── test/                    # Тест-классы
         ├── accounts/            # Тесты для блока accounts (создание, пополнение, списание)
@@ -60,23 +60,50 @@ src/test/java/com/apiAuto/
         └── users/               # Тесты для блока users (создание, получение по логину)
 
 src/test/resources/
+├── config/                      # Конфигурация стенда/окружения (по профилям)
+│   ├── local/                   # Локальный запуск
+│   └── teststand/               # Стенд teststand
 ├── schemas/                     # JSON Schema для валидации ответов
 │   ├── errorSchema/             # Схемы для ошибок (400)
 │   └── presentation/
-│       ├── accountSchema/       # Схемы для счетов (create, deposit, withdraw)
-│       └── userSchema/          # Схемы для пользователей (create, by login)
+│       ├── accountSchema/       # Схемы для счетов
+│       └── userSchema/          # Схемы для пользователей
 ├── allure.properties            # Настройки Allure
-├── db.properties                # Настройки подключения к PostgreSQL
-├── junit-platform.properties    # Настройки запуска JUnit
-└── local.properties             # Локальные настройки (игнорируется в Jenkins)
+└── junit-platform.properties    # Настройки запуска JUnit
 ```
 
 ## Команды для запуска
 
-**Запуск всех тестов и генерация Allure-отчета:**
+**Локальный запуск всех тестов (по умолчанию `service=presentation`, `profile=local`) и генерация Allure-отчета:**
 
 ```
 mvn clean test; allure generate target/allure-results --clean -o allure-report; allure open allure-report
+
+```
+
+**Запуск тестов на стенде (с указанием сервиса, профиля и пароля БД):**
+
+```
+mvn clean test -Dservice=presentation -Dprofile=teststand -Ddb.password=<пароль>
+
+```
+
+**Запуск отдельного пакета тестов:**
+
+```
+mvn clean test -Dtest=accounts/*    # только тесты счетов
+mvn clean test -Dtest=users/*       # только тесты пользователей
+mvn clean test -Dtest=kafka/*       # только тесты Kafka-событий
+
+```
+
+### Локальное окружение (Docker Compose)
+
+Поднимает инфраструктуру для тестирования: **PostgreSQL** (порт 54321), **Zookeeper** (2181), **Kafka** (9092),
+**Jenkins** (8085) и тестируемое приложение **presentation** (8081):
+
+```
+docker compose up -d
 
 ```
 
@@ -85,21 +112,29 @@ mvn clean test; allure generate target/allure-results --clean -o allure-report; 
 В проекте настроен параллельный запуск тестов для ускорения выполнения:
 
 - **JUnit уровень** — `junit-platform.properties`
-- **Maven уровень** — `maven-surefire-plugin`
+- **Maven уровень** — `maven-surefire-plugin` (`parallel=methods`, `threadCount=4`)
 
 ---
 
 ## CI/CD (Jenkins)
 
-Проект интегрирован с Jenkins. Пайплайн (`Jenkinsfile`) поддерживает параметризированную сборку:
+Проект интегрирован с Jenkins. Пайплайн через Jenkinsfile поддерживает параметризированную сборку:
 
 **Параметры сборки:**
 
-- `REPO_URL` — ссылка на тестируемый репозиторий репозитория
+- `REPO_URL` — ссылка на тестируемый репозиторий
+- `ENVIRONMENT` — стенд (окружение), на котором запускаются тесты
 - `BRANCH_NAME` — ветка тестируемого репозитория
-- `TEST_SUITE` — пакет тестов
-- `BASE_URL` — базовый URL API
-- `BASE_PATHS` — базовый путь API
+- `TESTS` — сервис и пакет тестов в формате `<сервис>/<пакет>`:
+  - `all/all` — все тесты всех сервисов
+  - `presentation/all` — все тесты сервиса presentation
+  - `presentation/accounts`, `presentation/users`, `presentation/kafka` — отдельные пакеты тестов
+
+**Учётные данные Jenkins:**
+
+- `db-password-<ENVIRONMENT>` — пароль БД текущего стенда
+- `telegram.token` — токен Telegram-бота
+- `user-credentials` — логин/пароль для тестируемого API
 
 ---
 
@@ -116,7 +151,8 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 
 ## Allure-отчетность
 
-После выполнения тестов генерируется детальный Allure-отчет.
+После выполнения тестов генерируется детальный Allure-отчет (`mvn allure:report`), который публикуется в Jenkins
+(плагин Allure, результаты из `target/allure-results`).
 
 ---
 
@@ -157,6 +193,17 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 | 5        |         | POST /accounts/{id}/withdraw — Списание со счёта      |                                                            |            |
 |          | Case5.1 | POST /accounts/{id}/withdraw                          | Списание суммы, превышающей текущий баланс (не нулевой)    | 400        |
 |          | Case5.2 | POST /accounts/{id}/withdraw                          | Списание со счёта при нулевом балансе                      | 400        |
+
+## Kafka-события
+
+| № топика | № кейса | Топик                | Название теста                     | Статус код |
+|----------|---------|----------------------|------------------------------------|------------|
+| 1        |         | user-events          |                                    |            |
+|          | Case3.1 | user-events          | Event Kafka — Пользователь создан  | 200        |
+| 2        |         | account-events       |                                    |            |
+|          | Case6.1 | account-events       | Event Kafka — Создание счёта       | 200        |
+|          | Case6.2 | account-events       | Event Kafka — Пополнение счёта     | 200        |
+|          | Case6.3 | account-events       | Event Kafka — Снятие со счёта      | 200        |
 
 ---
 

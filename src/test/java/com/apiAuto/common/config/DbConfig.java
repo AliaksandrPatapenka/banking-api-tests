@@ -3,7 +3,7 @@ package com.apiAuto.common.config;
 import com.apiAuto.common.helpers.PropertiesHelper;
 
 /**
- * Настройки подключения к PostgreSQL.
+ * Конфигурация подключения к БД (URL, логин, пароль) из системных свойств или properties-файла
  *
  */
 public final class DbConfig {

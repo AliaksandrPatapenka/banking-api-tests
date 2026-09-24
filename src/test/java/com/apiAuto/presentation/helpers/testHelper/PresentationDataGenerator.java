@@ -6,6 +6,10 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Генератор тестовых данных сервиса presentation
+ */
+
 public class PresentationDataGenerator {
 
     public PresentationDataGenerator() {

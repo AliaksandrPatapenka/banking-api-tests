@@ -13,6 +13,11 @@ import java.util.Map;
 
 import static com.apiAuto.common.config.Specs.requestSpec;
 
+
+/**
+ * Шаблоны для работы с пользователем
+ */
+
 public class UserTemplate {
     public static String userGetLogin(int httpStatus) {
         Map<String, Object> jsonRequest = UserJsonTemplate.userJsonTemplate();

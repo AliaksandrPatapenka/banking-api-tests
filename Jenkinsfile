@@ -1,3 +1,40 @@
+/**
+ * ==================================================================================
+ * ПАЙПЛАЙН ЗАПУСКА API-АВТОТЕСТОВ (Maven + RestAssured + JUnit 5) В JENKINS
+ * ==================================================================================
+ *
+ * 1. Блок parameters — параметры, которые Jenkins показывает в форме запуска сборки:
+ *    - REPO_URL    — URL репозитория с тестами;
+ *    - ENVIRONMENT — стенд (окружение), на котором запускаются тесты;
+ *    - BRANCH_NAME — ветка репозитория;
+ *    - TESTS       — что запускать, формат "<сервис>/<пакет>":
+ *      "all/all"          — все тесты всех сервисов;
+ *      "<сервис>/all"     — все тесты одного сервиса;
+ *      "<сервис>/<пакет>" — один пакет тестов сервиса (accounts, users, kafka).
+ *
+ * 2. Блок tools — инструменты сборки, настроенные в Jenkins: Maven "maven3", JDK "jdk21".
+ *
+ * 3. Блок stages (stage "Run") — основная логика. Сначала вычисляются переменные:
+ *    buildUrl (ссылка на сборку), repoName (имя репозитория для сообщений в Telegram),
+ *    testsFailed (флаг "тесты упали"). Дальше всё выполняется внутри withCredentials,
+ *    которая подключает учётные данные из Jenkins:
+ *    - "db-password-<ENVIRONMENT>" — пароль БД текущего стенда;
+ *    - "telegram.token"            — токен Telegram-бота для уведомлений;
+ *    - "user-credentials"          — логин/пароль для тестируемого API.
+ *    3.1. Уведомление в Telegram о старте сборки.
+ *    3.2. Клонирование выбранной ветки выбранного репозитория (шаг git).
+ *    3.3. Запуск тестов:
+ *         - параметр TESTS разбирается на "сервис" и "пакет";
+ *         - если сервис = "all" — список сервисов берётся из папки
+ *           src/test/resources/config/<ENVIRONMENT>/ (один .properties-файл = один
+ *           сервис) и mvn test запускается отдельно для каждого сервиса;
+ *         - иначе mvn test запускается один раз для выбранного сервиса;
+ *         - свойства -Dservice и -Dprofile указывают тестам, какой конфигурационный
+ *           файл загрузить: src/test/resources/config/<profile>/<service>.properties;
+ *    3.4. Генерация Allure-отчёта (mvn allure:report).
+ * ==================================================================================
+ */
+
 pipeline {
     agent any
 
@@ -5,15 +42,16 @@ pipeline {
     // 1. ПАРАМЕТРЫ СБОРКИ
     // ====================================================
     parameters {
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/banking-api-tests', description: 'URL репозитория с кодом. По умолчанию https://github.com/AliaksandrPatapenka/banking-api-tests')
+        string(name: 'REPO_URL', defaultValue: 'https://github.com/AliaksandrPatapenka/banking-api-tests', description: 'URL репозитория с кодом. По умолчанию /banking-api-tests')
         choice(name: 'ENVIRONMENT', choices: ['teststand'], description: 'Стенд')
         string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Название ветки. По умолчанию "master"')
         choice(name: 'TESTS', choices: [
-               'all/all',
-               'presentation/all',
-               'presentation/accounts',
-               'presentation/users',
-               'presentation/kafka'], description: 'Сервис и пакет тестов. По умолчанию "all"')
+                'all/all',
+                'presentation/all',
+                'presentation/accounts',
+                'presentation/users',
+                'presentation/kafka'
+        ], description: 'Сервис и пакет тестов. По умолчанию "all"')
     }
 
     // ====================================================

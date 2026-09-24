@@ -14,9 +14,11 @@ import static io.restassured.RestAssured.basePath;
 import static io.restassured.RestAssured.baseURI;
 
 /**
- * Настройки запросов и ответов для RestAssured.
- * Содержит базовый URL, заголовки, фильтр Allure и логирование
+ * Настройки RestAssured: базовый URI, Content-Type, таймауты HTTP, фильтр Allure и логирование запросов и ответов<br>
+ * requestSpec() — спецификация запроса (URL, заголовки, таймауты, логи, Allure)<br>
+ * responseSpec() — спецификация ответа с полным логированием
  */
+
 public class Specs {
     static {
         baseURI = PresentationProps.BASE_URI;

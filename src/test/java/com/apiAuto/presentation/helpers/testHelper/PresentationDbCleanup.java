@@ -4,6 +4,10 @@ import com.apiAuto.common.helpers.DbUtils;
 import com.apiAuto.presentation.constants.sql.AccountSql;
 import com.apiAuto.presentation.constants.sql.UserSql;
 
+/**
+ * Очистка тестовых данных в БД
+ */
+
 public class PresentationDbCleanup {
     public static void deleteUsers() {
         DbUtils.delete(UserSql.DELETE_USER_BY_LOGIN, "Test_%");

@@ -10,6 +10,10 @@ import java.util.Map;
 
 import static com.apiAuto.common.config.Specs.requestSpec;
 
+/**
+ * Шаблоны запросов к аккаунтам
+ */
+
 public class AccountTemplate {
     public static Response createAccount(String userLogin, int httpStatus) {
         return RequestTemplate.postQuery(requestSpec(),

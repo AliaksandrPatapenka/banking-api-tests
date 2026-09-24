@@ -7,6 +7,11 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import java.time.Duration;
 import java.util.Properties;
 
+/**
+ * Конфигурация Kafka: адреса брокеров и таймаут ожидания событий.<br>
+ * Метод consumerProps(groupId) собирает свойства для консьюмера.
+ */
+
 public final class KafkaConfig {
     private KafkaConfig() {
     }

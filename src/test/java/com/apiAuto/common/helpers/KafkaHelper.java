@@ -11,6 +11,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Утилита для чтения сообщений из топиков Kafka
+ */
+
 public final class KafkaHelper {
 
     private KafkaHelper() {
@@ -18,7 +22,6 @@ public final class KafkaHelper {
 
     /**
      * Читает одно сообщение из топика, подходящее под фильтр.
-     * Ждёт не дольше timeout. Кидает AssertionError, если ничего не пришло.
      */
     public static String oneByFilter(String topic, int accountId, String eventName, Duration timeout) {
         KafkaConsumer<String, String> consumer =

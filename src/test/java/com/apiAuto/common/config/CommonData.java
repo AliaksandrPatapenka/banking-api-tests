@@ -1,5 +1,9 @@
 package com.apiAuto.common.config;
 
+/**
+ * Общие тестовые константы
+ */
+
 public final class CommonData {
     private CommonData() {
     }

@@ -8,6 +8,10 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Работа с данными аккаунтов в БД
+ */
+
 public class AccountDb {
     public static void assertAccountBalance(String userLogin, BigDecimal expected) {
         BigDecimal actual = (BigDecimal) DbUtils.getValue(AccountSql.SELECT_ACCOUNT_BALANCE, userLogin);

@@ -7,6 +7,10 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
+/**
+ * Шаблоны HTTP-запросов
+ */
+
 public class RequestTemplate {
     public static Response postQuery(RequestSpecification spec,
                                      String endpoint,

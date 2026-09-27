@@ -12,7 +12,12 @@ import java.util.Map;
  */
 
 public class JsonContext {
-    private static final ObjectMapper mapper = new ObjectMapper();
+
+    /**
+     * Общий Jackson-маппер для сериализации и десериализации JSON
+     */
+    private static final ObjectMapper mapper = new ObjectMapper()
+            .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 
     /**
      * Метод toJson() превращает Java-объект в JSON-строку для отправки в запросе.
@@ -30,8 +35,6 @@ public class JsonContext {
      */
     public static Map<String, Object> toMap(String json) {
         try {
-            ObjectMapper mapper = new ObjectMapper()
-                    .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
             return mapper.readValue(json, new TypeReference<>() {
             });
         } catch (Exception e) {

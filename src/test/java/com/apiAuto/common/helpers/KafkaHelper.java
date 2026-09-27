@@ -1,6 +1,7 @@
 package com.apiAuto.common.helpers;
 
 import com.apiAuto.common.config.KafkaConfig;
+import com.apiAuto.common.constants.KafkaConst;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -45,7 +46,7 @@ public final class KafkaHelper {
                     }
 
                     Map<String, Object> event = JsonContext.toMap(record.value());
-                    if (eventName.equals(event.get("eventName"))) {
+                    if (eventName.equals(event.get(KafkaConst.EVENT_NAME))) {
                         return record.value();
                     }
                 }

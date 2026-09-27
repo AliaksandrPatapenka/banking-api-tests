@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.constants.kafka;
 
-public class TopicKafka {
+public final class TopicKafka {
     private TopicKafka() {
     }
 

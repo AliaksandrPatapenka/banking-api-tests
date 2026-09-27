@@ -4,8 +4,8 @@
 Reports** и интеграцией с **Jenkins**. Реализованы генерация тестовых данных, валидация JSON Schema, проверка данных в
 **PostgreSQL**, проверка **Kafka**-событий и отправка уведомлений в Telegram о результатах сборки.
 
-Инфраструктура поднимается через **Docker Compose**: PostgreSQL, Zookeeper, Kafka,
-Jenkins и тестируемое приложение presentation.
+Инфраструктура поднимается через **Docker Compose**: PostgreSQL, Zookeeper, Kafka, Jenkins и тестируемое приложение
+presentation.
 
 ---
 
@@ -126,9 +126,9 @@ docker compose up -d
 - `ENVIRONMENT` — стенд (окружение), на котором запускаются тесты
 - `BRANCH_NAME` — ветка тестируемого репозитория
 - `TESTS` — сервис и пакет тестов в формате `<сервис>/<пакет>`:
-  - `all/all` — все тесты всех сервисов
-  - `presentation/all` — все тесты сервиса presentation
-  - `presentation/accounts`, `presentation/users`, `presentation/kafka` — отдельные пакеты тестов
+    - `all/all` — все тесты всех сервисов
+    - `presentation/all` — все тесты сервиса presentation
+    - `presentation/accounts`, `presentation/users`, `presentation/kafka` — отдельные пакеты тестов
 
 **Страница запуска сборки в Jenkins:**
 ![](screen/s1.jpeg)
@@ -201,14 +201,14 @@ Jenkins-пайплайн отправляет уведомления в Telegram
 
 ## Kafka-события
 
-| № топика | № кейса | Топик                | Название теста                     | Статус код |
-|----------|---------|----------------------|------------------------------------|------------|
-| 1        |         | user-events          |                                    |            |
-|          | Case3.1 | user-events          | Event Kafka — Пользователь создан  | 200        |
-| 2        |         | account-events       |                                    |            |
-|          | Case6.1 | account-events       | Event Kafka — Создание счёта       | 200        |
-|          | Case6.2 | account-events       | Event Kafka — Пополнение счёта     | 200        |
-|          | Case6.3 | account-events       | Event Kafka — Снятие со счёта      | 200        |
+| № топика | № кейса | Топик          | Название теста                    | Статус код |
+|----------|---------|----------------|-----------------------------------|------------|
+| 1        |         | user-events    |                                   |            |
+|          | Case3.1 | user-events    | Event Kafka — Пользователь создан | 200        |
+| 2        |         | account-events |                                   |            |
+|          | Case6.1 | account-events | Event Kafka — Создание счёта      | 200        |
+|          | Case6.2 | account-events | Event Kafka — Пополнение счёта    | 200        |
+|          | Case6.3 | account-events | Event Kafka — Снятие со счёта     | 200        |
 
 ---
 

@@ -19,6 +19,7 @@ public class UserTemplate {
         createUser(requestBody, httpStatus);
         return requestBody.getLogin();
     }
+
     @Step("Создание пользователя")
     public static Response createUser(CreateUserDto createUserDto, int httpStatus) {
         return RequestTemplate.postBody(requestSpec(),

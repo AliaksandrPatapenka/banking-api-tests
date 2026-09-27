@@ -19,11 +19,12 @@ public class PropertiesHelper {
 
     private static void load(String path) {
         try (InputStream in = PropertiesHelper.class.getResourceAsStream(path)) {
-            if (in != null) {
-                props.load(in);
+            if (in == null) {
+                throw new IllegalStateException("Не найден properties: " + path);
             }
+            props.load(in);
         } catch (Exception e) {
-            // ignore
+            throw new RuntimeException("Ошибка чтения properties: " + path, e);
         }
     }
 }

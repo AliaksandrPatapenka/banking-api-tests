@@ -4,10 +4,10 @@ package com.apiAuto.presentation.test.users;
 import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.common.helpers.RequestTemplate;
 import com.apiAuto.presentation.constants.endpoints.UsersEndpoints;
-import com.apiAuto.presentation.constants.queryParam.UserQueryParam;
 import com.apiAuto.presentation.constants.schemasPatchs.ErrorSchemas;
 import com.apiAuto.presentation.constants.schemasPatchs.UserSchemas;
 import com.apiAuto.presentation.constants.testData.UserData;
+import com.apiAuto.presentation.dto.CreateUserDto;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;
@@ -43,7 +43,7 @@ public class GetUsersLoginTest {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
 
             RequestTemplate.get(requestSpec(),
-                            Map.of(UserQueryParam.USER_LOGIN, userLogin),
+                            Map.of(CreateUserDto.Fields.login, userLogin),
                             UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
                             HttpStatus.OK)
                     .then()
@@ -68,7 +68,7 @@ public class GetUsersLoginTest {
             String userLogin = UserData.LOGIN_NOT_EXIST;
 
             RequestTemplate.get(requestSpec(),
-                            Map.of(UserQueryParam.USER_LOGIN, userLogin),
+                            Map.of(CreateUserDto.Fields.login, userLogin),
                             UsersEndpoints.ENDPOINT_USERS_BY_LOGIN,
                             HttpStatus.BAD_REQUEST)
                     .then()

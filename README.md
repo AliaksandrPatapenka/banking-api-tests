@@ -99,8 +99,8 @@ mvn clean test -Dtest=kafka/*       # только тесты Kafka-событи
 
 ### Локальное окружение (Docker Compose)
 
-Поднимает инфраструктуру для тестирования: **PostgreSQL** (порт 54321), **Zookeeper** (2181), **Kafka** (9092),
-**Jenkins** (8085) и тестируемое приложение **presentation** (8081):
+Поднимает инфраструктуру для тестирования: **PostgreSQL**, **Zookeeper**, **Kafka**,
+**Jenkins** и тестируемое приложение **presentation**:
 
 ```
 docker compose up -d
@@ -109,7 +109,7 @@ docker compose up -d
 
 ### Параллельный запуск тестов
 
-В проекте настроен параллельный запуск тестов для ускорения выполнения:
+В проекте есть возможность параллельного запуск тестов:
 
 - **JUnit уровень** — `junit-platform.properties`
 - **Maven уровень** — `maven-surefire-plugin` (`parallel=methods`, `threadCount=4`)

@@ -10,7 +10,9 @@ public class HttpAssert {
     public static void httpStatusAssert(Response response, int expected) {
         int actual = response.getStatusCode();
         if (actual != expected) {
-            throw new AssertionError("Тело ответа: " + response.body().asString());
+            throw new AssertionError("Ожидаемый статус " + expected + "\n" +
+                    "Фактический статус: " + actual + "\n" +
+                    "Тело ответа: " + response.body().asString());
         }
     }
 }

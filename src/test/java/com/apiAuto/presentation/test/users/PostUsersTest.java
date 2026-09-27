@@ -7,6 +7,7 @@ import com.apiAuto.presentation.constants.schemasPatchs.UserSchemas;
 import com.apiAuto.presentation.constants.sql.UserSql;
 import com.apiAuto.presentation.dto.CreateUserDto;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
+import com.apiAuto.presentation.helpers.userHelper.DefaultRequestBody;
 import com.apiAuto.presentation.helpers.userHelper.UserDb;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;
@@ -37,7 +38,7 @@ public class PostUsersTest {
         @Test
         @DisplayName("Case 1.1: Создание пользователя без привязки друзей")
         void createUser() {
-            CreateUserDto requestBody = UserTemplate.defaultRequestBody();
+            CreateUserDto requestBody = DefaultRequestBody.defaultRequestBody();
 
             UserTemplate.createUser(requestBody, HttpStatus.OK)
                     .then()
@@ -55,7 +56,7 @@ public class PostUsersTest {
                 friends.add(UserTemplate.userGetLogin(HttpStatus.OK));
             }
 
-            CreateUserDto createUserDto = UserTemplate.defaultRequestBody(friends);
+            CreateUserDto createUserDto = DefaultRequestBody.defaultRequestBody(friends);
 
             UserTemplate.createUser(createUserDto, HttpStatus.OK)
                     .then()
@@ -82,7 +83,7 @@ public class PostUsersTest {
         @DisplayName("Case 1.2: Создание пользователя с существующим в базе данных логином")
         void createUserStatus400() {
             String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
-            CreateUserDto createUserDto = UserTemplate.defaultRequestBody();
+            CreateUserDto createUserDto = DefaultRequestBody.defaultRequestBody();
             createUserDto.setLogin(userLogin);
 
             UserTemplate.createUser(createUserDto, HttpStatus.BAD_REQUEST)

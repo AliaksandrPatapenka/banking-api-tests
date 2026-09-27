@@ -13,7 +13,7 @@ import static com.apiAuto.common.config.Specs.requestSpec;
  * Шаблоны для работы с пользователем
  */
 public class UserTemplate {
-    @Step("Создание пользователя и получение его id: {userId}")
+    @Step("Создание пользователя и получение его логина")
     public static String userGetLogin(int httpStatus) {
         CreateUserDto requestBody = DefaultRequestBody.defaultRequestBody();
         createUser(requestBody, httpStatus);

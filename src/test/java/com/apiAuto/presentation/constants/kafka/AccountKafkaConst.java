@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.constants.kafka;
 
-public class AccountKafkaConst {
+public final class AccountKafkaConst {
     private AccountKafkaConst() {
 
     }

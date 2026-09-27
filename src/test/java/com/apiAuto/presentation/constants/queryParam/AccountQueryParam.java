@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.constants.queryParam;
 
-public class AccountQueryParam {
+public final class AccountQueryParam {
     private AccountQueryParam() {
     }
 

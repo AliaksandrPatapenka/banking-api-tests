@@ -7,6 +7,7 @@ import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
  * JSON-шаблон пользователя
  */
@@ -23,14 +24,13 @@ public class DefaultRequestBody {
         String userGender = PresentationDataGenerator.randomGender();
         String userHairColor = PresentationDataGenerator.randomHairColor();
 
-        CreateUserDto requestBody = new CreateUserDto();
-        requestBody.setLogin(userLogin);
-        requestBody.setName(userName);
-        requestBody.setAge(userAge);
-        requestBody.setGender(userGender);
-        requestBody.setHairColor(userHairColor);
-        requestBody.setFriends(friends);
-
-        return requestBody;
+        return CreateUserDto.builder()
+                .login(userLogin)
+                .name(userName)
+                .age(userAge)
+                .gender(userGender)
+                .hairColor(userHairColor)
+                .friends(friends)
+                .build();
     }
 }

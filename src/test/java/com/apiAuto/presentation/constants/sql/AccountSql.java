@@ -4,8 +4,8 @@ public class AccountSql {
     private AccountSql() {
     }
 
-    public static String SELECT_ACCOUNT_COUNT = "SELECT COUNT(*) FROM accounts WHERE user_login like ?";
-    public static String SELECT_ACCOUNT_BALANCE = "SELECT balance FROM accounts WHERE user_login like ?";
-    public static String SELECT_ACCOUNT_ID = "SELECT id FROM accounts WHERE user_login like ?";
-    public static String DELETE_ACCOUNT_BY_USER_LOGIN = "DELETE FROM accounts WHERE user_login LIKE ?";
+    public static final String SELECT_ACCOUNT_COUNT = "SELECT COUNT(*) FROM accounts WHERE user_login like ?";
+    public static final String SELECT_ACCOUNT_BALANCE = "SELECT balance FROM accounts WHERE user_login like ? ORDER BY id";
+    public static final String SELECT_ACCOUNT_ID = "SELECT id FROM accounts WHERE user_login like ?";
+    public static final String DELETE_ACCOUNT_BY_USER_LOGIN = "DELETE FROM accounts WHERE user_login LIKE ?";
 }

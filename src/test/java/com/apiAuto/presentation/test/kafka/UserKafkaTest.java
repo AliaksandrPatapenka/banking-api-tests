@@ -23,7 +23,6 @@ public class UserKafkaTest {
     @BeforeAll
     static void dbCleanup() {
         PresentationDbCleanup.deleteUsers();
-        PresentationDbCleanup.deleteAccounts();
     }
 
     /**

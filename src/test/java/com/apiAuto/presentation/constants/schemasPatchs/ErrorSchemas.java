@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.constants.schemasPatchs;
 
-public class ErrorSchemas {
+public final class ErrorSchemas {
     private ErrorSchemas() {
     }
 

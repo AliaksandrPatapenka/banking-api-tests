@@ -9,6 +9,7 @@ import com.apiAuto.presentation.constants.kafka.TopicKafka;
 import com.apiAuto.presentation.constants.kafka.UserKafkaConst;
 import com.apiAuto.presentation.dto.CreateUserDto;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDbCleanup;
+import com.apiAuto.presentation.helpers.userHelper.DefaultRequestBody;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
 import org.junit.jupiter.api.*;
 
@@ -36,7 +37,7 @@ public class UserKafkaTest {
         @Test
         @DisplayName("Case 3.1 Event Kafka: Пользователь создан")
         void userCreateKafkaEvent() {
-            CreateUserDto requestBody = UserTemplate.defaultRequestBody();
+            CreateUserDto requestBody = DefaultRequestBody.defaultRequestBody();
             UserTemplate.createUser(requestBody, HttpStatus.OK);
 
             String eventJson = KafkaHelper.oneByKeyString(

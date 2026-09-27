@@ -46,6 +46,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Проверка JSON схемы -->
@@ -106,11 +107,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
-                <configuration>
-                    <parallel>methods</parallel>
-                    <threadCount>4</threadCount>
-                    <perCoreThreadCount>false</perCoreThreadCount>
-                </configuration>
             </plugin>
 
             <plugin>

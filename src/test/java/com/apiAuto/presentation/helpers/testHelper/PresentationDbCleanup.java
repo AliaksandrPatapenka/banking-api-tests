@@ -7,17 +7,16 @@ import com.apiAuto.presentation.constants.sql.UserSql;
 /**
  * Очистка тестовых данных в БД
  */
-
 public class PresentationDbCleanup {
     public static void deleteUsers() {
-        DbUtils.delete(UserSql.DELETE_USER_BY_LOGIN, "Test_%");
+        DbUtils.delete(UserSql.DELETE_USER_BY_LOGIN, "Test\\_%' ESCAPE '\\'");
     }
 
     public static void deleteFriends() {
-        DbUtils.delete(UserSql.DELETE_FRIENDS_BY_USER_LOGIN, "Test_%");
+        DbUtils.delete(UserSql.DELETE_FRIENDS_BY_USER_LOGIN, "Test\\_%' ESCAPE '\\'");
     }
 
     public static void deleteAccounts() {
-        DbUtils.delete(AccountSql.DELETE_ACCOUNT_BY_USER_LOGIN, "Test_%");
+        DbUtils.delete(AccountSql.DELETE_ACCOUNT_BY_USER_LOGIN, "Test\\_%' ESCAPE '\\'");
     }
 }

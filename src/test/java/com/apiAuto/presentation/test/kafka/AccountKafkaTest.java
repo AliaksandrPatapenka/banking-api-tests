@@ -82,8 +82,8 @@ public class AccountKafkaTest {
             assertEquals(AccountKafkaConst.EVENT_ACCOUNT_DEPOSIT, event.get(KafkaConst.EVENT_NAME));
             assertEquals(ctx.accountId(), account.get(AccountKafkaConst.KEY_ID));
             assertEquals(ctx.userLogin(), account.get(AccountKafkaConst.KEY_USER_LOGIN));
-            assertEquals(getBalance, balance);
-            assertEquals(getBalance, amount);
+            assertEquals(0, balance.compareTo(getBalance), "Баланс в событии не совпадает с БД");
+            assertEquals(0, amount.compareTo(getBalance), "Сумма в событии не совпадает с балансом");
         }
 
         @Test
@@ -93,6 +93,8 @@ public class AccountKafkaTest {
             AccountSteps.AccountContext ctx = AccountSteps.createAccount();
             BigDecimal getBalance = AccountSteps.depositAndGetBalance(ctx);
             BigDecimal debitAmount = AccountSteps.withdrawAndGetDebitAmount(ctx, getBalance);
+            BigDecimal expectedBalance = getBalance.subtract(debitAmount);
+
 
             String eventJson = KafkaHelper.oneByFilter(
                     TopicKafka.TOPIC_ACCOUNT_EVENTS,
@@ -107,15 +109,15 @@ public class AccountKafkaTest {
             List<Map<String, Object>> eventData = (List<Map<String, Object>>) event.get(KafkaConst.EVENT_DATA);
 
             Map<String, Object> account = eventData.get(0);
-            BigDecimal balance = new BigDecimal(account.get(AccountKafkaConst.KEY_BALANCE).toString());
+            BigDecimal actualBalance = new BigDecimal(account.get(AccountKafkaConst.KEY_BALANCE).toString());
             Map<String, Object> transaction = eventData.get(1);
             BigDecimal amount = new BigDecimal(transaction.get(AccountKafkaConst.KEY_AMOUNT).toString());
 
             assertEquals(AccountKafkaConst.EVENT_ACCOUNT_WITHDRAWAL, event.get(KafkaConst.EVENT_NAME));
             assertEquals(ctx.accountId(), account.get(AccountKafkaConst.KEY_ID));
             assertEquals(ctx.userLogin(), account.get(AccountKafkaConst.KEY_USER_LOGIN));
-            assertEquals(account.get(AccountKafkaConst.KEY_BALANCE), balance);
-            assertEquals(debitAmount, amount);
+            assertEquals(0, actualBalance.compareTo(expectedBalance), "Баланс в событии не совпадает с ожидаемым");
+            assertEquals(0, amount.compareTo(debitAmount), "Сумма списания не совпадает");
         }
     }
 }

@@ -10,6 +10,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 
 /**
  * Проверки данных пользователя в БД
@@ -21,11 +23,13 @@ public class UserDb {
                 UserSql.SELECT_USER_BY_LOGIN, expected.getLogin());
 
         assertNotNull(user, "Пользователь " + expected.getLogin() + " не найден");
-        assertEquals(expected.getLogin(), user.get("login"), "Логин пользователя не совпадает");
-        assertEquals(expected.getName(), user.get("name"), "Имя пользователя не совпадает");
-        assertEquals(expected.getAge(), user.get("age"), "Возраст пользователя не совпадает");
-        assertEquals(expected.getGender(), user.get("gender"), "Пол пользователя не совпадает");
-        assertEquals(expected.getHairColor(), user.get("hair_color"), "Цвет волос не совпадает");
+
+        assertAll("Данные пользователя " + expected.getLogin(),
+                ()-> assertEquals(expected.getLogin(), user.get("login"), "Логин пользователя не совпадает"),
+                ()-> assertEquals(expected.getName(), user.get("name"), "Имя пользователя не совпадает"),
+                ()-> assertEquals(expected.getAge(), user.get("age"), "Возраст пользователя не совпадает"),
+                ()-> assertEquals(expected.getGender(), user.get("gender"), "Пол пользователя не совпадает"),
+                ()-> assertEquals(expected.getHairColor(), user.get("hair_color"), "Цвет волос не совпадает"));
     }
 
     public static void assertFriends(CreateUserDto expected) {

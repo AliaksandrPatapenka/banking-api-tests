@@ -2,7 +2,7 @@ package com.apiAuto.presentation.constants.kafka;
 
 import com.apiAuto.presentation.dto.CreateUserDto;
 
-public class UserKafkaConst {
+public final class UserKafkaConst {
     private UserKafkaConst() {
     }
 

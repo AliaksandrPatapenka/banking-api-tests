@@ -1,6 +1,7 @@
 package com.apiAuto.common.config;
 
 
+import com.apiAuto.common.constants.KafkaConst;
 import com.apiAuto.common.helpers.PropertiesHelper;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
@@ -17,12 +18,12 @@ public final class KafkaConfig {
     }
 
     public static final String KAFKA_SERVERS = System.getProperty(
-            "kafka.servers", PropertiesHelper.props.getProperty("kafka.servers"));
+            "kafka.servers", PropertiesHelper.props.getProperty("kafka.servers", KafkaConst.DEFAULT_KAFKA_SERVER));
 
     public static final Duration EVENT_TIMEOUT = Duration.ofSeconds(
             Long.parseLong(System.getProperty(
                     "event.timeout", PropertiesHelper.props.getProperty(
-                            "event.timeout"))));
+                            "event.timeout", KafkaConst.DEFAULT_KAFKA_TIMEOUT))));
 
     public static Properties consumerProps(String groupId) {
         Properties props = new Properties();

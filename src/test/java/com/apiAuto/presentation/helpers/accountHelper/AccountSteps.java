@@ -4,6 +4,7 @@ import com.apiAuto.common.constants.HttpStatus;
 import com.apiAuto.presentation.constants.testData.AccountData;
 import com.apiAuto.presentation.helpers.testHelper.PresentationDataGenerator;
 import com.apiAuto.presentation.helpers.userHelper.UserTemplate;
+import io.qameta.allure.Step;
 
 
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ public class AccountSteps {
     public record AccountContext(String userLogin, int accountId) {
     }
 
+    @Step("Создание пользователя и аккаунт")
     public static AccountContext createAccount() {
         String userLogin = UserTemplate.userGetLogin(HttpStatus.OK);
         AccountTemplate.createAccount(userLogin, HttpStatus.OK);
@@ -24,6 +26,7 @@ public class AccountSteps {
         return new AccountContext(userLogin, accountId);
     }
 
+    @Step("Пополнение счёта {ctx.accountId} и получение баланса")
     public static BigDecimal depositAndGetBalance(AccountContext ctx) {
         AccountTemplate.accountDeposit(ctx.accountId(),
                 AccountData.ACCOUNT_DEPOSIT_MAX,
@@ -32,6 +35,7 @@ public class AccountSteps {
         return AccountDb.getAccountBalance(ctx.userLogin());
     }
 
+    @Step("Списание со счёта {ctx.accountId}")
     public static BigDecimal withdrawAndGetDebitAmount(AccountContext ctx, BigDecimal balance) {
         BigDecimal debitAmount = PresentationDataGenerator.debitAmount(balance);
         AccountTemplate.accountWithdraw(ctx.accountId(), debitAmount, HttpStatus.OK);

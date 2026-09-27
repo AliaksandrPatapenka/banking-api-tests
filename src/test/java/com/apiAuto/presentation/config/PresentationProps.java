@@ -12,7 +12,7 @@ public final class PresentationProps {
 
     public static final int HTTP_CONNECTION_TIMEOUT = Integer.parseInt(
             System.getProperty(
-                    "http.socket.timeout", PropertiesHelper.props.getProperty(
+                    "http.connection.timeout", PropertiesHelper.props.getProperty(
                             "http.connection.timeout")));
 
     public static final int HTTP_SOCKET_TIMEOUT = Integer.parseInt(System.getProperty(

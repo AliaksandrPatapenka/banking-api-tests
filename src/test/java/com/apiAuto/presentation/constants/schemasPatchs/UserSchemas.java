@@ -1,6 +1,6 @@
 package com.apiAuto.presentation.constants.schemasPatchs;
 
-public class UserSchemas {
+public final class UserSchemas {
     private UserSchemas() {
     }
 
